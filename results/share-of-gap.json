@@ -1,0 +1,91 @@
+{
+ "what": "share of the gap — the analogue of the per-category threshold rung (never a replication)",
+ "prereg_section": "## Amendment 1 (Gate 4)",
+ "definition": "share = (ask_①(global τ) − ask_①(per-class τ)) / (ask_①(global τ) − ask_③(per-class τ)), ask rate at SA target 0.95 thresholds fitted on the fit split; paired bootstrap; undefined when the denominator's CI includes 0 or lies below 0",
+ "tau_global_gauge1": 0.84,
+ "taus_gauge1": [
+  0.34,
+  0.84,
+  0.84
+ ],
+ "taus_gauge3": [
+  0.76,
+  0.74,
+  0.55
+ ],
+ "terms": {
+  "ask_gauge1_global_tau": {
+   "value": 0.1971,
+   "ci": [
+    0.17,
+    0.2257
+   ],
+   "n_boot_used": 1000
+  },
+  "ask_gauge1_per_class_tau": {
+   "value": 0.1343,
+   "ci": [
+    0.11,
+    0.16
+   ],
+   "n_boot_used": 1000
+  },
+  "ask_gauge3_per_class_tau": {
+   "value": 0.0729,
+   "ci": [
+    0.0543,
+    0.0915
+   ],
+   "n_boot_used": 1000
+  }
+ },
+ "numerator": {
+  "value": 0.0629,
+  "ci": [
+   0.0457,
+   0.0829
+  ],
+  "n_boot_used": 1000
+ },
+ "denominator": {
+  "value": 0.1243,
+  "ci": [
+   0.0971,
+   0.1529
+  ],
+  "n_boot_used": 1000
+ },
+ "share": {
+  "value": 0.5057,
+  "ci": [
+   0.3855,
+   0.6324
+  ],
+  "n_boot_used": 1000
+ },
+ "defined": true,
+ "check_gate3": {
+  "ask_gauge1_per_class_tau_recomputed": 0.1343,
+  "gate3_exam_block": 0.1343,
+  "equal": true
+ },
+ "display": {
+  "share": "0.506 [0.386, 0.632]",
+  "ask_gauge1_global_tau": "19.7 [17.0, 22.6]",
+  "ask_gauge1_per_class_tau": "13.4 [11.0, 16.0]",
+  "ask_gauge3_per_class_tau": "7.3 [5.4, 9.2]",
+  "numerator": "6.3 [4.6, 8.3]",
+  "denominator": "12.4 [9.7, 15.3]"
+ },
+ "exam": {
+  "n_exam": 700,
+  "n_boot": 1000,
+  "ci_level": 95,
+  "seed": 20261007,
+  "exam_sha256": "cb0fa1f71cd363703122ba9c50ba326700ee6f7394fc5085297855aa6ae7758e",
+  "scored_at": "2026-10-07T11:00:43Z",
+  "prereg_commit": "2026-10-07T06:42:07-04:00",
+  "prereg_section": "## Amendment 1 (Gate 4)",
+  "prereg_section_commit": "2026-10-07T06:42:07-04:00"
+ }
+}

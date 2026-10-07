@@ -25,7 +25,11 @@ Checks:
      inputs and are left out of that comparison.
   h  every results/<gauge>.calib.json carries fit_fingerprint and it equals nikasha.fit_fingerprint of
      results/<gauge>.json (sha256 over sorted fit ids + logits_mean): the calibration belongs to this run.
-     An exam block that records fit_fingerprint must match it too.
+     An exam block that records fit_fingerprint must match it too; score.py's guard refuses a tampered run.
+  i  PREREG Amendment 1 (Gate 4): its commit predates every new exam block, each block records it, the Gate 3
+     blocks predate it, and it is on origin/main.
+  j  gauge ③'s fit-split logits are flagged oof: true and reproduce as out-of-fold values by refitting per fold.
+  k  no key material anywhere in the repo: the key prefix is in no file (.git included) and in no commit.
 
 Run from the repo root:  ~/venvs/nikasha/bin/python -m nikasha.selftest
 This module never imports an engine and never prints the text of any set-A item.
@@ -266,9 +270,11 @@ def check_b(repo: Repo) -> list[tuple[str, str, str]]:
                 out.append((FAIL, "b", f"{p.name}: gauge file with an empty items list"))
                 continue
             n_fit, n_exam = obj.get("n_fit"), obj.get("n_exam")
+            # an external gauge lists the items it could not get an answer for in `failed` (never dropped silently)
+            n_failed = len(obj["failed"]) if obj.get("external") is True and isinstance(obj.get("failed"), list) else 0
             if (all(isinstance(x, int) and not isinstance(x, bool) for x in (n_fit, n_exam))
-                    and len(items) != n_fit + n_exam):
-                out.append((FAIL, "b", f"{p.name}: {len(items)} items but n_fit + n_exam = "
+                    and len(items) + n_failed != n_fit + n_exam):
+                out.append((FAIL, "b", f"{p.name}: {len(items)} items + {n_failed} failed but n_fit + n_exam = "
                             f"{n_fit} + {n_exam} = {n_fit + n_exam} (truncated or padded gauge file)"))
         n_checked = 0
         failures: list[str] = []
@@ -622,6 +628,122 @@ def _refusal_probe(repo: Repo) -> tuple[str, str, str]:
     return (SKIP, "h", "no calibrated gauge with fit items to probe the refusal")
 
 
+AMENDMENT_HEADING = "## Amendment 1 (Gate 4)"
+GATE3_FILES = {"baseline-uniform.json", "baseline-majority.json", "gauge1-logit.json"}
+
+
+def check_i(repo: Repo) -> list[tuple[str, str, str]]:
+    """Rule 12 (brief 10): the commit that introduced Amendment 1 predates every new (Gate 4) exam block, every
+    block recording the amendment names that commit, the Gate 3 blocks predate it (never re-scored), and the
+    commit is on origin/main."""
+    blocks = exam_blocks(repo)
+    new = [(n, ex) for n, ex in blocks if n not in GATE3_FILES]
+    old = [(n, ex) for n, ex in blocks if n in GATE3_FILES]
+    if not new:
+        return [(SKIP, "i", "no Gate 4 exam block yet")]
+    rc, out_txt, err_txt = _git("log", "--format=%H %cI", "-S", AMENDMENT_HEADING, "--", "PREREG.md")
+    lines = [ln.split() for ln in out_txt.splitlines() if ln.strip()] if rc == 0 else []
+    if not lines:
+        return [(FAIL, "i", f"no commit introduces {AMENDMENT_HEADING!r} in PREREG.md ({err_txt or 'git log -S empty'})")]
+    sha, raw = lines[-1][0], lines[-1][1]
+    when = _parse_iso(raw)
+    problems = []
+    for name, ex in new:
+        try:
+            if not _parse_iso(str(ex.get("scored_at"))) > when:
+                problems.append(f"{name}: scored_at {ex.get('scored_at')} does not follow the amendment")
+        except ValueError:
+            problems.append(f"{name}: unparsable scored_at")
+        rec = ex.get("prereg_section_commit")
+        if rec is None or ex.get("prereg_section") != AMENDMENT_HEADING:
+            problems.append(f"{name}: exam block does not record the amendment it was read under")
+        elif _parse_iso(str(rec)) != when:
+            problems.append(f"{name}: records amendment commit {rec}, not {raw}")
+    for name, ex in old:
+        if not _parse_iso(str(ex.get("scored_at"))) < when:
+            problems.append(f"{name}: Gate 3 block scored at {ex.get('scored_at')}, after the amendment (re-scored?)")
+    rc2, _, _ = _git("merge-base", "--is-ancestor", sha, "origin/main")
+    if rc2 != 0:
+        problems.append(f"amendment commit {sha[:7]} is not on origin/main")
+    if problems:
+        return [(FAIL, "i", "; ".join(problems))]
+    return [(PASS, "i", f"Amendment 1 commit {sha[:7]} ({raw}) predates all {len(new)} Gate 4 exam blocks "
+                        f"({', '.join(sorted(n for n, _ in new))}), each records it; the {len(old)} Gate 3 blocks predate "
+                        f"it; on origin/main")]
+
+
+def check_j(repo: Repo) -> list[tuple[str, str, str]]:
+    """gauge ③: fit-split logits flagged oof: true — and genuinely out-of-fold: refitting the head per stored fold
+    (chosen C, features from results/gauge3-features.npy) reproduces them, and they differ from in-sample values."""
+    path = RESULTS_DIR / "gauge3-probe.json"
+    obj, err = repo.results.get(path, (None, "absent"))
+    if err or not isinstance(obj, dict):
+        return [(SKIP, "j", "results/gauge3-probe.json absent")]
+    fit = [it for it in obj["items"] if it.get("split") == "fit"]
+    exam = [it for it in obj["items"] if it.get("split") == "exam"]
+    flags_ok = (obj.get("oof") is True and fit and all(it.get("oof") is True for it in fit)
+                and all(it.get("oof") is False for it in exam)
+                and all(isinstance(it.get("fold"), int) for it in fit))
+    if not flags_ok:
+        return [(FAIL, "j", "gauge3-probe.json: fit logits are not all flagged oof: true with a fold "
+                            "(top-level oof, per-item oof/fold, exam items oof: false)")]
+    out = [(PASS, "j", f"gauge3-probe.json: top-level oof true; {len(fit)} fit items oof: true with folds "
+                       f"{sorted({it['fold'] for it in fit})}; {len(exam)} exam items oof: false")]
+    try:
+        import numpy as np
+
+        from nikasha import metrics
+        from nikasha.gauge_probe import fit_head, load_features
+
+        X, index = load_features(RESULTS_DIR / "gauge3-features.npy", RESULTS_DIR / "gauge3-features.index.json")
+        row = {i: k for k, i in enumerate(index["ids"])}
+        Xf = X[[row[it["id"]] for it in fit]]
+        y = metrics.labels_to_idx([it["label"] for it in fit])
+        folds = np.array([it["fold"] for it in fit])
+        stored = np.array([it["logits_mean"] for it in fit], dtype=float)
+        oof = np.empty_like(stored)
+        for k in sorted(set(folds.tolist())):
+            m, _, _ = fit_head(Xf[folds != k], y[folds != k], float(obj["C"]))
+            oof[folds == k] = m.decision_function(Xf[folds == k])
+        insample = fit_head(Xf, y, float(obj["C"]))[0].decision_function(Xf)
+        d_oof = float(np.abs(oof - stored).max())
+        d_in = float(np.abs(insample - stored).max())
+        if d_oof <= 1e-6 < d_in:
+            out.append((PASS, "j", f"refit per stored fold reproduces the fit logits (max |diff| {d_oof:.1e}); "
+                                   f"in-sample logits differ by up to {d_in:.2f}: they are out-of-fold"))
+        else:
+            out.append((FAIL, "j", f"fit logits not reproduced as out-of-fold values (max |oof diff| {d_oof:.3g}, "
+                                   f"max |in-sample diff| {d_in:.3g})"))
+    except Exception as exc:  # noqa: BLE001
+        out.append((FAIL, "j", f"out-of-fold reproduction failed: {type(exc).__name__}: {exc}"))
+    return out
+
+
+def check_k(repo: Repo) -> list[tuple[str, str, str]]:
+    """No key material anywhere in the repo: the key prefix (assembled here, so this file never contains it)
+    occurs in no file under the repo root (the .git directory included, like grep -r) and in no commit of any
+    ref (git log --all -p, i.e. decompressed history)."""
+    needle = "-".join(("sk", "or")).encode()  # joined at run time: "+" of constants is folded into the .pyc
+    hits = []
+    for p in sorted(ROOT.rglob("*")):
+        if p.is_file() and not p.is_symlink():
+            try:
+                if needle in p.read_bytes():
+                    hits.append(str(p.relative_to(ROOT)))
+            except OSError:
+                continue
+    try:
+        hist = subprocess.run(["git", "log", "--all", "-p", "--no-color", "--no-ext-diff"], cwd=str(ROOT),
+                              capture_output=True, timeout=300, check=False).stdout
+    except (OSError, subprocess.TimeoutExpired) as exc:
+        return [(FAIL, "k", f"git history scan failed: {type(exc).__name__}")]
+    n_hist = hist.count(needle)
+    if hits or n_hist:
+        return [(FAIL, "k", f"key prefix found in {len(hits)} file(s) {hits[:MAX_SHOWN]} and {n_hist} history line(s)")]
+    return [(PASS, "k", f"no key material: key prefix absent from every file under the repo root (.git included) "
+                        f"and from the full history ({len(hist) // 1024} KiB of git log --all -p)")]
+
+
 CHECKS = (
     ("a", check_a),
     ("b", check_b),
@@ -631,6 +753,9 @@ CHECKS = (
     ("f", check_f),
     ("g", check_g),
     ("h", check_h),
+    ("i", check_i),
+    ("j", check_j),
+    ("k", check_k),
 )
 
 
@@ -640,7 +765,7 @@ CHECKS = (
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="nikasha.selftest",
-        description="Repo consistency checks (a-h); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
+        description="Repo consistency checks (a-k); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
     )
     ap.add_argument("--strict", action="store_true", help="treat WARN lines as FAIL")
     args = ap.parse_args(argv)

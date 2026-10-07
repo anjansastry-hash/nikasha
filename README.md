@@ -74,6 +74,10 @@ Smallest n whose mean ask rate is within noise of gauge ①'s or better (pre-reg
 
 ![labels needed by the gauge ③ head](results/labels-needed.png)
 
+## Share of the gap
+
+The analogue of the per-category threshold rung, on the 700-item exam with the ask rate at the selective-accuracy target as the metric: gauge ① at its fit-chosen global τ 0.84 asks 19.7 [17.0, 22.6], at its fit-chosen per-class τ 13.4 [11.0, 16.0]; gauge ③ at its per-class τ asks 7.3 [5.4, 9.2]. Per-class thresholds on the zero-shot read close a share **0.506 [0.386, 0.632]** of the gap between gauge ① at its global τ and gauge ③ (numerator 6.3 [4.6, 8.3], denominator 12.4 [9.7, 15.3] points; 95% paired bootstrap CIs, 1000 resamples).
+
 ## Engines and licenses
 
 - gemma-4-12b-8bit-text: license: apache-2.0 — license_link: https://ai.google.dev/gemma/docs/gemma_4_license

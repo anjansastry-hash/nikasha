@@ -467,6 +467,32 @@ def like_for_like_section() -> list[str]:
     return out
 
 
+def share_of_gap_section() -> list[str]:
+    """Task E: one line from results/share-of-gap.json — the analogue of the per-category threshold rung."""
+    path = RESULTS_DIR / "share-of-gap.json"
+    doc = load_json_dict(path) if path.is_file() else None
+    if not isinstance(doc, dict) or not isinstance(doc.get("exam"), dict):
+        return []
+    d, ex = doc.get("display") or {}, doc["exam"]
+    level = f"{fmt(ex.get('ci_level'))}%" if ex.get("ci_level") is not None else CI_LEVEL_WORDS
+    head = ["## Share of the gap", ""]
+    terms = (f"gauge ① at its fit-chosen global τ {fmt(doc.get('tau_global_gauge1'))} asks "
+             f"{fmt(d.get('ask_gauge1_global_tau'))}, at its fit-chosen per-class τ "
+             f"{fmt(d.get('ask_gauge1_per_class_tau'))}; gauge ③ at its per-class τ asks "
+             f"{fmt(d.get('ask_gauge3_per_class_tau'))}")
+    if doc.get("defined"):
+        line = (f"The analogue of the per-category threshold rung, on the {fmt(ex.get('n_exam'))}-item exam with the ask "
+                f"rate at the selective-accuracy target as the metric: {terms}. Per-class thresholds on the zero-shot "
+                f"read close a share **{fmt(d.get('share'))}** of the gap between gauge ① at its global τ and gauge ③ "
+                f"(numerator {fmt(d.get('numerator'))}, denominator {fmt(d.get('denominator'))} points; {level} paired "
+                f"bootstrap CIs, {fmt(ex.get('n_boot'))} resamples).")
+    else:
+        line = (f"The analogue of the per-category threshold rung, on the {fmt(ex.get('n_exam'))}-item exam: {terms}; "
+                f"share: **{fmt(d.get('share'))}** (denominator {fmt(d.get('denominator'))} points, {level} paired "
+                f"bootstrap CI).")
+    return head + [line]
+
+
 LABELS_NEEDED_REL = "results/labels-needed.png"
 
 
@@ -561,7 +587,7 @@ def build(manifest: dict, rows: list[dict]) -> str:
     lines += intro_section()
     lines += [""] + seta_section(manifest)
     lines += [""] + results_section(rows)
-    for section in (like_for_like_section(), labels_needed_section()):
+    for section in (like_for_like_section(), labels_needed_section(), share_of_gap_section()):
         if section:
             lines += [""] + section
     lines += [""] + engines_section()

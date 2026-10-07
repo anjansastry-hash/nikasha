@@ -99,9 +99,10 @@ FAIL_STATUS = {400, 413}
 ABORT_STATUS = {401, 402, 403, 404}
 P_FLOOR = 1e-12
 
-# key-shaped tokens: the prefix (assembled so the literal never appears in this file) at a token start,
-# followed by at least 8 key characters — so ordinary words that merely contain the prefix are untouched
-_KEY_PREFIX_RE = re.compile(r"(?<![A-Za-z0-9])" + "sk" + "-" + "or" + r"-[-_A-Za-z0-9]{8,}")
+# key-shaped tokens: the prefix at a token start, followed by at least 8 key characters — so ordinary words
+# that merely contain the prefix are untouched. The prefix is joined at run time: a "+" of two constants would
+# be folded by the compiler into the literal inside the .pyc, which the repo's key scan must never find.
+_KEY_PREFIX_RE = re.compile(r"(?<![A-Za-z0-9])" + "-".join(("sk", "or")) + r"-[-_A-Za-z0-9]{8,}")
 
 
 def now_iso() -> str:

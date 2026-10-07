@@ -829,6 +829,95 @@ def score_like_for_like(rescore: bool) -> int:
     return 0
 
 
+# ----------------------------------------------------------------------------- share of the gap (Task E)
+
+SHARE_PATH = RESULTS_DIR / "share-of-gap.json"
+SHARE_UNDEFINED = "undefined: the probe does not beat the zero-shot read"
+
+
+def score_share_of_gap(rescore: bool) -> int:
+    """PREREG Amendment 1: share = (ask_①(global τ) − ask_①(per-class τ)) / (ask_①(global τ) − ask_③(per-class τ))
+    on the 700-item exam; paired bootstrap (the same resamples for all three ask rates); undefined when the
+    denominator's CI includes 0 or lies below 0. The analogue of the per-category threshold rung, never a
+    replication."""
+    if SHARE_PATH.exists() and not rescore:
+        _fail(f"{SHARE_PATH.name} already exists; the share of the gap is computed once (rule 8)")
+    g1, g3 = read_json(GAUGE1_PATH), read_json(GAUGE3_PATH)
+    c1, c3 = read_json(RESULTS_DIR / "gauge1-logit.calib.json"), read_json(RESULTS_DIR / "gauge3-probe.calib.json")
+    _check_fingerprint("gauge1-logit", g1, RESULTS_DIR / "gauge1-logit.calib.json")
+    _check_fingerprint("gauge3-probe", g3, RESULTS_DIR / "gauge3-probe.calib.json")
+    if c1.get("tau_global") is None or c1.get("taus") is None or c3.get("taus") is None:
+        _fail("gauge ① needs a global τ and per-class τ, gauge ③ per-class τ")
+    rows1, rows3 = _rows_of("gauge1-logit", g1["items"], "exam"), _rows_of("gauge3-probe", g3["items"], "exam")
+    if [r["id"] for r in rows1] != [r["id"] for r in rows3]:
+        _fail("gauge ① and gauge ③ exam items are not in the same order")
+    L1, y = _arrays("gauge1-logit", rows1)
+    L3, y3 = _arrays("gauge3-probe", rows3)
+    P1, P3 = metrics.softmax(L1, float(c1["T"])), metrics.softmax(L3, float(c3["T"]))
+    tg = [float(c1["tau_global"])] * len(LABELS)
+    t1, t3 = [float(t) for t in c1["taus"]], [float(t) for t in c3["taus"]]
+
+    prereg_commit, exam_sha, section_info, truth = _open_exam_for(g3.get("prereg_section"))
+    _check_split("gauge1-logit", rows1, "exam", truth, subset_ok=False)
+    _check_split("gauge3-probe", rows3, "exam", truth, subset_ok=False)
+    if [r["id"] for r in rows1] != list(truth):
+        _fail("exam items are not in exam.jsonl order")
+
+    def terms(idx):
+        return (metrics.ask_rate(P1[idx], tg), metrics.ask_rate(P1[idx], t1), metrics.ask_rate(P3[idx], t3))
+
+    def share(idx):
+        a, b, c = terms(idx)
+        return None if a - c == 0 else (a - b) / (a - c)
+
+    fns = {
+        "ask_gauge1_global_tau": lambda idx: terms(idx)[0],
+        "ask_gauge1_per_class_tau": lambda idx: terms(idx)[1],
+        "ask_gauge3_per_class_tau": lambda idx: terms(idx)[2],
+        "numerator": lambda idx: terms(idx)[0] - terms(idx)[1],
+        "denominator": lambda idx: terms(idx)[0] - terms(idx)[2],
+        "share": share,
+    }
+    boot = metrics.bootstrap(fns, len(y), n_boot=N_BOOT, seed=SEED)
+    stored = g1["exam"]["metrics"]["ask_rate"]["value"]
+    if boot["ask_gauge1_per_class_tau"]["value"] != stored:
+        _fail(f"ask_①(per-class τ) recomputed {boot['ask_gauge1_per_class_tau']['value']} != Gate 3 exam block {stored}")
+    den_ci = boot["denominator"]["ci"]
+    defined = bool(den_ci is not None and den_ci[0] > 0)
+    s = boot["share"]
+    display_share = (f"{_num(s['value'], 1, 3)} [{_num(s['ci'][0], 1, 3)}, {_num(s['ci'][1], 1, 3)}]"
+                     if defined and s["ci"] else SHARE_UNDEFINED)
+    doc = {
+        "what": "share of the gap — the analogue of the per-category threshold rung (never a replication)",
+        "prereg_section": g3.get("prereg_section"),
+        "definition": "share = (ask_①(global τ) − ask_①(per-class τ)) / (ask_①(global τ) − ask_③(per-class τ)), ask rate "
+                      "at SA target 0.95 thresholds fitted on the fit split; paired bootstrap; undefined when the "
+                      "denominator's CI includes 0 or lies below 0",
+        "tau_global_gauge1": c1["tau_global"], "taus_gauge1": c1["taus"], "taus_gauge3": c3["taus"],
+        "terms": {k: boot[k] for k in ("ask_gauge1_global_tau", "ask_gauge1_per_class_tau", "ask_gauge3_per_class_tau")},
+        "numerator": boot["numerator"], "denominator": boot["denominator"], "share": s, "defined": defined,
+        "check_gate3": {"ask_gauge1_per_class_tau_recomputed": boot["ask_gauge1_per_class_tau"]["value"],
+                        "gate3_exam_block": stored, "equal": True},
+        "display": {
+            "share": display_share,
+            "ask_gauge1_global_tau": _with_ci(boot["ask_gauge1_global_tau"], 100, 1),
+            "ask_gauge1_per_class_tau": _with_ci(boot["ask_gauge1_per_class_tau"], 100, 1),
+            "ask_gauge3_per_class_tau": _with_ci(boot["ask_gauge3_per_class_tau"], 100, 1),
+            "numerator": _with_ci(boot["numerator"], 100, 1),
+            "denominator": _with_ci(boot["denominator"], 100, 1),
+        },
+        "exam": {"n_exam": len(y), "n_boot": N_BOOT, "ci_level": 95, "seed": SEED, "exam_sha256": exam_sha,
+                 "scored_at": _utc_now(), "prereg_commit": prereg_commit, **(section_info or {})},
+    }
+    write_json(SHARE_PATH, doc)
+    d = doc["display"]
+    print(f"ask ① global τ {d['ask_gauge1_global_tau']} | ask ① per-class τ {d['ask_gauge1_per_class_tau']} | "
+          f"ask ③ per-class τ {d['ask_gauge3_per_class_tau']}")
+    print(f"numerator {d['numerator']} | denominator {d['denominator']} | share {d['share']} (defined: {defined}); "
+          f"wrote {SHARE_PATH.name}")
+    return 0
+
+
 # ----------------------------------------------------------------------------- main
 
 def main(argv=None) -> int:
@@ -850,7 +939,13 @@ def main(argv=None) -> int:
                     help="score the labels-needed head variants (results/labels-needed.json) once; draw labels-needed.png")
     ap.add_argument("--like-for-like", action="store_true",
                     help="score the Jev column and the like-for-like group (①, ③, Jev on the same items) once")
+    ap.add_argument("--share-of-gap", action="store_true",
+                    help="compute the share of the gap (analogue of the per-category threshold rung) once")
     args = ap.parse_args(argv)
+    if args.share_of_gap:
+        if args.gauge or args.fit_dry_run or args.curve_only or args.labels_needed or args.like_for_like:
+            ap.error("--share-of-gap takes only --rescore")
+        return score_share_of_gap(args.rescore)
     if args.labels_needed:
         if args.gauge or args.fit_dry_run or args.curve_only or args.like_for_like:
             ap.error("--labels-needed takes only --rescore")
