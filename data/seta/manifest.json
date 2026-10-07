@@ -1,0 +1,335 @@
+{
+ "name": "set A",
+ "source": "gorilla-llm/Berkeley-Function-Calling-Leaderboard",
+ "source_license": "Apache-2.0",
+ "bfcl_dir": "~/data/bfcl",
+ "labels": [
+  "no-call",
+  "one-call",
+  "multi-call"
+ ],
+ "seed": 20261007,
+ "label_rule": {
+  "no-call": "irrelevance files have no possible_answer ground truth; every item is labelled by category",
+  "one-call": "len(possible_answer ground_truth) == 1 (joined on id); items with count != 1 are dropped",
+  "multi-call": "len(possible_answer ground_truth) >= 2 (joined on id); items with count < 2 are dropped"
+ },
+ "files": {
+  "BFCL_v3_irrelevance.json": {
+   "label": "no-call",
+   "brief_name": "BFCL_v3_irrelevance.json",
+   "present": true,
+   "possible_answer_file": null,
+   "n_items": 240,
+   "n_ground_truth_rows": null,
+   "n_ground_truth_duplicate_ids": null,
+   "n_valid": 240,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 71,
+   "n_fit": 16,
+   "n_exam": 55
+  },
+  "BFCL_v3_live_irrelevance.json": {
+   "label": "no-call",
+   "brief_name": "BFCL_v3_live_irrelevance.json",
+   "present": true,
+   "possible_answer_file": null,
+   "n_items": 882,
+   "n_ground_truth_rows": null,
+   "n_ground_truth_duplicate_ids": null,
+   "n_valid": 882,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 263,
+   "n_fit": 84,
+   "n_exam": 179
+  },
+  "BFCL_v3_simple.json": {
+   "label": "one-call",
+   "brief_name": "BFCL_v3_simple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_simple.json",
+   "n_items": 400,
+   "n_ground_truth_rows": 400,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 400,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 70,
+   "n_fit": 15,
+   "n_exam": 55
+  },
+  "BFCL_v3_multiple.json": {
+   "label": "one-call",
+   "brief_name": "BFCL_v3_multiple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_multiple.json",
+   "n_items": 200,
+   "n_ground_truth_rows": 200,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 200,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 35,
+   "n_fit": 12,
+   "n_exam": 23
+  },
+  "BFCL_v3_live_simple.json": {
+   "label": "one-call",
+   "brief_name": "BFCL_v3_live_simple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_live_simple.json",
+   "n_items": 258,
+   "n_ground_truth_rows": 258,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 258,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 45,
+   "n_fit": 20,
+   "n_exam": 25
+  },
+  "BFCL_v3_live_multiple.json": {
+   "label": "one-call",
+   "brief_name": "BFCL_v3_live_multiple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_live_multiple.json",
+   "n_items": 1053,
+   "n_ground_truth_rows": 1053,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 1052,
+   "n_dropped": 0,
+   "n_dropped_all": 1,
+   "n_no_ground_truth": 1,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 183,
+   "n_fit": 53,
+   "n_exam": 130
+  },
+  "BFCL_v3_parallel.json": {
+   "label": "multi-call",
+   "brief_name": "BFCL_v3_parallel.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_parallel.json",
+   "n_items": 200,
+   "n_ground_truth_rows": 200,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 200,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 152,
+   "n_fit": 51,
+   "n_exam": 101
+  },
+  "BFCL_v3_parallel_multiple.json": {
+   "label": "multi-call",
+   "brief_name": "BFCL_v3_parallel_multiple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_parallel_multiple.json",
+   "n_items": 200,
+   "n_ground_truth_rows": 200,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 200,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 151,
+   "n_fit": 47,
+   "n_exam": 104
+  },
+  "BFCL_v3_live_parallel.json": {
+   "label": "multi-call",
+   "brief_name": "BFCL_v3_live_parallel.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_live_parallel.json",
+   "n_items": 16,
+   "n_ground_truth_rows": 16,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 16,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 12,
+   "n_fit": 1,
+   "n_exam": 11
+  },
+  "BFCL_v3_live_parallel_multiple.json": {
+   "label": "multi-call",
+   "brief_name": "BFCL_v3_live_parallel_multiple.json",
+   "present": true,
+   "possible_answer_file": "possible_answer/BFCL_v3_live_parallel_multiple.json",
+   "n_items": 24,
+   "n_ground_truth_rows": 24,
+   "n_ground_truth_duplicate_ids": 0,
+   "n_valid": 24,
+   "n_dropped": 0,
+   "n_dropped_all": 0,
+   "n_no_ground_truth": 0,
+   "n_empty_request": 0,
+   "n_duplicate_id": 0,
+   "n_sampled": 18,
+   "n_fit": 1,
+   "n_exam": 17
+  }
+ },
+ "dropped": {
+  "total": 0,
+  "by_file": {},
+  "reason": "ground-truth call count contradicts the file's category",
+  "no_ground_truth": {
+   "total": 1,
+   "by_file": {
+    "BFCL_v3_live_multiple.json": 1
+   },
+   "reason": "no possible_answer row for the item's id (or ground_truth not a list/dict)"
+  },
+  "empty_request": {
+   "total": 0,
+   "by_file": {},
+   "reason": "turn 0 has no user message text"
+  },
+  "duplicate_id": {
+   "total": 0,
+   "by_file": {},
+   "reason": "id already seen earlier in the same file (first occurrence kept)"
+  },
+  "all_reasons_total": 1
+ },
+ "excluded_patterns": [
+  "BFCL_v3_exec_*.json",
+  "BFCL_v3_chatable.json",
+  "BFCL_v3_java.json",
+  "BFCL_v3_javascript.json",
+  "BFCL_v3_sql.json",
+  "BFCL_v3_rest.json",
+  "BFCL_v3_multi_turn_*.json",
+  "BFCL_v3_live_relevance.json"
+ ],
+ "excluded_files": [
+  "BFCL_v3_chatable.json",
+  "BFCL_v3_exec_multiple.json",
+  "BFCL_v3_exec_parallel.json",
+  "BFCL_v3_exec_parallel_multiple.json",
+  "BFCL_v3_exec_simple.json",
+  "BFCL_v3_java.json",
+  "BFCL_v3_javascript.json",
+  "BFCL_v3_live_relevance.json",
+  "BFCL_v3_multi_turn_base.json",
+  "BFCL_v3_multi_turn_composite.json",
+  "BFCL_v3_multi_turn_long_context.json",
+  "BFCL_v3_multi_turn_miss_func.json",
+  "BFCL_v3_multi_turn_miss_param.json",
+  "BFCL_v3_rest.json",
+  "BFCL_v3_sql.json"
+ ],
+ "unexpected_files": [],
+ "name_substitutions": {},
+ "missing_files": [],
+ "allocation": {
+  "no-call": {
+   "note": {
+    "target": 334,
+    "floor": 10,
+    "floors_scaled": false,
+    "method": "proportional-to-n_valid, floor per non-empty file, largest-remainder rounding"
+   },
+   "by_file": {
+    "BFCL_v3_irrelevance.json": 71,
+    "BFCL_v3_live_irrelevance.json": 263
+   }
+  },
+  "one-call": {
+   "note": {
+    "target": 333,
+    "floor": 10,
+    "floors_scaled": false,
+    "method": "proportional-to-n_valid, floor per non-empty file, largest-remainder rounding"
+   },
+   "by_file": {
+    "BFCL_v3_simple.json": 70,
+    "BFCL_v3_multiple.json": 35,
+    "BFCL_v3_live_simple.json": 45,
+    "BFCL_v3_live_multiple.json": 183
+   }
+  },
+  "multi-call": {
+   "note": {
+    "target": 333,
+    "floor": 10,
+    "floors_scaled": false,
+    "method": "proportional-to-n_valid, floor per non-empty file, largest-remainder rounding"
+   },
+   "by_file": {
+    "BFCL_v3_parallel.json": 152,
+    "BFCL_v3_parallel_multiple.json": 151,
+    "BFCL_v3_live_parallel.json": 12,
+    "BFCL_v3_live_parallel_multiple.json": 18
+   }
+  }
+ },
+ "counts": {
+  "total": 1000,
+  "by_label": {
+   "no-call": 334,
+   "one-call": 333,
+   "multi-call": 333
+  },
+  "fit": {
+   "total": 300,
+   "by_label": {
+    "no-call": 100,
+    "one-call": 100,
+    "multi-call": 100
+   }
+  },
+  "exam": {
+   "total": 700,
+   "by_label": {
+    "no-call": 234,
+    "one-call": 233,
+    "multi-call": 233
+   }
+  }
+ },
+ "targets": {
+  "by_label": {
+   "no-call": 334,
+   "one-call": 333,
+   "multi-call": 333
+  },
+  "fit_per_label": 100
+ },
+ "min_per_source_file": 10,
+ "sampling": "random.Random(SEED); labels in LABELS order, files in brief-table order; rng.sample(valid items in file order, k)",
+ "split": "random.Random(SEED) (fresh); per label shuffle sampled ids, first 100 fit, rest exam; rows written in that order",
+ "sha256": {
+  "fit.jsonl": "a6246a54afa40d9d3a529d5e48f590dc6f6f753cb0ee7b24cc2e18cb3d44575c",
+  "exam.jsonl": "cb0fa1f71cd363703122ba9c50ba326700ee6f7394fc5085297855aa6ae7758e"
+ },
+ "exam_reduced": false,
+ "built_at": "2026-10-07T08:55:41Z"
+}
