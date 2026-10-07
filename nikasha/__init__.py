@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 LABELS = ["no-call", "one-call", "multi-call"]
@@ -17,8 +18,9 @@ SA_TARGET = 0.95
 ECE_BINS = 15
 
 ENGINE_NAME = "gemma-4-12b-8bit-text"
-ENGINE_PATH = "~/mlx-models/gemma-4-12b-8bit-text"
-BFCL_DIR = "~/data/bfcl"
+# Portable (Gate 5): override with NIKASHA_ENGINE / NIKASHA_BFCL; the defaults are the Studio layout.
+ENGINE_PATH = os.environ.get("NIKASHA_ENGINE") or os.path.expanduser("~/mlx-models/gemma-4-12b-8bit-text")
+BFCL_DIR = os.environ.get("NIKASHA_BFCL") or os.path.expanduser("~/data/bfcl")
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA_DIR = ROOT / "data" / "seta"
