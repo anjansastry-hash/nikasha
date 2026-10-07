@@ -43,6 +43,22 @@ Letter bias of gauge ① logit read (fit split, rotation r0 minus the mean over 
 
 Hidden-state check (KU2): last hidden state shape [1, 156, 3840], head reproduces logits within max-abs 0.0 — PASS.
 
+## Labels needed (gauge ③ head)
+
+The gauge ③ head retrained on n fit labels (equal per class), 21 variants in all; each variant's T and per-class thresholds are fitted on its own out-of-fold fit predictions, then the 700-item exam is scored once per variant. Mean over draws (min–max) and the paired 95% bootstrap CI of the draw mean (1000 exam resamples, seed 20261007; the CI does not include draw-to-draw variation, the min–max does).
+
+| fit labels n | draws | exam accuracy | ask rate @ SA 0.95 | selective accuracy achieved | draws meeting the SA target | within noise of gauge ① or better |
+|---|---|---|---|---|---|---|
+| 24 | 5 | 90.6 (89.0–91.4) [88.6, 92.5] | 8.5 (0.3–21.6) [7.2, 9.7] | 92.0 (89.2–94.1) | 0/5 | yes |
+| 48 | 5 | 89.8 (89.0–90.1) [87.7, 91.7] | 1.2 (0.0–3.6) [0.8, 1.6] | 90.3 (89.0–92.2) | 0/5 | yes |
+| 96 | 5 | 91.0 (90.3–92.0) [89.0, 92.9] | 14.6 (1.9–55.1) [13.5, 15.7] | 92.3 (89.5–94.9) | 0/5 | yes |
+| 192 | 5 | 92.1 (91.6–92.6) [90.3, 94.0] | 5.9 (0.9–11.1) [4.7, 7.2] | 94.6 (92.2–96.8) | 2/5 | yes |
+| 300 | 1 | 93.0 [91.1, 94.9] | 7.3 [5.4, 9.2] | 95.8 | 1/1 | yes |
+
+Smallest n whose mean ask rate is within noise of gauge ①'s or better (pre-registered rule; gauge ① 13.4 [11.0, 16.0]): **24**. Read it with the selective-accuracy column: at n = 24, 48, 96, 192 the draw-mean selective accuracy achieved on the exam is below the 0.95 target (gauge ①: 95.2 [93.4, 96.9]), so thresholds fitted on that few out-of-fold predictions under-ask — a lower ask rate there is not an improvement at equal selective accuracy.
+
+![labels needed by the gauge ③ head](results/labels-needed.png)
+
 ## Engines and licenses
 
 - gemma-4-12b-8bit-text: license: apache-2.0 — license_link: https://ai.google.dev/gemma/docs/gemma_4_license

@@ -394,6 +394,50 @@ def results_section(rows: list[dict]) -> list[str]:
     return out
 
 
+LABELS_NEEDED_REL = "results/labels-needed.png"
+
+
+def labels_needed_section() -> list[str]:
+    """Task C: per-n table, the pre-registered smallest-n line with its caveat, and the figure — every number
+    from results/labels-needed.json (its display strings and lists)."""
+    path = RESULTS_DIR / "labels-needed.json"
+    doc = load_json_dict(path) if path.is_file() else None
+    if not isinstance(doc, dict) or not isinstance(doc.get("exam"), dict) or not doc.get("summary"):
+        return []
+    ex = doc["exam"]
+    level = f"{fmt(ex.get('ci_level'))}%" if ex.get("ci_level") is not None else CI_LEVEL_WORDS
+    ref = doc.get("gauge1_reference") or {}
+    out = ["## Labels needed (gauge ③ head)", "",
+           f"The gauge ③ head retrained on n fit labels (equal per class), {fmt(len(doc['variants']))} variants in all; "
+           f"each variant's T and per-class thresholds are fitted on its own out-of-fold fit predictions, then the "
+           f"{fmt(ex.get('n_exam'))}-item exam is scored once per variant. Mean over draws (min–max) and the paired "
+           f"{level} bootstrap CI of the draw mean ({fmt(ex.get('n_boot'))} exam resamples, seed {fmt(ex.get('seed'))}; "
+           "the CI does not include draw-to-draw variation, the min–max does).", "",
+           "| fit labels n | draws | exam accuracy | ask rate @ SA "
+           f"{fmt(ex.get('sa_target'))} | selective accuracy achieved | draws meeting the SA target | "
+           "within noise of gauge ① or better |",
+           "|---|---|---|---|---|---|---|"]
+    for row in doc["summary"]:
+        d = row.get("display") or {}
+        out.append("| " + " | ".join([fmt(row.get("n")), fmt(row.get("draws")), fmt(d.get("accuracy")),
+                                      fmt(d.get("ask_rate")), fmt(d.get("selective_accuracy")),
+                                      fmt(d.get("draws_meeting_target")), fmt(d.get("within_noise_or_better"))]) + " |")
+    out.append("")
+    below = doc.get("n_with_mean_sa_below_target") or []
+    out.append(
+        f"Smallest n whose mean ask rate is within noise of gauge ①'s or better (pre-registered rule; gauge ① "
+        f"{fmt(dig(ref, 'display', 'ask_rate'))}): **{fmt(doc.get('smallest_n_display'))}**."
+        + (f" Read it with the selective-accuracy column: at n = {', '.join(fmt(n) for n in below)} the draw-mean "
+           f"selective accuracy achieved on the exam is below the {fmt(ex.get('sa_target'))} target (gauge ①: "
+           f"{fmt(dig(ref, 'display', 'selective_accuracy'))}), so thresholds fitted on that few out-of-fold "
+           "predictions under-ask — a lower ask rate there is not an improvement at equal selective accuracy."
+           if below else "")
+    )
+    if (ROOT / LABELS_NEEDED_REL).exists():
+        out += ["", f"![labels needed by the gauge ③ head]({LABELS_NEEDED_REL})"]
+    return out
+
+
 def engines_in_results() -> set[str]:
     """Non-constant engines named by results gauge files — the engines the README reports on (the same set
     selftest check d requires a card for). A card whose engine has no result yet is not printed."""
@@ -444,6 +488,9 @@ def build(manifest: dict, rows: list[dict]) -> str:
     lines += intro_section()
     lines += [""] + seta_section(manifest)
     lines += [""] + results_section(rows)
+    ln = labels_needed_section()
+    if ln:
+        lines += [""] + ln
     lines += [""] + engines_section()
     lines += [""] + promised_section()
     lines += ["", FOOTER]

@@ -428,6 +428,245 @@ def _select(args) -> list[tuple[Path, dict]]:
     return targets
 
 
+# ----------------------------------------------------------------------------- labels-needed (Task C)
+
+LABELS_NEEDED_PATH = RESULTS_DIR / "labels-needed.json"
+LABELS_NEEDED_PNG = RESULTS_DIR / "labels-needed.png"
+GAUGE1_PATH = RESULTS_DIR / "gauge1-logit.json"
+
+
+def _pct(v) -> str:
+    return _num(v, 100, 1)
+
+
+def _open_exam_for(section: str | None) -> tuple[str, str, dict | None, dict[str, str]]:
+    """The exam is opened here for the Gate 4 modes, after the same guards as the main run: PREREG committed
+    and clean, the declared amendment heading committed and pushed, exam sha256 equal to the manifest's.
+    Returns (prereg_commit, exam_sha, section info, id -> label)."""
+    if not PREREG_PATH.exists():
+        _fail("PREREG.md is missing — pre-register before the first exam read (rule 9)")
+    prereg_commit = _prereg_commit_or_fail()
+    info = None
+    if section:
+        info = {"prereg_section": section, "prereg_section_commit": _prereg_section_or_fail(section)}
+    manifest = read_json(MANIFEST_PATH)
+    expected = (manifest.get("sha256") or {}).get("exam.jsonl")
+    actual = sha256_file(EXAM_PATH)
+    if not expected or actual != expected:
+        _fail(f"exam.jsonl sha256 {actual} != manifest {expected} — the sealed exam changed; stop")
+    truth = _load_truth(EXAM_PATH)
+    print(f"exam.jsonl sha256 verified ({actual[:16]}…); ids={len(truth)}; n_boot={N_BOOT}; seed={SEED}")
+    return prereg_commit, actual, info, truth
+
+
+def score_labels_needed(rescore: bool) -> int:
+    """Score every labels-needed variant once on the exam, then the per-n summary and the pre-registered
+    'smallest n within noise of gauge ①'s or better' rule (PREREG Amendment 1)."""
+    if not LABELS_NEEDED_PATH.exists():
+        _fail(f"{LABELS_NEEDED_PATH.name} not found — run `gauge_probe labels-needed` first")
+    doc = read_json(LABELS_NEEDED_PATH)
+    if "exam" in doc and not rescore:
+        _fail(f"{LABELS_NEEDED_PATH.name} is already scored (scored_at {doc['exam'].get('scored_at')}); "
+              f"each variant is read once (rule 8)")
+    variants = doc.get("variants") or []
+    if len(variants) != 21:
+        _fail(f"{LABELS_NEEDED_PATH.name} holds {len(variants)} variants, Amendment 1 fixes 21")
+    g1 = read_json(GAUGE1_PATH)
+    ref_ask = ((g1.get("exam") or {}).get("metrics") or {}).get("ask_rate") or {}
+    if not (isinstance(ref_ask.get("ci"), list) and len(ref_ask["ci"]) == 2):
+        _fail("gauge ①'s exam block carries no ask-rate CI to compare against")
+
+    # phase 1 — no exam data: fingerprints, arrays, contract, one common exam order
+    prepared = []
+    order = None
+    for v in variants:
+        name = f"labels-needed {v['name']}"
+        fit_items = [{"id": it["id"], "split": "fit", "logits_mean": it["logits_mean"]} for it in v["fit_items"]]
+        if fit_fingerprint(fit_items)["sha256"] != v["calib"]["fit_fingerprint"]["sha256"]:
+            _fail(f"{name}: fit fingerprint differs from its calibration")
+        rows = [dict(it, split="exam") for it in v["exam_items"]]
+        ids = [r["id"] for r in rows]
+        if order is None:
+            order = ids
+        elif ids != order:
+            _fail(f"{name}: exam item order differs from the first variant's")
+        L, y = _arrays(name, rows)
+        T = float(v["calib"]["T"])
+        taus = [float(t) for t in v["calib"]["taus"]]
+        _validate_probs(name, metrics.softmax(L), "raw")
+        _validate_probs(name, metrics.softmax(L, T), "calibrated")
+        prepared.append((v, name, rows, L, y, T, taus))
+
+    # phase 2 — the exam is opened here
+    prereg_commit, exam_sha, section_info, truth = _open_exam_for(doc.get("prereg_section"))
+    if order != list(truth):
+        _fail("labels-needed exam rows are not in exam.jsonl order")
+    for v, name, rows, *_ in prepared:
+        _check_split(name, rows, "exam", truth, subset_ok=False)
+
+    # phase 3 — every variant, then the paired draw-mean CIs (the same resamples as every exam bootstrap)
+    y_all = prepared[0][4]
+    P_by = {}
+    for v, name, rows, L, y, T, taus in prepared:
+        m, _curve, conf = compute(name, L, y, T, taus)
+        v["exam"] = {"n_exam": len(rows), "T": T, "taus": taus, "metrics": m, "confusion": conf,
+                     "display": display_strings(m)}
+        P_by[v["name"]] = (metrics.softmax(L, T), taus)
+        print(f"{v['name']:>8}: acc {v['exam']['display']['accuracy']}  ask {v['exam']['display']['ask_rate']}  "
+              f"sa {v['exam']['display']['selective_accuracy']}  (taus {taus})")
+    sizes = doc["sizes"]
+    by_n = {n: [v for v, *_ in prepared if v["n"] == n] for n in sizes}
+    fns = {}
+    for n in sizes:
+        names = [v["name"] for v in by_n[n]]
+        fns[f"ask_n{n}"] = (lambda idx, names=names: float(np.mean(
+            [metrics.ask_rate(P_by[nm][0][idx], P_by[nm][1]) for nm in names])))
+        fns[f"acc_n{n}"] = (lambda idx, names=names: float(np.mean(
+            [metrics.accuracy(P_by[nm][0][idx], y_all[idx]) for nm in names])))
+    boot = metrics.bootstrap(fns, len(y_all), n_boot=N_BOOT, seed=SEED)
+    lo_ref, hi_ref = ref_ask["ci"]
+    summary, smallest = [], None
+    for n in sizes:
+        acc = [v["exam"]["metrics"]["accuracy"]["value"] for v in by_n[n]]
+        ask = [v["exam"]["metrics"]["ask_rate"]["value"] for v in by_n[n]]
+        ask_ci = boot[f"ask_n{n}"]["ci"]
+        acc_ci = boot[f"acc_n{n}"]["ci"]
+        qualifies = bool(ask_ci is not None and ask_ci[0] <= hi_ref)
+        if qualifies and smallest is None:
+            smallest = n
+        row = {
+            "n": n, "per_label": n // len(LABELS), "draws": len(by_n[n]),
+            "accuracy": {"mean": boot[f"acc_n{n}"]["value"], "min": min(acc), "max": max(acc), "ci": acc_ci},
+            "ask_rate": {"mean": boot[f"ask_n{n}"]["value"], "min": min(ask), "max": max(ask), "ci": ask_ci},
+            "within_noise_or_better_than_gauge1": qualifies,
+        }
+        rng_txt = lambda d: (f"{_pct(d['mean'])}" + (f" ({_pct(d['min'])}–{_pct(d['max'])})" if row["draws"] > 1 else "")
+                             + (f" [{_pct(d['ci'][0])}, {_pct(d['ci'][1])}]" if d["ci"] else ""))
+        row["display"] = {"accuracy": rng_txt(row["accuracy"]), "ask_rate": rng_txt(row["ask_rate"]),
+                          "within_noise_or_better": "yes" if qualifies else "no"}
+        summary.append(row)
+        print(f"n={n:3d}: accuracy {row['display']['accuracy']}  ask {row['display']['ask_rate']}  "
+              f"within noise of ① or better: {row['display']['within_noise_or_better']}")
+    doc["summary"] = summary
+    doc["gauge1_reference"] = {"ask_rate": {"value": ref_ask.get("value"), "ci": ref_ask["ci"]},
+                               "accuracy": g1["exam"]["metrics"]["accuracy"],
+                               "display": {"ask_rate": g1["exam"]["display"]["ask_rate"],
+                                           "accuracy": g1["exam"]["display"]["accuracy"]},
+                               "source": "results/gauge1-logit.json exam block (Gate 3)"}
+    doc["rule"] = ("smallest n whose draw-mean ask-rate CI has its lower end <= the upper end of gauge ①'s exam "
+                   "ask-rate CI (overlap = within noise; entirely below = better); none if no n qualifies")
+    doc["smallest_n_within_noise_or_better"] = smallest
+    doc["smallest_n_display"] = DASH if smallest is None else str(smallest)
+    doc["exam"] = {"n_exam": len(y_all), "n_boot": N_BOOT, "ci_level": 95, "seed": SEED, "sa_target": SA_TARGET,
+                   "exam_sha256": exam_sha, "scored_at": _utc_now(), "prereg_commit": prereg_commit,
+                   **(section_info or {})}
+    annotate_labels_needed_sa(doc)
+    write_json(LABELS_NEEDED_PATH, doc)
+    draw_labels_needed(doc)
+    print(f"smallest n within noise of gauge ①'s ask rate or better: {doc['smallest_n_display']} "
+          f"(gauge ① {g1['exam']['display']['ask_rate']}); wrote {LABELS_NEEDED_PATH.name}, {LABELS_NEEDED_PNG.name}")
+    return 0
+
+
+def annotate_labels_needed_sa(doc: dict) -> dict:
+    """Descriptive context for the ask-rate rule, from the per-variant exam blocks already stored (the exam is
+    not opened): per n, the selective accuracy each draw achieved on the exam at its own fit-chosen thresholds —
+    mean, min–max, and how many draws met the SA target. A low ask rate with selective accuracy below the
+    target is under-asking, not an improvement at equal selective accuracy."""
+    by_n: dict[int, list[float]] = {}
+    for v in doc["variants"]:
+        sa = v["exam"]["metrics"]["selective_accuracy"]["value"]
+        by_n.setdefault(v["n"], []).append(sa)
+    below = []
+    for row in doc["summary"]:
+        vals = [x for x in by_n[row["n"]] if x is not None]
+        mean = round(float(np.mean(vals)), 4) if vals else None
+        met = sum(1 for x in vals if x + 1e-12 >= SA_TARGET)
+        row["selective_accuracy"] = {"mean": mean, "min": min(vals) if vals else None, "max": max(vals) if vals else None,
+                                     "draws_meeting_target": met, "source": "per-variant exam blocks (no new exam read)"}
+        row["display"]["selective_accuracy"] = (_pct(mean) + (f" ({_pct(min(vals))}–{_pct(max(vals))})"
+                                                              if row["draws"] > 1 else "")) if vals else DASH
+        row["display"]["draws_meeting_target"] = f"{met}/{row['draws']}"
+        if mean is None or mean + 1e-12 < SA_TARGET:
+            below.append(row["n"])
+    g1_exam = read_json(GAUGE1_PATH)["exam"]
+    doc["gauge1_reference"]["selective_accuracy"] = g1_exam["metrics"]["selective_accuracy"]
+    doc["gauge1_reference"]["display"]["selective_accuracy"] = g1_exam["display"]["selective_accuracy"]
+    doc["n_with_mean_sa_below_target"] = below
+    doc["sa_note"] = ("thresholds fitted on small out-of-fold sets under-ask: where the draw-mean selective accuracy "
+                      "achieved on the exam is below the SA target, a lower ask rate is not an improvement at equal "
+                      "selective accuracy")
+    return doc
+
+
+def draw_labels_needed(doc: dict, out_path: Path = LABELS_NEEDED_PNG) -> None:
+    """Exam ask rate @ SA target and accuracy vs number of fit labels: one dot per draw, the draw mean with its
+    paired CI, gauge ①'s value and CI as a reference band."""
+    os.environ.setdefault("MPLCONFIGDIR", str(_mpl_config_dir()))
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    from matplotlib.lines import Line2D
+
+    ref = doc["gauge1_reference"]
+    with_sa = all("selective_accuracy" in row for row in doc["summary"]) and "selective_accuracy" in ref
+    panels = [("ask_rate", "exam ask rate @ SA 0.95 (%)", ref["ask_rate"])]
+    if with_sa:
+        panels.append(("selective_accuracy", "selective accuracy achieved on the exam (%)", ref["selective_accuracy"]))
+    panels.append(("accuracy", "exam accuracy (%)", ref["accuracy"]))
+    fig, axes = plt.subplots(1, len(panels), figsize=(4.6 * len(panels), 4.3), dpi=150)
+    fig.patch.set_facecolor("white")
+    sizes = [row["n"] for row in doc["summary"]]
+    for ax, (key, ylabel, r) in zip(axes, panels):
+        ax.set_facecolor("white")
+        ax.axhspan(100 * r["ci"][0], 100 * r["ci"][1], color=PALETTE[1], alpha=0.12, linewidth=0, zorder=1)
+        ax.axhline(100 * r["value"], color=PALETTE[1], linewidth=1.2, linestyle="--", zorder=2)
+        if key == "selective_accuracy":
+            ax.axhline(100 * SA_TARGET, color=INK_MUTED, linewidth=1.0, linestyle=":", zorder=2)
+        for v in doc["variants"]:
+            val = v["exam"]["metrics"][key]["value"]
+            if val is not None:
+                ax.plot([v["n"]], [100 * val], linestyle="none", marker="o", markersize=3.5,
+                        color=PALETTE[0], alpha=0.45, zorder=3)
+        means = [100 * row[key]["mean"] for row in doc["summary"]]
+        if all(isinstance(row[key].get("ci"), list) for row in doc["summary"]):
+            lo = [100 * row[key]["ci"][0] for row in doc["summary"]]
+            hi = [100 * row[key]["ci"][1] for row in doc["summary"]]
+            ax.fill_between(sizes, lo, hi, color=PALETTE[0], alpha=0.15, linewidth=0, zorder=2)
+        ax.plot(sizes, means, color=PALETTE[0], linewidth=1.8, marker="s", markersize=5, zorder=4)
+        ax.set_xscale("log")
+        ax.set_xticks(sizes)
+        ax.set_xticklabels([str(s) for s in sizes])
+        ax.minorticks_off()
+        ax.set_xlabel("fit labels used to train the head (equal per class)", color=INK)
+        ax.set_ylabel(ylabel, color=INK)
+        ax.grid(True, color=GRID, linewidth=0.6)
+        ax.set_axisbelow(True)
+        for side in ("top", "right"):
+            ax.spines[side].set_visible(False)
+        for side in ("left", "bottom"):
+            ax.spines[side].set_color(GRID)
+        ax.tick_params(colors=INK_MUTED, labelsize=8)
+    handles = [
+        Line2D([], [], color=PALETTE[0], linewidth=1.8, marker="s", markersize=5),
+        Line2D([], [], color=PALETTE[0], linestyle="none", marker="o", markersize=3.5, alpha=0.45),
+        Line2D([], [], color=PALETTE[1], linewidth=1.2, linestyle="--"),
+    ]
+    labels = ["gauge ③ head: mean over draws (band: paired 95% CI where computed)", "one draw",
+              "gauge ① logit read, 95% CI band"]
+    if with_sa:
+        handles.append(Line2D([], [], color=INK_MUTED, linewidth=1.0, linestyle=":"))
+        labels.append(f"selective-accuracy target {SA_TARGET:.2f}")
+    fig.legend(handles, labels, loc="lower center", ncol=len(labels), frameon=False, fontsize=7.5)
+    fig.suptitle("set A exam — labels needed by the gauge ③ head (thresholds fitted on each draw's out-of-fold "
+                 "predictions)", color=INK, fontsize=10)
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.savefig(out_path, dpi=150)
+    plt.close(fig)
+    print(f"labels-needed.png -> {out_path}")
+
+
 # ----------------------------------------------------------------------------- main
 
 def main(argv=None) -> int:
@@ -445,7 +684,13 @@ def main(argv=None) -> int:
     ap.add_argument("--curve-only", action="store_true",
                     help="only redraw results/curve.png from the exam blocks already on disk; scores nothing "
                          "and never opens exam.jsonl")
+    ap.add_argument("--labels-needed", action="store_true",
+                    help="score the labels-needed head variants (results/labels-needed.json) once; draw labels-needed.png")
     args = ap.parse_args(argv)
+    if args.labels_needed:
+        if args.gauge or args.fit_dry_run or args.curve_only:
+            ap.error("--labels-needed takes only --rescore")
+        return score_labels_needed(args.rescore)
     if args.fit_dry_run and args.rescore:
         ap.error("--fit-dry-run writes nothing; --rescore is meaningless with it")
     if args.curve_only:

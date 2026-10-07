@@ -141,13 +141,13 @@ def _canon(token: str) -> str | None:
         return None
     try:
         d = Decimal(s)
-    except InvalidOperation:
+        if not d.is_finite():
+            return None
+        if d == 0:
+            return "0"
+        return format(d.normalize(), "f")
+    except ArithmeticError:  # InvalidOperation; Overflow from hex digests such as "...6e5967613..." in a sha256
         return None
-    if not d.is_finite():
-        return None
-    if d == 0:
-        return "0"
-    return format(d.normalize(), "f")
 
 
 def _collect_text_numbers(text: str, out: set[str]) -> None:
@@ -302,10 +302,16 @@ def check_c(repo: Repo) -> list[tuple[str, str, str]]:
         return [(FAIL, "c", "README.md missing -- cannot check its numbers")]
     text = README_PATH.read_text(encoding="utf-8", errors="replace")
     readme: dict[str, str] = {}  # canonical -> first raw token as printed
+    unreadable: list[str] = []
     for tok in NUM_RE.findall(text):
         c = _canon(tok)
-        if c is not None and c not in readme:
+        if c is None:
+            unreadable.append(tok)
+        elif c not in readme:
             readme[c] = tok
+    if unreadable:
+        return [(FAIL, "c", f"README.md prints {len(unreadable)} number-like token(s) that do not parse as finite "
+                            f"numbers: {', '.join(unreadable[:MAX_SHOWN])}")]
     allowed: set[str] = set()
     n_sources = 0
     notes: list[str] = []
