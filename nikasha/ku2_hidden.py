@@ -293,30 +293,34 @@ def main(argv=None) -> int:
     mx.eval(ref)
     rec["vocab_size"] = int(ref.shape[-1])
 
-    # 6. THE check (brief, Task 5): the head applied to the LAST POSITION, h[:, -1] of shape
-    #    (1, hidden) — the quantity gauge ③ will consume. This feeds max_abs_diff and pass.
-    lp_raw = head(h[:, -1])
-    rec["logits_dtype"] = str(lp_raw.dtype)
-    lp = lp_raw[0].astype(mx.float32)
-    diff = float(mx.max(mx.abs(lp - ref)))
+    # 6. THE check (brief, Task 5): the model's own head applied to the hidden state, position -1
+    #    compared with model(x)[0, -1]. The head is applied exactly as gemma4_text.Model.__call__
+    #    applies it — to the whole (1, T, hidden) tensor, the last position sliced afterwards — so the
+    #    only thing under test is whether attr_path + head reproduce the model's forward. This feeds
+    #    max_abs_diff and pass.
+    full_raw = head(h)
+    rec["logits_dtype"] = str(full_raw.dtype)
+    full = full_raw[0, -1].astype(mx.float32)
+    diff = float(mx.max(mx.abs(full - ref)))
     rec["max_abs_diff"] = diff
-    rec["argmax_match"] = bool(int(mx.argmax(lp)) == int(mx.argmax(ref)))
-    rec["head_input"] = "h[:, -1] (1, hidden)"
+    rec["argmax_match"] = bool(int(mx.argmax(full)) == int(mx.argmax(ref)))
+    rec["head_input"] = "h (1, T, hidden) through the head, position -1 taken after the head (the model's own path)"
     rec["pass"] = bool(diff <= TOLERANCE) and shape == [1, len(toks), hidden]
 
-    # 7. Diagnostic only (never used for pass): the head over the whole hidden state with the last
-    #    position sliced after the head — the model's own forward decomposed into two calls, so it
-    #    reproduces the reference to the bit when attr_path and the head are right.
-    try:
-        full = head(h)[0, -1].astype(mx.float32)
-        rec["full_h"] = {
-            "head_input": "h (1, T, hidden) through the head, position -1 taken after the head",
-            "max_abs_diff": float(mx.max(mx.abs(full - ref))),
-            "argmax_match": bool(int(mx.argmax(full)) == int(mx.argmax(ref))),
-            "note": "diagnostic; not used for pass",
-        }
-    except Exception as e:  # noqa: BLE001
-        rec["full_h"] = {"head_input": "h (1, T, hidden)", "error": type(e).__name__}
+    # 7. Diagnostics (never used for pass): the head applied to the LAST POSITION ONLY, h[:, -1] of
+    #    shape (1, hidden) — the quantity gauge ③ will consume — in the model's bf16 and in float32.
+    #    A single-row quantized matmul accumulates in a different order from the full-sequence kernel,
+    #    so in bf16 it can differ from the reference by one ulp (0.125 at logit magnitudes 16–32).
+    def _variant(z, label):
+        try:
+            v = head(z)[0].astype(mx.float32)
+            return {"head_input": label, "max_abs_diff": float(mx.max(mx.abs(v - ref))),
+                    "argmax_match": bool(int(mx.argmax(v)) == int(mx.argmax(ref))),
+                    "note": "diagnostic; not used for pass"}
+        except Exception as e:  # noqa: BLE001
+            return {"head_input": label, "error": type(e).__name__}
+    rec["last_position_bf16"] = _variant(h[:, -1], "h[:, -1] (1, hidden), model dtype")
+    rec["last_position_fp32"] = _variant(h[:, -1].astype(mx.float32), "h[:, -1] (1, hidden) cast to float32 before the head")
 
     return _emit(rec)
 

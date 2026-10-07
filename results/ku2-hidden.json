@@ -1,0 +1,69 @@
+{
+ "engine": "gemma-4-12b-8bit-text",
+ "engine_path": "~/mlx-models/gemma-4-12b-8bit-text",
+ "attr_path": "language_model.model",
+ "head": "embed_tokens.as_linear + logit_softcap(30.0)",
+ "hidden_shape": [
+  1,
+  156,
+  3840
+ ],
+ "hidden_size": 3840,
+ "max_abs_diff": 0.0,
+ "tolerance": 0.01,
+ "pass": true,
+ "item_id": "live_irrelevance_63-2-51",
+ "prompt_tokens": 156,
+ "argmax_match": true,
+ "split": "fit",
+ "prompt_version": "v1",
+ "prompt_sha256": "f45f503ecce61805817028a7abca55e14bc4c50da0e4f3fb2b08ccfef78641d4",
+ "rotation": 0,
+ "render_source": "nikasha.gauge_logit (Reader.build_tools_block + system_text/user_text + Reader.render)",
+ "model_class": "mlx_lm.models.gemma4.Model",
+ "versions": {
+  "mlx": "0.32.3",
+  "mlx_lm": "0.31.3"
+ },
+ "checked_at": "2026-10-07T09:14:58Z",
+ "truncated": false,
+ "tokenization": "tok.encode(prompt) then Reader._ensure_single_bos (gauge ①'s read path)",
+ "n_bos_fixed": 0,
+ "template_fallback": false,
+ "hidden_size_source": "language_model.args.hidden_size",
+ "candidates": [
+  {
+   "attr_path": "language_model.model",
+   "present": true,
+   "callable": true,
+   "ndim": 3,
+   "shape": [
+    1,
+    156,
+    3840
+   ],
+   "dtype": "mlx.core.bfloat16",
+   "selected": true
+  }
+ ],
+ "hidden_dtype": "mlx.core.bfloat16",
+ "text_model_class": "mlx_lm.models.gemma4_text.Model",
+ "tie_word_embeddings": true,
+ "final_logit_softcapping": 30.0,
+ "softcap_impl": "mlx_lm.models.gemma4_text.logit_softcap",
+ "vocab_size": 262144,
+ "logits_dtype": "mlx.core.bfloat16",
+ "head_input": "h (1, T, hidden) through the head, position -1 taken after the head (the model's own path)",
+ "last_position_bf16": {
+  "head_input": "h[:, -1] (1, hidden), model dtype",
+  "max_abs_diff": 0.125,
+  "argmax_match": true,
+  "note": "diagnostic; not used for pass"
+ },
+ "last_position_fp32": {
+  "head_input": "h[:, -1] (1, hidden) cast to float32 before the head",
+  "max_abs_diff": 0.15544509887695312,
+  "argmax_match": true,
+  "note": "diagnostic; not used for pass"
+ }
+}
