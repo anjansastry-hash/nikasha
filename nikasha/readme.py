@@ -269,7 +269,8 @@ def dropped_lines(m: dict) -> list[str]:
 def seta_section(m: dict) -> list[str]:
     out = ["## Set A", ""]
     out.append(f"{fmt(m.get('name'))}: built from {code(fmt(m.get('source')))} "
-               f"(license {fmt(m.get('source_license'))}). Three labels, in fixed order:")
+               f"(license {fmt(m.get('source_license'))}) at dataset revision {code(fmt(m.get('bfcl_revision')))}. "
+               f"Three labels, in fixed order:")
     out.append("")
     rules = m.get("label_rule") if isinstance(m.get("label_rule"), dict) else {}
     for label in LABELS:

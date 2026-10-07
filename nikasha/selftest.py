@@ -14,7 +14,7 @@ Checks:
      JSON string VALUES; dict keys and the absolute value of negative numbers are not consulted.
   d  one license line per distinct non-"constant" engine named in results gauge files:
      cards/<engine>.md exists and has a line starting with "license:".
-  e  sha256(exam.jsonl) and sha256(fit.jsonl) equal the manifest's.
+  e  sha256(exam.jsonl) and sha256(fit.jsonl) equal the manifest's, and the manifest pins bfcl_revision.
   f  every exam.scored_at is preceded by a commit of PREREG.md (rule 9): the version in force at scoring
      time is the latest PREREG.md commit before it, and an exam block that records `prereg_commit` must
      name exactly that commit's date. PREREG.md is amended, never rewritten: every later committed version
@@ -399,6 +399,11 @@ def check_e(repo: Repo) -> list[tuple[str, str, str]]:
             out.append((PASS, "e", f"{name} sha256 {actual[:12]}... equals manifest"))
         else:
             out.append((FAIL, "e", f"{name} sha256 {actual[:12]}... != manifest {expected[:12]}..."))
+    rev = repo.manifest.get("bfcl_revision") if isinstance(repo.manifest, dict) else None
+    if isinstance(rev, str) and re.fullmatch(r"[0-9a-f]{40}", rev):
+        out.append((PASS, "e", f"manifest pins the BFCL dataset revision {rev[:12]}..."))
+    else:
+        out.append((FAIL, "e", f"manifest has no bfcl_revision (a 40-hex Hugging Face commit): {rev!r}"))
     return out
 
 

@@ -14,7 +14,7 @@ Use a full clone, not a shallow clone or a ZIP: selftest checks f and i read the
 
 ## Set A
 
-set A: built from `gorilla-llm/Berkeley-Function-Calling-Leaderboard` (license Apache-2.0). Three labels, in fixed order:
+set A: built from `gorilla-llm/Berkeley-Function-Calling-Leaderboard` (license Apache-2.0) at dataset revision `61fc0608cfd831fcfbbaa676ebdfef0ed963eeda`. Three labels, in fixed order:
 
 - `no-call` — irrelevance files have no possible_answer ground truth; every item is labelled by category
 - `one-call` — len(possible_answer ground_truth) == 1 (joined on id); items with count != 1 are dropped

@@ -1,6 +1,7 @@
 {
  "name": "set A",
  "source": "gorilla-llm/Berkeley-Function-Calling-Leaderboard",
+ "bfcl_revision": "61fc0608cfd831fcfbbaa676ebdfef0ed963eeda",
  "source_license": "Apache-2.0",
  "bfcl_dir": "~/data/bfcl",
  "labels": [

@@ -321,6 +321,14 @@ def allocate(n_valid: dict[str, int], target: int, floor: int, order: list[str])
 # ---------------------------------------------------------------------------------------------
 
 
+def bfcl_revision(bfcl_dir: Path) -> str | None:
+    """The Hugging Face dataset commit the local copy was downloaded at: line 1 of every
+    .cache/huggingface/download/*.metadata that `hf download --local-dir` writes. None if absent or mixed."""
+    revs = {f.read_text(encoding="utf-8").split("\n", 1)[0].strip()
+            for f in (bfcl_dir / ".cache" / "huggingface" / "download").glob("*.metadata")}
+    return revs.pop() if len(revs) == 1 else None
+
+
 def build(bfcl_dir: Path) -> tuple[list[dict], list[dict], dict]:
     resolved, substitutions, present = resolve_files(bfcl_dir)
     used = {a for a in resolved.values() if a}
@@ -437,6 +445,7 @@ def build(bfcl_dir: Path) -> tuple[list[dict], list[dict], dict]:
     manifest = {
         "name": "set A",
         "source": "gorilla-llm/Berkeley-Function-Calling-Leaderboard",
+        "bfcl_revision": bfcl_revision(bfcl_dir),
         "source_license": "Apache-2.0",
         "bfcl_dir": str(bfcl_dir),
         "labels": list(LABELS),
