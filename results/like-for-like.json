@@ -1,0 +1,415 @@
+{
+ "what": "like-for-like group: gauges ①, ③ and Jev on the same exam items (the Jev subsample minus Jev failures, exam.jsonl order); one bootstrap seed and order for every row, so resamples are paired",
+ "prereg_section": "## Amendment 1 (Gate 4)",
+ "ids_file": "data/seta/jev-subsample.json",
+ "subsample_sha256": "69e7937fe6b81f6c4f507c5445e51a87c6b198c0f5aeaf60b81b73d17d6eb187",
+ "n": 300,
+ "n_jev_failed": 0,
+ "jev_failed_ids": [],
+ "gate_rule": "unfitted gate: answer iff max p >= 0.95 (each gauge's own final probabilities; no threshold fitted)",
+ "rows": {
+  "gauge1-logit": {
+   "T": 3.7937827067436003,
+   "taus": [
+    0.34,
+    0.84,
+    0.84
+   ],
+   "metrics": {
+    "accuracy": {
+     "value": 0.8833,
+     "ci": [
+      0.8467,
+      0.9167
+     ],
+     "n_boot_used": 1000
+    },
+    "macro_f1": {
+     "value": 0.8819,
+     "ci": [
+      0.8477,
+      0.9177
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_raw": {
+     "value": 0.9627,
+     "ci": [
+      0.6668,
+      1.2901
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_cal": {
+     "value": 0.3764,
+     "ci": [
+      0.2923,
+      0.469
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_raw": {
+     "value": 0.1125,
+     "ci": [
+      0.0806,
+      0.1494
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_cal": {
+     "value": 0.061,
+     "ci": [
+      0.0364,
+      0.0984
+     ],
+     "n_boot_used": 1000
+    },
+    "ask_rate": {
+     "value": 0.1333,
+     "ci": [
+      0.0933,
+      0.17
+     ],
+     "n_boot_used": 1000
+    },
+    "selective_accuracy": {
+     "value": 0.9577,
+     "ci": [
+      0.9316,
+      0.98
+     ],
+     "n_boot_used": 1000,
+     "n_answered": 260
+    },
+    "auroc": {
+     "value": 0.8266,
+     "ci": [
+      0.7455,
+      0.8934
+     ],
+     "n_boot_used": 1000
+    }
+   },
+   "display": {
+    "accuracy": "88.3 [84.7, 91.7]",
+    "macro_f1": "88.2 [84.8, 91.8]",
+    "nll": "0.963 → 0.376",
+    "ece": "0.113 → 0.061",
+    "ask_rate": "13.3 [9.3, 17.0]",
+    "selective_accuracy": "95.8 [93.2, 98.0]",
+    "auroc": "0.827 [0.746, 0.893]"
+   },
+   "confusion": [
+    [
+     70,
+     29,
+     1
+    ],
+    [
+     0,
+     98,
+     2
+    ],
+    [
+     0,
+     3,
+     97
+    ]
+   ],
+   "unfitted_gate": {
+    "tau": 0.95,
+    "ask_rate": {
+     "value": 0.6267,
+     "ci": [
+      0.57,
+      0.6734
+     ],
+     "n_boot_used": 1000
+    },
+    "selective_accuracy": {
+     "value": 0.9821,
+     "ci": [
+      0.9549,
+      1.0
+     ],
+     "n_boot_used": 1000,
+     "n_answered": 112
+    },
+    "display": {
+     "ask_rate": "62.7 [57.0, 67.3]",
+     "selective_accuracy": "98.2 [95.5, 100.0]"
+    }
+   }
+  },
+  "gauge3-probe": {
+   "T": 0.9204683057076837,
+   "taus": [
+    0.76,
+    0.74,
+    0.55
+   ],
+   "metrics": {
+    "accuracy": {
+     "value": 0.9367,
+     "ci": [
+      0.9067,
+      0.96
+     ],
+     "n_boot_used": 1000
+    },
+    "macro_f1": {
+     "value": 0.9369,
+     "ci": [
+      0.9085,
+      0.9604
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_raw": {
+     "value": 0.2075,
+     "ci": [
+      0.1437,
+      0.2776
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_cal": {
+     "value": 0.2061,
+     "ci": [
+      0.1381,
+      0.2815
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_raw": {
+     "value": 0.0407,
+     "ci": [
+      0.0276,
+      0.0686
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_cal": {
+     "value": 0.0318,
+     "ci": [
+      0.0231,
+      0.06
+     ],
+     "n_boot_used": 1000
+    },
+    "ask_rate": {
+     "value": 0.08,
+     "ci": [
+      0.05,
+      0.1133
+     ],
+     "n_boot_used": 1000
+    },
+    "selective_accuracy": {
+     "value": 0.9674,
+     "ci": [
+      0.9456,
+      0.9857
+     ],
+     "n_boot_used": 1000,
+     "n_answered": 276
+    },
+    "auroc": {
+     "value": 0.8891,
+     "ci": [
+      0.8154,
+      0.9535
+     ],
+     "n_boot_used": 1000
+    }
+   },
+   "display": {
+    "accuracy": "93.7 [90.7, 96.0]",
+    "macro_f1": "93.7 [90.8, 96.0]",
+    "nll": "0.207 → 0.206",
+    "ece": "0.041 → 0.032",
+    "ask_rate": "8.0 [5.0, 11.3]",
+    "selective_accuracy": "96.7 [94.6, 98.6]",
+    "auroc": "0.889 [0.815, 0.954]"
+   },
+   "confusion": [
+    [
+     91,
+     9,
+     0
+    ],
+    [
+     6,
+     93,
+     1
+    ],
+    [
+     1,
+     2,
+     97
+    ]
+   ],
+   "unfitted_gate": {
+    "tau": 0.95,
+    "ask_rate": {
+     "value": 0.2967,
+     "ci": [
+      0.2433,
+      0.35
+     ],
+     "n_boot_used": 1000
+    },
+    "selective_accuracy": {
+     "value": 0.9858,
+     "ci": [
+      0.967,
+      1.0
+     ],
+     "n_boot_used": 1000,
+     "n_answered": 211
+    },
+    "display": {
+     "ask_rate": "29.7 [24.3, 35.0]",
+     "selective_accuracy": "98.6 [96.7, 100.0]"
+    }
+   }
+  },
+  "jev": {
+   "T": 1.0,
+   "taus": null,
+   "metrics": {
+    "accuracy": {
+     "value": 0.86,
+     "ci": [
+      0.8167,
+      0.9
+     ],
+     "n_boot_used": 1000
+    },
+    "macro_f1": {
+     "value": 0.8588,
+     "ci": [
+      0.8175,
+      0.8979
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_raw": {
+     "value": 0.5089,
+     "ci": [
+      0.2929,
+      0.8145
+     ],
+     "n_boot_used": 1000
+    },
+    "nll_cal": {
+     "value": 0.5089,
+     "ci": [
+      0.2929,
+      0.8145
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_raw": {
+     "value": 0.0719,
+     "ci": [
+      0.0474,
+      0.108
+     ],
+     "n_boot_used": 1000
+    },
+    "ece_cal": {
+     "value": 0.0719,
+     "ci": [
+      0.0474,
+      0.108
+     ],
+     "n_boot_used": 1000
+    },
+    "ask_rate": {
+     "value": null,
+     "ci": null,
+     "n_boot_used": 0,
+     "na": "n/a (no fit-split outputs)"
+    },
+    "selective_accuracy": {
+     "value": null,
+     "ci": null,
+     "n_boot_used": 0,
+     "na": "n/a (no fit-split outputs)",
+     "n_answered": null
+    },
+    "auroc": {
+     "value": 0.839,
+     "ci": [
+      0.7679,
+      0.899
+     ],
+     "n_boot_used": 1000
+    }
+   },
+   "display": {
+    "accuracy": "86.0 [81.7, 90.0]",
+    "macro_f1": "85.9 [81.8, 89.8]",
+    "nll": "0.509 → 0.509",
+    "ece": "0.072 → 0.072",
+    "ask_rate": "n/a (no fit-split outputs)",
+    "selective_accuracy": "n/a (no fit-split outputs)",
+    "auroc": "0.839 [0.768, 0.899]"
+   },
+   "confusion": [
+    [
+     66,
+     33,
+     1
+    ],
+    [
+     0,
+     98,
+     2
+    ],
+    [
+     0,
+     6,
+     94
+    ]
+   ],
+   "unfitted_gate": {
+    "tau": 0.95,
+    "ask_rate": {
+     "value": 0.38,
+     "ci": [
+      0.3267,
+      0.4367
+     ],
+     "n_boot_used": 1000
+    },
+    "selective_accuracy": {
+     "value": 0.9677,
+     "ci": [
+      0.9409,
+      0.9895
+     ],
+     "n_boot_used": 1000,
+     "n_answered": 186
+    },
+    "display": {
+     "ask_rate": "38.0 [32.7, 43.7]",
+     "selective_accuracy": "96.8 [94.1, 99.0]"
+    }
+   }
+  }
+ },
+ "exam": {
+  "n_exam": 300,
+  "n_boot": 1000,
+  "ci_level": 95,
+  "seed": 20261007,
+  "ece_bins": 15,
+  "exam_sha256": "cb0fa1f71cd363703122ba9c50ba326700ee6f7394fc5085297855aa6ae7758e",
+  "scored_at": "2026-10-07T10:58:28Z",
+  "prereg_commit": "2026-10-07T06:42:07-04:00",
+  "prereg_section": "## Amendment 1 (Gate 4)",
+  "prereg_section_commit": "2026-10-07T06:42:07-04:00"
+ }
+}

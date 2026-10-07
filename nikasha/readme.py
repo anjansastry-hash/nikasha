@@ -394,6 +394,79 @@ def results_section(rows: list[dict]) -> list[str]:
     return out
 
 
+LIKE_ORDER = ["gauge1-logit", "gauge3-probe", "jev"]
+GATE_KEYS = {"gate_ask_rate": "ask_rate", "gate_selective_accuracy": "selective_accuracy"}
+
+
+def like_for_like_section() -> list[str]:
+    """The 300-item like-for-like group (gauges ①, ③ and Jev on the same items, paired resamples), the
+    unfitted-gate columns, and the Jev call summary — every number from results/like-for-like.json and
+    results/jev.json."""
+    path = RESULTS_DIR / "like-for-like.json"
+    like = load_json_dict(path) if path.is_file() else None
+    if not isinstance(like, dict) or not isinstance(like.get("exam"), dict):
+        return []
+    ex = like["exam"]
+    level = f"{fmt(ex.get('ci_level'))}%" if ex.get("ci_level") is not None else CI_LEVEL_WORDS
+    sa_targets = {json.dumps(dig(load_json_dict(RESULTS_DIR / f"{name}.calib.json") or {}, "sa_target"))
+                  for name in LIKE_ORDER if (RESULTS_DIR / f"{name}.calib.json").is_file()}
+    if len(sa_targets) != 1:
+        raise SystemExit(f"readme: sa_target differs across the like-for-like calibrations: {sa_targets}")
+    sa_target = json.loads(next(iter(sa_targets)))
+    rows = []
+    for name in LIKE_ORDER:
+        r = (like.get("rows") or {}).get(name)
+        if not isinstance(r, dict):
+            continue
+        m = dict(r.get("metrics") or {})
+        gate = r.get("unfitted_gate") or {}
+        for key, src in GATE_KEYS.items():
+            m[key] = gate.get(src) if isinstance(gate.get(src), dict) else {"value": None, "ci": None}
+        rows.append({"id": name, "gauge": name, "exam": {"metrics": m, "display": r.get("display") or {}},
+                     "gate_display": gate.get("display") or {}})
+    noise = {k: within_noise(rows, k) for k in CI_COLUMNS + list(GATE_KEYS) + ["ece_raw", "ece_cal"]}
+    tau = None
+    for name in LIKE_ORDER:
+        tau = dig(like, "rows", name, "unfitted_gate", "tau") if tau is None else tau
+    out = ["## Like-for-like: the same 300 exam items", "",
+           f"Gauges ① and ③ (their fit-split T and thresholds) and Jev on the same {fmt(like.get('n'))} exam items "
+           f"(the Jev subsample, {fmt(like.get('n_jev_failed'))} Jev failures removed), one bootstrap order, so the "
+           f"rows' resamples are paired. The last two columns are the unfitted gate \"answer iff max p ≥ {fmt(tau)}\" "
+           "on each gauge's own final probabilities — no threshold fitted, reported for this group only.", "",
+           f"| gauge | n | accuracy [CI] | ECE raw → cal | ask rate @ SA {fmt(sa_target)} [CI] | "
+           f"selective accuracy achieved [CI] | AUROC [CI] | unfitted gate: ask rate [CI] | unfitted gate: selective accuracy [CI] |",
+           "|" + "---|" * 9]
+    for i, r in enumerate(rows):
+        d, gd = r["exam"]["display"], r["gate_display"]
+        cells = [DISPLAY_NAME.get(r["id"], r["id"]), fmt(like.get("n")),
+                 cell(d, "accuracy", noise["accuracy"][i]),
+                 arrow_cell(d, "ece", (noise["ece_raw"][i], noise["ece_cal"][i])),
+                 cell(d, "ask_rate", noise["ask_rate"][i]),
+                 cell(d, "selective_accuracy", noise["selective_accuracy"][i]),
+                 cell(d, "auroc", noise["auroc"][i]),
+                 cell(gd, "ask_rate", noise["gate_ask_rate"][i]),
+                 cell(gd, "selective_accuracy", noise["gate_selective_accuracy"][i])]
+        out.append("| " + " | ".join(cells) + " |")
+    out.append("")
+    if any(any(f) for f in noise.values()):
+        out += [FOOTNOTE_TPL.format(level=level), ""]
+    jev = load_json_dict(RESULTS_DIR / "jev.json") if (RESULTS_DIR / "jev.json").is_file() else None
+    if isinstance(jev, dict):
+        calls = jev.get("calls") or {}
+        conf = jev.get("confidence")
+        conf_txt = {"probabilities": "every response carried per-option probabilities, taken as its probability vector",
+                    "none": "no response carried a confidence: one-hot vectors, ask rate n/a (no confidence returned)",
+                    "mixed": "some responses carried no probabilities (one-hot, counted in results/jev.json)"}.get(conf, "")
+        out.append(
+            f"Jev: {fmt(jev.get('n_success'))} of {fmt(dig(jev, 'subsample', 'n'))} subsample items answered, "
+            f"{fmt(jev.get('n_failed'))} failed (listed in `results/jev.json`); {fmt(calls.get('total'))} calls including "
+            f"{fmt(calls.get('retries'))} retries (cap {fmt(calls.get('cap'))}); {conf_txt}. Nothing is fitted for an "
+            "exam-only subsample: T = 1 and no thresholds, so its ask rate at fitted thresholds is n/a. Raw responses: "
+            "`results/jev-raw/`."
+        )
+    return out
+
+
 LABELS_NEEDED_REL = "results/labels-needed.png"
 
 
@@ -488,9 +561,9 @@ def build(manifest: dict, rows: list[dict]) -> str:
     lines += intro_section()
     lines += [""] + seta_section(manifest)
     lines += [""] + results_section(rows)
-    ln = labels_needed_section()
-    if ln:
-        lines += [""] + ln
+    for section in (like_for_like_section(), labels_needed_section()):
+        if section:
+            lines += [""] + section
     lines += [""] + engines_section()
     lines += [""] + promised_section()
     lines += ["", FOOTER]

@@ -218,6 +218,29 @@ def letter_bias(fit_items: list[dict]) -> dict | None:
     }
 
 
+EXTERNAL_T_METHOD = "fixed (external gauge with no fit-split outputs: nothing is fitted)"
+
+
+def calibrate_external(obj: dict, gauge: str) -> dict:
+    """An external gauge run on an exam-only subsample (PREREG Amendment 1, Jev): no fit-split outputs exist,
+    so nothing is fitted — T = 1 (fixed, as for the constant baselines) and no thresholds (taus null: the ask
+    rate at fitted thresholds is n/a). The fingerprint binds the calib to the (empty) fit split of this run."""
+    return {
+        "gauge": gauge,
+        "n_fit": 0,
+        "sa_target": SA_TARGET,
+        "T": 1.0,
+        "T_method": EXTERNAL_T_METHOD,
+        "tau_global": None,
+        "taus": None,
+        "target_reachable_on_fit": None,
+        "fit": None,
+        "grid": None,
+        "fit_fingerprint": fit_fingerprint(obj["items"]),
+        "note": "no fit-split outputs (exam-only subsample); thresholds are fitted on the fit split only, so none exist",
+    }
+
+
 def calibrate_gauge(obj: dict, stem: str) -> dict:
     """Fit T and thresholds on the fit split of one gauge result; return the calib.json object."""
     gauge = obj.get("gauge") if isinstance(obj.get("gauge"), str) else stem
@@ -225,6 +248,9 @@ def calibrate_gauge(obj: dict, stem: str) -> dict:
         print(f"calibrate: {stem}: warning: file's gauge name is {gauge!r}; output is paired by file stem",
               file=sys.stderr)
     engine = obj.get("engine")
+    if obj.get("external") is True and not any(isinstance(it, dict) and it.get("split") == "fit"
+                                               for it in obj["items"]):
+        return calibrate_external(obj, gauge)
 
     fit_items, logits, y = _fit_arrays(obj, stem)
     n_fit = len(fit_items)
@@ -326,6 +352,9 @@ def stamp_existing(results_dir: Path) -> int:
 
 
 def summary_line(stem: str, calib: dict, out_path: Path) -> str:
+    if calib.get("T_method") == EXTERNAL_T_METHOD:
+        return (f"{stem}: external, n_fit=0 -> T=1.0 fixed, no thresholds (ask rate at fitted thresholds n/a); "
+                f"fit_fingerprint {calib['fit_fingerprint']['sha256'][:16]}… -> results/{out_path.name}")
     fit = calib["fit"]
     fmt = lambda v, nd=4: "null" if v is None else f"{v:.{nd}f}"  # noqa: E731
     taus_s = "[" + ", ".join(f"{t:.2f}" for t in calib["taus"]) + "]"

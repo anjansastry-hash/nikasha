@@ -1,0 +1,1 @@
+{"model":"typesafe/jev-1.13-20260917","answers":{"tool_calls":{"type":"choice","choice":"one tool call","probabilities":{"more than one tool call":0.01,"no tool call":0.16,"one tool call":0.83},"confidence":0.74}},"usage":{"input_tokens":462,"output_tokens":49,"cost":0.000019404},"id":"gen-dec-1791370585-XVEIe5erbN7z481AhWvs","provider":"TypeSafe"}

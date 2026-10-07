@@ -1,0 +1,9214 @@
+{
+ "gauge": "jev",
+ "engine": "jev-1.13",
+ "engine_path": null,
+ "external": true,
+ "endpoint": "https://openrouter.ai/api/alpha/decisions",
+ "model_requested": "typesafe/jev-1.13",
+ "models_returned": {
+  "typesafe/jev-1.13-20260917": 300
+ },
+ "providers_returned": {
+  "TypeSafe": 300
+ },
+ "license": "license: proprietary — no published weights (\"Jev is a proprietary model and as such there are no published weights and no paper.\")",
+ "prompt_sha256": "1e5da8521bf778f6fc292044507325a05eb567116c4d1433816ab52e56192213",
+ "prompt_version": "jev-v1",
+ "rotations": 1,
+ "seed": 20261007,
+ "n_fit": 0,
+ "n_exam": 300,
+ "labels": [
+  "no-call",
+  "one-call",
+  "multi-call"
+ ],
+ "prereg_section": "## Amendment 1 (Gate 4)",
+ "subsample": {
+  "file": "data/seta/jev-subsample.json",
+  "sha256": "69e7937fe6b81f6c4f507c5445e51a87c6b198c0f5aeaf60b81b73d17d6eb187",
+  "n": 300
+ },
+ "confidence": "probabilities",
+ "mapping_counts": {
+  "probabilities": 300
+ },
+ "n_success": 300,
+ "n_failed": 0,
+ "failed": [],
+ "n_choice_disagrees_with_argmax": 0,
+ "n_argmax_ties": 0,
+ "calls": {
+  "total": 304,
+  "cap": 400,
+  "retries": 4,
+  "max_retries_per_item": 3,
+  "backoff_s": [
+   2,
+   4,
+   8
+  ],
+  "timeout_s": 60.0
+ },
+ "usage": {
+  "cost_usd": 0.0062,
+  "input_tokens": 147609,
+  "output_tokens": 14894
+ },
+ "docs_read": [
+  "https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request",
+  "https://openrouter.ai/docs/guides/community/jev",
+  "https://openrouter.ai/docs/cookbook/building-agents/gate-tool-calls-with-jev",
+  "https://openrouter.ai/blog/insights/what-is-jev/"
+ ],
+ "timing": {
+  "s_per_item": 0.26,
+  "wall_s": 79.049,
+  "peak_gb": null,
+  "n_items": 300,
+  "forwards_per_item": 1
+ },
+ "built_at": "2026-10-07T10:56:50Z",
+ "items": [
+  {
+   "id": "irrelevance_163",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 408,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_163.json"
+  },
+  {
+   "id": "live_irrelevance_142-13-8",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.40047756659712525,
+    -1.1394342831883648,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.67,
+    0.32,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 630,
+   "choice": "no-call",
+   "confidence_field": 0.51,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.67,
+    0.32,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_142-13-8.json"
+  },
+  {
+   "id": "live_irrelevance_503-148-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.020202707317519466,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.98,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 421,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.98,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_503-148-0.json"
+  },
+  {
+   "id": "live_irrelevance_17-2-5",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_17-2-5.json"
+  },
+  {
+   "id": "irrelevance_161",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.16251892949777494,
+    -2.120263536200091,
+    -3.506557897319982
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.85,
+    0.12,
+    0.030000000000000006
+   ],
+   "truncated": false,
+   "prompt_tokens": 403,
+   "choice": "no-call",
+   "confidence_field": 0.77,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.85,
+    0.12,
+    0.03
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_161.json"
+  },
+  {
+   "id": "live_irrelevance_13-2-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 403,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_13-2-1.json"
+  },
+  {
+   "id": "live_irrelevance_712-236-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.040821994520255166,
+    -3.506557897319982
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.96,
+    0.03
+   ],
+   "truncated": false,
+   "prompt_tokens": 507,
+   "choice": "one-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.96,
+    0.03
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_712-236-0.json"
+  },
+  {
+   "id": "live_irrelevance_416-95-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.0216512475319814,
+    -0.4620354595965587,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.36,
+    0.63,
+    0.010000000000000002
+   ],
+   "truncated": false,
+   "prompt_tokens": 416,
+   "choice": "one-call",
+   "confidence_field": 0.45,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.36,
+    0.63,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_416-95-0.json"
+  },
+  {
+   "id": "live_irrelevance_493-142-4",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.030459207484708574,
+    -3.506557897319982,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9699999999990301,
+    0.02999999999997,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 612,
+   "choice": "no-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.97,
+    0.03,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_493-142-4.json"
+  },
+  {
+   "id": "live_irrelevance_686-223-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7985076962177716,
+    -1.4696759700589417,
+    -1.1394342831883648
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.44999999999999996,
+    0.22999999999999998,
+    0.32
+   ],
+   "truncated": false,
+   "prompt_tokens": 591,
+   "choice": "no-call",
+   "confidence_field": 0.18,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.45,
+    0.23,
+    0.32
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_686-223-1.json"
+  },
+  {
+   "id": "live_irrelevance_605-193-7",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.171182981502945,
+    -0.4307829160924542,
+    -3.2188758248682006
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.31,
+    0.6499999999999999,
+    0.04
+   ],
+   "truncated": false,
+   "prompt_tokens": 517,
+   "choice": "one-call",
+   "confidence_field": 0.48,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.31,
+    0.65,
+    0.04
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_605-193-7.json"
+  },
+  {
+   "id": "live_irrelevance_823-316-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 460,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_823-316-0.json"
+  },
+  {
+   "id": "live_irrelevance_469-130-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 419,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_469-130-1.json"
+  },
+  {
+   "id": "live_irrelevance_64-2-52",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 398,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_64-2-52.json"
+  },
+  {
+   "id": "live_irrelevance_563-172-4",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.2039728043259361,
+    -0.35667494393873245,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.2999999999997,
+    0.6999999999993001,
+    9.999999999990001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 421,
+   "choice": "one-call",
+   "confidence_field": 0.55,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.3,
+    0.7,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_563-172-4.json"
+  },
+  {
+   "id": "irrelevance_116",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 400,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_116.json"
+  },
+  {
+   "id": "live_irrelevance_57-2-45",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 400,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_57-2-45.json"
+  },
+  {
+   "id": "live_irrelevance_258-56-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -0.030459207484708574,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.02,
+    0.9699999999999999,
+    0.010000000000000007
+   ],
+   "truncated": false,
+   "prompt_tokens": 548,
+   "choice": "one-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.97,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_258-56-1.json"
+  },
+  {
+   "id": "live_irrelevance_661-211-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.2729656758128873,
+    -0.40047756659712525,
+    -2.995732273553991
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.27999999999999997,
+    0.6699999999999999,
+    0.05
+   ],
+   "truncated": false,
+   "prompt_tokens": 789,
+   "choice": "one-call",
+   "confidence_field": 0.51,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.28,
+    0.67,
+    0.05
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_661-211-1.json"
+  },
+  {
+   "id": "live_irrelevance_711-235-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 403,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_711-235-0.json"
+  },
+  {
+   "id": "irrelevance_26",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7765287894989963,
+    -0.6348782724359695,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.46,
+    0.53,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 434,
+   "choice": "one-call",
+   "confidence_field": 0.3,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.46,
+    0.53,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_26.json"
+  },
+  {
+   "id": "live_irrelevance_32-2-20",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.020202707317519466,
+    -3.912023005428146,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9799999999990201,
+    0.019999999999980003,
+    9.999999999990011e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 453,
+   "choice": "no-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.98,
+    0.02,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_32-2-20.json"
+  },
+  {
+   "id": "live_irrelevance_338-80-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.2378743560016174,
+    -0.7133498878774648,
+    -1.5141277326297755
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.29,
+    0.49,
+    0.22
+   ],
+   "truncated": false,
+   "prompt_tokens": 401,
+   "choice": "one-call",
+   "confidence_field": 0.23,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.29,
+    0.49,
+    0.22
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_338-80-1.json"
+  },
+  {
+   "id": "irrelevance_187",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 418,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_187.json"
+  },
+  {
+   "id": "live_irrelevance_726-242-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.2613647641344075,
+    -1.4696759700589417,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.76999999999923,
+    0.22999999999977,
+    9.999999999989993e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 520,
+   "choice": "no-call",
+   "confidence_field": 0.66,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.77,
+    0.23,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_726-242-0.json"
+  },
+  {
+   "id": "live_irrelevance_622-196-3",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.941608539858445,
+    -0.527632742082372,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.39,
+    0.5900000000000001,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 644,
+   "choice": "one-call",
+   "confidence_field": 0.38,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.39,
+    0.59,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_622-196-3.json"
+  },
+  {
+   "id": "live_irrelevance_560-172-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.995732273553991,
+    -0.05129329438755058,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.04999999999995001,
+    0.9499999999990499,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 421,
+   "choice": "one-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.05,
+    0.95,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_560-172-1.json"
+  },
+  {
+   "id": "live_irrelevance_362-81-23",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 430,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_362-81-23.json"
+  },
+  {
+   "id": "irrelevance_10",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.020202707317519466,
+    -3.912023005428146,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9799999999990201,
+    0.019999999999980003,
+    9.999999999990011e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 421,
+   "choice": "no-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.98,
+    0.02,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_10.json"
+  },
+  {
+   "id": "live_irrelevance_806-305-10",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.06187540371808753,
+    -3.2188758248682006,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9400000000000001,
+    0.040000000000000015,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 583,
+   "choice": "no-call",
+   "confidence_field": 0.91,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.94,
+    0.04,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_806-305-10.json"
+  },
+  {
+   "id": "live_irrelevance_732-247-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.05129329438755058,
+    -3.506557897319982,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9500000000000001,
+    0.030000000000000002,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "no-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.95,
+    0.03,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_732-247-0.json"
+  },
+  {
+   "id": "live_irrelevance_410-91-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 408,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_410-91-1.json"
+  },
+  {
+   "id": "live_irrelevance_478-135-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 456,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_478-135-0.json"
+  },
+  {
+   "id": "live_irrelevance_516-154-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.8134107167600364,
+    -0.08338160893905101,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.05999999999999999,
+    0.92,
+    0.02
+   ],
+   "truncated": false,
+   "prompt_tokens": 420,
+   "choice": "one-call",
+   "confidence_field": 0.88,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.06,
+    0.92,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_516-154-1.json"
+  },
+  {
+   "id": "live_irrelevance_94-2-82",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.030459207484708574,
+    -3.506557897319982,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9699999999990301,
+    0.02999999999997,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "no-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.97,
+    0.03,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_94-2-82.json"
+  },
+  {
+   "id": "live_irrelevance_485-139-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.030459207484708574,
+    -3.506557897319982,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9699999999990301,
+    0.02999999999997,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 436,
+   "choice": "no-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.97,
+    0.03,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_485-139-0.json"
+  },
+  {
+   "id": "live_irrelevance_499-145-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.8971199848858813,
+    -0.18632957819149348,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.15000000000000002,
+    0.83,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 458,
+   "choice": "one-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.15,
+    0.83,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_499-145-0.json"
+  },
+  {
+   "id": "live_irrelevance_253-53-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.35667494393873245,
+    -1.4696759700589417,
+    -2.659260036932778
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.7,
+    0.22999999999999998,
+    0.07
+   ],
+   "truncated": false,
+   "prompt_tokens": 678,
+   "choice": "no-call",
+   "confidence_field": 0.55,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.7,
+    0.23,
+    0.07
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_253-53-1.json"
+  },
+  {
+   "id": "live_irrelevance_368-81-29",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.0402208285265546,
+    -0.1743533871447778,
+    -3.506557897319982
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.13,
+    0.84,
+    0.030000000000000006
+   ],
+   "truncated": false,
+   "prompt_tokens": 618,
+   "choice": "one-call",
+   "confidence_field": 0.76,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.13,
+    0.84,
+    0.03
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_368-81-29.json"
+  },
+  {
+   "id": "live_irrelevance_357-81-18",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 426,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_357-81-18.json"
+  },
+  {
+   "id": "live_irrelevance_1-0-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.3470736479666092,
+    -1.3862943611198906,
+    -0.7133498878774648
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.26,
+    0.25,
+    0.49
+   ],
+   "truncated": false,
+   "prompt_tokens": 444,
+   "choice": "multi-call",
+   "confidence_field": 0.23,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.26,
+    0.25,
+    0.49
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_1-0-1.json"
+  },
+  {
+   "id": "live_irrelevance_169-23-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 439,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_169-23-1.json"
+  },
+  {
+   "id": "live_irrelevance_477-134-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.2072749131897207,
+    -0.12783337150988489,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.11000000000000001,
+    0.8799999999999999,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 411,
+   "choice": "one-call",
+   "confidence_field": 0.82,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.11,
+    0.88,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_477-134-1.json"
+  },
+  {
+   "id": "irrelevance_73",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.35667494393873245,
+    -1.5141277326297755,
+    -2.5257286443082556
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.7,
+    0.22000000000000003,
+    0.07999999999999999
+   ],
+   "truncated": false,
+   "prompt_tokens": 417,
+   "choice": "no-call",
+   "confidence_field": 0.55,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.7,
+    0.22,
+    0.08
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_73.json"
+  },
+  {
+   "id": "live_irrelevance_748-259-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 596,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_748-259-0.json"
+  },
+  {
+   "id": "live_irrelevance_60-2-48",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_60-2-48.json"
+  },
+  {
+   "id": "irrelevance_90",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 408,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_90.json"
+  },
+  {
+   "id": "live_irrelevance_762-272-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.10536051565782628,
+    -2.4079456086518722
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.8999999999999999,
+    0.08999999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 603,
+   "choice": "one-call",
+   "confidence_field": 0.85,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.9,
+    0.09
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_762-272-1.json"
+  },
+  {
+   "id": "irrelevance_86",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 403,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_86.json"
+  },
+  {
+   "id": "irrelevance_155",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_155.json"
+  },
+  {
+   "id": "live_irrelevance_248-49-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.2039728043259361,
+    -0.6539264674066639,
+    -1.7147984280919266
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.29999999999999993,
+    0.52,
+    0.18000000000000005
+   ],
+   "truncated": false,
+   "prompt_tokens": 553,
+   "choice": "one-call",
+   "confidence_field": 0.28,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.3,
+    0.52,
+    0.18
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_248-49-0.json"
+  },
+  {
+   "id": "live_irrelevance_59-2-47",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_59-2-47.json"
+  },
+  {
+   "id": "live_irrelevance_407-89-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 392,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_407-89-0.json"
+  },
+  {
+   "id": "live_irrelevance_20-2-8",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.040821994520255166,
+    -3.506557897319982,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.96,
+    0.03,
+    0.01
+   ],
+   "truncated": false,
+   "prompt_tokens": 444,
+   "choice": "no-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.96,
+    0.03,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_20-2-8.json"
+  },
+  {
+   "id": "irrelevance_168",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.06187540371808753,
+    -2.995732273553991,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9400000000000001,
+    0.05000000000000001,
+    0.010000000000000009
+   ],
+   "truncated": false,
+   "prompt_tokens": 408,
+   "choice": "no-call",
+   "confidence_field": 0.91,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.94,
+    0.05,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_168.json"
+  },
+  {
+   "id": "live_irrelevance_302-76-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 551,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_302-76-0.json"
+  },
+  {
+   "id": "live_irrelevance_610-194-3",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.0788096613719298,
+    -0.4780358009429998,
+    -3.2188758248682006
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.34,
+    0.62,
+    0.039999999999999994
+   ],
+   "truncated": false,
+   "prompt_tokens": 728,
+   "choice": "one-call",
+   "confidence_field": 0.43,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.34,
+    0.62,
+    0.04
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_610-194-3.json"
+  },
+  {
+   "id": "live_irrelevance_680-220-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7339691750802004,
+    -1.2039728043259361,
+    -1.5141277326297755
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.4800000000000001,
+    0.3,
+    0.22000000000000003
+   ],
+   "truncated": false,
+   "prompt_tokens": 508,
+   "choice": "no-call",
+   "confidence_field": 0.22,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.48,
+    0.3,
+    0.22
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_680-220-0.json"
+  },
+  {
+   "id": "irrelevance_221",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_221.json"
+  },
+  {
+   "id": "live_irrelevance_404-86-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.5257286443082556,
+    -0.09431067947124129,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.07999999999999997,
+    0.9100000000000001,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "one-call",
+   "confidence_field": 0.86,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.08,
+    0.91,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_404-86-0.json"
+  },
+  {
+   "id": "irrelevance_175",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_175.json"
+  },
+  {
+   "id": "irrelevance_12",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_12.json"
+  },
+  {
+   "id": "live_irrelevance_472-132-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.7147984280919266,
+    -0.21072103131565253,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.18,
+    0.81,
+    0.010000000000000005
+   ],
+   "truncated": false,
+   "prompt_tokens": 482,
+   "choice": "one-call",
+   "confidence_field": 0.72,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.18,
+    0.81,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_472-132-0.json"
+  },
+  {
+   "id": "live_irrelevance_573-179-2",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.2613647641344075,
+    -2.120263536200091,
+    -2.2072749131897207
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.77,
+    0.12,
+    0.11000000000000001
+   ],
+   "truncated": false,
+   "prompt_tokens": 468,
+   "choice": "no-call",
+   "confidence_field": 0.66,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.77,
+    0.12,
+    0.11
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_573-179-2.json"
+  },
+  {
+   "id": "live_irrelevance_5-0-5",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7133498878774648,
+    -0.941608539858445,
+    -2.120263536200091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.49,
+    0.39,
+    0.12000000000000002
+   ],
+   "truncated": false,
+   "prompt_tokens": 448,
+   "choice": "no-call",
+   "confidence_field": 0.23,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.49,
+    0.39,
+    0.12
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_5-0-5.json"
+  },
+  {
+   "id": "live_irrelevance_191-32-4",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 423,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_191-32-4.json"
+  },
+  {
+   "id": "live_irrelevance_632-201-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -3.2188758248682006,
+    -0.16251892949777494,
+    -2.2072749131897207
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.040000000000000015,
+    0.85,
+    0.11000000000000003
+   ],
+   "truncated": false,
+   "prompt_tokens": 585,
+   "choice": "one-call",
+   "confidence_field": 0.77,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.04,
+    0.85,
+    0.11
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_632-201-0.json"
+  },
+  {
+   "id": "irrelevance_210",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.2876820724517809,
+    -1.4271163556401458,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.75,
+    0.24000000000000002,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 409,
+   "choice": "no-call",
+   "confidence_field": 0.62,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.75,
+    0.24,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_210.json"
+  },
+  {
+   "id": "live_irrelevance_220-34-9",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.9942522733438669,
+    -0.4942963218147801,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.37,
+    0.61,
+    0.02
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "one-call",
+   "confidence_field": 0.41,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.37,
+    0.61,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_220-34-9.json"
+  },
+  {
+   "id": "live_irrelevance_133-12-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.040821994520255166,
+    -3.2188758248682006,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.95999999999904,
+    0.03999999999996001,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 498,
+   "choice": "no-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.96,
+    0.04,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_133-12-0.json"
+  },
+  {
+   "id": "live_irrelevance_48-2-36",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_48-2-36.json"
+  },
+  {
+   "id": "live_irrelevance_607-194-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.8915981192837836,
+    -0.5978370007556204,
+    -3.2188758248682006
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.41,
+    0.55,
+    0.04
+   ],
+   "truncated": false,
+   "prompt_tokens": 711,
+   "choice": "one-call",
+   "confidence_field": 0.33,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.41,
+    0.55,
+    0.04
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_607-194-0.json"
+  },
+  {
+   "id": "live_irrelevance_98-2-86",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 396,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_98-2-86.json"
+  },
+  {
+   "id": "live_irrelevance_657-209-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.579818495252942,
+    -1.171182981502945,
+    -2.0402208285265546
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.56,
+    0.31,
+    0.13
+   ],
+   "truncated": false,
+   "prompt_tokens": 446,
+   "choice": "no-call",
+   "confidence_field": 0.34,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.56,
+    0.31,
+    0.13
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_657-209-0.json"
+  },
+  {
+   "id": "live_irrelevance_86-2-74",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.12783337150988489,
+    -2.120263536200091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.87999999999912,
+    0.11999999999988002,
+    9.999999999989993e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 403,
+   "choice": "no-call",
+   "confidence_field": 0.82,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.88,
+    0.12,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_86-2-74.json"
+  },
+  {
+   "id": "live_irrelevance_229-36-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.9675840262617056,
+    -0.6348782724359695,
+    -2.4079456086518722
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.38,
+    0.53,
+    0.08999999999999997
+   ],
+   "truncated": false,
+   "prompt_tokens": 435,
+   "choice": "one-call",
+   "confidence_field": 0.3,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.38,
+    0.53,
+    0.09
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_229-36-0.json"
+  },
+  {
+   "id": "live_irrelevance_746-257-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.2484613592984996,
+    -1.5606477482646683,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.7799999999999999,
+    0.21000000000000002,
+    0.01
+   ],
+   "truncated": false,
+   "prompt_tokens": 493,
+   "choice": "no-call",
+   "confidence_field": 0.67,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.78,
+    0.21,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_746-257-0.json"
+  },
+  {
+   "id": "live_irrelevance_214-34-3",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.8971199848858813,
+    -0.18632957819149348,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.15000000000000002,
+    0.83,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "one-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.15,
+    0.83,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_214-34-3.json"
+  },
+  {
+   "id": "live_irrelevance_356-81-17",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 434,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_356-81-17.json"
+  },
+  {
+   "id": "live_irrelevance_490-142-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 618,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_490-142-1.json"
+  },
+  {
+   "id": "irrelevance_48",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 409,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_48.json"
+  },
+  {
+   "id": "live_irrelevance_58-2-46",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 399,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_58-2-46.json"
+  },
+  {
+   "id": "irrelevance_130",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.5621189181535413,
+    -1.3093333199837622,
+    -1.8325814637483102
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.57,
+    0.27,
+    0.15999999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 413,
+   "choice": "no-call",
+   "confidence_field": 0.35,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.57,
+    0.27,
+    0.16
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_130.json"
+  },
+  {
+   "id": "live_irrelevance_597-192-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.5257286443082556,
+    -0.10536051565782628,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.07999999999999999,
+    0.8999999999999999,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 504,
+   "choice": "one-call",
+   "confidence_field": 0.85,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.08,
+    0.9,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_597-192-0.json"
+  },
+  {
+   "id": "irrelevance_71",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.08338160893905101,
+    -2.5257286443082556,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.9199999999990801,
+    0.07999999999991998,
+    9.999999999989995e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 434,
+   "choice": "no-call",
+   "confidence_field": 0.88,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.92,
+    0.08,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_71.json"
+  },
+  {
+   "id": "irrelevance_142",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_142.json"
+  },
+  {
+   "id": "live_irrelevance_256-55-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7550225842780328,
+    -0.843970070294529,
+    -2.3025850929940455
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.47000000000000003,
+    0.43,
+    0.10000000000000005
+   ],
+   "truncated": false,
+   "prompt_tokens": 609,
+   "choice": "no-call",
+   "confidence_field": 0.2,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.47,
+    0.43,
+    0.1
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_256-55-0.json"
+  },
+  {
+   "id": "live_irrelevance_683-221-1",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -1.6094379124341003,
+    -0.5621189181535413,
+    -1.4696759700589417
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.20000000000000004,
+    0.57,
+    0.23
+   ],
+   "truncated": false,
+   "prompt_tokens": 579,
+   "choice": "one-call",
+   "confidence_field": 0.35,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.2,
+    0.57,
+    0.23
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_683-221-1.json"
+  },
+  {
+   "id": "live_irrelevance_238-43-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7765287894989963,
+    -0.616186139423817,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.45999999999954,
+    0.53999999999946,
+    9.999999999990011e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 463,
+   "choice": "one-call",
+   "confidence_field": 0.31,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.46,
+    0.54,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_238-43-0.json"
+  },
+  {
+   "id": "live_irrelevance_821-314-5",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.16251892949777494,
+    -1.8971199848858813,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.84999999999915,
+    0.14999999999985,
+    9.999999999990013e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 435,
+   "choice": "no-call",
+   "confidence_field": 0.77,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.85,
+    0.15,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_821-314-5.json"
+  },
+  {
+   "id": "irrelevance_4",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.5108256237659907,
+    -0.916290731874155,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.5999999999994,
+    0.3999999999996,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 415,
+   "choice": "no-call",
+   "confidence_field": 0.4,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.6,
+    0.4,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_4.json"
+  },
+  {
+   "id": "live_irrelevance_286-68-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.5621189181535411,
+    -0.867500567704723,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.5700000000000001,
+    0.42,
+    0.010000000000000007
+   ],
+   "truncated": false,
+   "prompt_tokens": 766,
+   "choice": "no-call",
+   "confidence_field": 0.35,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.57,
+    0.42,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_286-68-0.json"
+  },
+  {
+   "id": "live_irrelevance_873-358-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.7985076962177716,
+    -0.6539264674066639,
+    -3.506557897319982
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.45,
+    0.52,
+    0.029999999999999992
+   ],
+   "truncated": false,
+   "prompt_tokens": 587,
+   "choice": "one-call",
+   "confidence_field": 0.28,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.45,
+    0.52,
+    0.03
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_873-358-0.json"
+  },
+  {
+   "id": "irrelevance_29",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.5978370007556204,
+    -0.8209805520698302,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.55,
+    0.44,
+    0.010000000000000007
+   ],
+   "truncated": false,
+   "prompt_tokens": 409,
+   "choice": "no-call",
+   "confidence_field": 0.33,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.55,
+    0.44,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_29.json"
+  },
+  {
+   "id": "live_irrelevance_353-81-14",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.0402208285265546,
+    -0.15082288973458366,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.12999999999999998,
+    0.86,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "one-call",
+   "confidence_field": 0.79,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.13,
+    0.86,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_353-81-14.json"
+  },
+  {
+   "id": "live_irrelevance_616-195-4",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -2.3025850929940455,
+    -0.4307829160924542,
+    -1.3862943611198906
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.1,
+    0.6499999999999999,
+    0.25
+   ],
+   "truncated": false,
+   "prompt_tokens": 606,
+   "choice": "one-call",
+   "confidence_field": 0.48,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.1,
+    0.65,
+    0.25
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_616-195-4.json"
+  },
+  {
+   "id": "live_irrelevance_391-81-52",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.11653381625595151,
+    -2.3025850929940455,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.8899999999999999,
+    0.10000000000000003,
+    0.01
+   ],
+   "truncated": false,
+   "prompt_tokens": 439,
+   "choice": "no-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.89,
+    0.1,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_391-81-52.json"
+  },
+  {
+   "id": "irrelevance_82",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 414,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/irrelevance_82.json"
+  },
+  {
+   "id": "live_irrelevance_74-2-62",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    0.0,
+    -27.631021115928547,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.999999999998,
+    9.99999999998001e-13,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 409,
+   "choice": "no-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    1.0,
+    0.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_74-2-62.json"
+  },
+  {
+   "id": "live_irrelevance_177-29-0",
+   "split": "exam",
+   "label": "no-call",
+   "logits_mean": [
+    -0.01005033585350145,
+    -4.605170185988091,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.98999999999901,
+    0.009999999999990001,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 402,
+   "choice": "no-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.99,
+    0.01,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_irrelevance_177-29-0.json"
+  },
+  {
+   "id": "simple_174",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 419,
+   "choice": "one-call",
+   "confidence_field": 0.99,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_174.json"
+  },
+  {
+   "id": "live_multiple_1018-247-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 485,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_1018-247-0.json"
+  },
+  {
+   "id": "multiple_126",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 493,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_126.json"
+  },
+  {
+   "id": "simple_240",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 416,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_240.json"
+  },
+  {
+   "id": "live_multiple_246-110-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 475,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_246-110-0.json"
+  },
+  {
+   "id": "simple_304",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.020202707317519466,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.9799999999990201,
+    0.019999999999980003
+   ],
+   "truncated": false,
+   "prompt_tokens": 412,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.98,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_304.json"
+  },
+  {
+   "id": "live_multiple_34-11-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.2188758248682006,
+    -0.05129329438755058,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.040000000000000015,
+    0.9500000000000001,
+    0.010000000000000002
+   ],
+   "truncated": false,
+   "prompt_tokens": 443,
+   "choice": "one-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.04,
+    0.95,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_34-11-0.json"
+  },
+  {
+   "id": "live_multiple_497-148-7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 555,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_497-148-7.json"
+  },
+  {
+   "id": "simple_211",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 427,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_211.json"
+  },
+  {
+   "id": "simple_112",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 409,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_112.json"
+  },
+  {
+   "id": "live_multiple_288-129-3",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 512,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_288-129-3.json"
+  },
+  {
+   "id": "multiple_98",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 472,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_98.json"
+  },
+  {
+   "id": "live_simple_68-32-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -0.030459207484708574,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.02999999999997,
+    0.9699999999990301,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "one-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.97,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_68-32-0.json"
+  },
+  {
+   "id": "multiple_13",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.3856624808119846,
+    -1.1394342831883648
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990003e-13,
+    0.67999999999932,
+    0.31999999999968004
+   ],
+   "truncated": false,
+   "prompt_tokens": 466,
+   "choice": "one-call",
+   "confidence_field": 0.52,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.68,
+    0.32
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_13.json"
+  },
+  {
+   "id": "live_multiple_418-141-7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.18632957819149348,
+    -1.8325814637483102
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.83,
+    0.16
+   ],
+   "truncated": false,
+   "prompt_tokens": 536,
+   "choice": "one-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.83,
+    0.16
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_418-141-7.json"
+  },
+  {
+   "id": "live_multiple_685-164-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 495,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_685-164-1.json"
+  },
+  {
+   "id": "live_multiple_94-41-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 584,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_94-41-1.json"
+  },
+  {
+   "id": "simple_201",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.020202707317519466,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.98,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.98,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_201.json"
+  },
+  {
+   "id": "live_multiple_254-118-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 502,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_254-118-0.json"
+  },
+  {
+   "id": "simple_104",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_104.json"
+  },
+  {
+   "id": "live_multiple_747-169-2",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 562,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_747-169-2.json"
+  },
+  {
+   "id": "simple_301",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -0.030459207484708574,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.02999999999997,
+    0.9699999999990301,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 404,
+   "choice": "one-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.97,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_301.json"
+  },
+  {
+   "id": "live_multiple_562-155-2",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -0.040821994520255166,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.03,
+    0.96,
+    0.01
+   ],
+   "truncated": false,
+   "prompt_tokens": 663,
+   "choice": "one-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.96,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_562-155-2.json"
+  },
+  {
+   "id": "live_multiple_463-145-14",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 649,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_463-145-14.json"
+  },
+  {
+   "id": "live_multiple_810-176-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 475,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_810-176-1.json"
+  },
+  {
+   "id": "live_multiple_143-55-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 449,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_143-55-1.json"
+  },
+  {
+   "id": "live_multiple_528-151-4",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.020202707317519466,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.98,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 473,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.98,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_528-151-4.json"
+  },
+  {
+   "id": "live_multiple_74-34-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 484,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_74-34-0.json"
+  },
+  {
+   "id": "multiple_112",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 453,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_112.json"
+  },
+  {
+   "id": "live_simple_100-59-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 421,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_100-59-1.json"
+  },
+  {
+   "id": "live_multiple_412-141-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.12783337150988489,
+    -2.120263536200091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989993e-13,
+    0.87999999999912,
+    0.11999999999988002
+   ],
+   "truncated": false,
+   "prompt_tokens": 546,
+   "choice": "one-call",
+   "confidence_field": 0.82,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.88,
+    0.12
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_412-141-1.json"
+  },
+  {
+   "id": "simple_364",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 406,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_364.json"
+  },
+  {
+   "id": "live_multiple_800-175-6",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 673,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_800-175-6.json"
+  },
+  {
+   "id": "live_simple_115-71-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 404,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_115-71-0.json"
+  },
+  {
+   "id": "multiple_26",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.5447271754416719,
+    -0.8915981192837835
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000002,
+    0.5800000000000001,
+    0.41000000000000003
+   ],
+   "truncated": false,
+   "prompt_tokens": 461,
+   "choice": "one-call",
+   "confidence_field": 0.37,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.58,
+    0.41
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_26.json"
+  },
+  {
+   "id": "live_multiple_437-142-3",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 740,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_437-142-3.json"
+  },
+  {
+   "id": "live_multiple_1007-236-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 476,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_1007-236-0.json"
+  },
+  {
+   "id": "live_multiple_658-162-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 793,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_658-162-0.json"
+  },
+  {
+   "id": "simple_300",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -1.8325814637483102,
+    -0.18632957819149348,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.16,
+    0.83,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 426,
+   "choice": "one-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.16,
+    0.83,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_300.json"
+  },
+  {
+   "id": "live_multiple_501-148-11",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 582,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_501-148-11.json"
+  },
+  {
+   "id": "live_multiple_491-148-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 554,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_491-148-1.json"
+  },
+  {
+   "id": "live_multiple_182-77-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 445,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_182-77-0.json"
+  },
+  {
+   "id": "simple_213",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -2.5257286443082556,
+    -0.10536051565782628,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.07999999999999999,
+    0.8999999999999999,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "one-call",
+   "confidence_field": 0.85,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.08,
+    0.9,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_213.json"
+  },
+  {
+   "id": "live_simple_176-102-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -2.8134107167600364,
+    -0.09431067947124129,
+    -3.506557897319982
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.059999999999999984,
+    0.9099999999999999,
+    0.029999999999999992
+   ],
+   "truncated": false,
+   "prompt_tokens": 430,
+   "choice": "one-call",
+   "confidence_field": 0.86,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.06,
+    0.91,
+    0.03
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_176-102-0.json"
+  },
+  {
+   "id": "live_simple_59-28-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 423,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_59-28-0.json"
+  },
+  {
+   "id": "live_simple_144-95-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 413,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_144-95-1.json"
+  },
+  {
+   "id": "live_multiple_595-158-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.7765287894989963,
+    -0.6348782724359695
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.46,
+    0.53
+   ],
+   "truncated": false,
+   "prompt_tokens": 467,
+   "choice": "multi-call",
+   "confidence_field": 0.3,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.46,
+    0.53
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_595-158-1.json"
+  },
+  {
+   "id": "live_multiple_238-106-4",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 482,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_238-106-4.json"
+  },
+  {
+   "id": "simple_4",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 414,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_4.json"
+  },
+  {
+   "id": "live_multiple_526-151-2",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 470,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_526-151-2.json"
+  },
+  {
+   "id": "simple_62",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 448,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_62.json"
+  },
+  {
+   "id": "multiple_7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 455,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_7.json"
+  },
+  {
+   "id": "live_simple_189-114-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -1.6607312068216509,
+    -0.3285040669720361,
+    -2.4079456086518722
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.19,
+    0.72,
+    0.08999999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 447,
+   "choice": "one-call",
+   "confidence_field": 0.58,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.19,
+    0.72,
+    0.09
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_189-114-0.json"
+  },
+  {
+   "id": "live_multiple_934-191-22",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.05129329438755058,
+    -3.2188758248682006
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000002,
+    0.9500000000000001,
+    0.040000000000000015
+   ],
+   "truncated": false,
+   "prompt_tokens": 552,
+   "choice": "one-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.95,
+    0.04
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_934-191-22.json"
+  },
+  {
+   "id": "live_multiple_393-138-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 458,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_393-138-1.json"
+  },
+  {
+   "id": "live_multiple_162-63-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 583,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_162-63-1.json"
+  },
+  {
+   "id": "simple_257",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_257.json"
+  },
+  {
+   "id": "live_multiple_135-51-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 442,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_135-51-1.json"
+  },
+  {
+   "id": "simple_200",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 456,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_200.json"
+  },
+  {
+   "id": "live_multiple_229-103-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 484,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_229-103-0.json"
+  },
+  {
+   "id": "simple_292",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 424,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_292.json"
+  },
+  {
+   "id": "live_simple_1-1-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 453,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_1-1-0.json"
+  },
+  {
+   "id": "multiple_174",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -0.040821994520255166,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.020000000000000004,
+    0.96,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 439,
+   "choice": "one-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.96,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_174.json"
+  },
+  {
+   "id": "simple_32",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 418,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_32.json"
+  },
+  {
+   "id": "live_simple_101-60-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 452,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_101-60-0.json"
+  },
+  {
+   "id": "live_multiple_510-149-7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 647,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_510-149-7.json"
+  },
+  {
+   "id": "live_multiple_173-71-2",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 673,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_173-71-2.json"
+  },
+  {
+   "id": "simple_244",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -0.040821994520255166,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.03,
+    0.96,
+    0.01
+   ],
+   "truncated": false,
+   "prompt_tokens": 411,
+   "choice": "one-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.96,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_244.json"
+  },
+  {
+   "id": "live_multiple_56-22-3",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.020202707317519466,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.98,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 503,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.98,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_56-22-3.json"
+  },
+  {
+   "id": "live_multiple_134-51-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 443,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_134-51-0.json"
+  },
+  {
+   "id": "live_multiple_667-162-9",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 806,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_667-162-9.json"
+  },
+  {
+   "id": "simple_145",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 439,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_145.json"
+  },
+  {
+   "id": "live_multiple_429-141-18",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.2744368457017603,
+    -1.4696759700589417
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.7599999999999999,
+    0.22999999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 539,
+   "choice": "one-call",
+   "confidence_field": 0.64,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.76,
+    0.23
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_429-141-18.json"
+  },
+  {
+   "id": "multiple_149",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 488,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_149.json"
+  },
+  {
+   "id": "live_multiple_89-39-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -0.040821994520255166,
+    -3.912023005428146
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.020000000000000004,
+    0.96,
+    0.020000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 530,
+   "choice": "one-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.96,
+    0.02
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_89-39-0.json"
+  },
+  {
+   "id": "simple_212",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 407,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_212.json"
+  },
+  {
+   "id": "live_multiple_1036-263-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.1743533871447778,
+    -1.8325814637483102
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999e-13,
+    0.8399999999991601,
+    0.15999999999984
+   ],
+   "truncated": false,
+   "prompt_tokens": 506,
+   "choice": "one-call",
+   "confidence_field": 0.76,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.84,
+    0.16
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_1036-263-1.json"
+  },
+  {
+   "id": "live_multiple_987-218-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 568,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_987-218-0.json"
+  },
+  {
+   "id": "simple_128",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 436,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_128.json"
+  },
+  {
+   "id": "simple_23",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 415,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_23.json"
+  },
+  {
+   "id": "simple_268",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 414,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_268.json"
+  },
+  {
+   "id": "live_multiple_79-36-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 505,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_79-36-0.json"
+  },
+  {
+   "id": "live_multiple_732-167-3",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -0.030459207484708574,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.02999999999997,
+    0.9699999999990301,
+    9.999999999989997e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 583,
+   "choice": "one-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.97,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_732-167-3.json"
+  },
+  {
+   "id": "live_multiple_130-50-2",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 684,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_130-50-2.json"
+  },
+  {
+   "id": "live_multiple_950-199-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 520,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_950-199-1.json"
+  },
+  {
+   "id": "simple_345",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 417,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_345.json"
+  },
+  {
+   "id": "simple_158",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 432,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_158.json"
+  },
+  {
+   "id": "live_multiple_15-4-7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 646,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_15-4-7.json"
+  },
+  {
+   "id": "live_simple_44-18-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -1.3093333199837622,
+    -0.3285040669720361,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.27,
+    0.72,
+    0.01000000000000001
+   ],
+   "truncated": false,
+   "prompt_tokens": 413,
+   "choice": "one-call",
+   "confidence_field": 0.58,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.27,
+    0.72,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_simple_44-18-0.json"
+  },
+  {
+   "id": "live_multiple_391-137-9",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.01005033585350145,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.009999999999990001,
+    0.98999999999901,
+    9.999999999990024e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 554,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.99,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_391-137-9.json"
+  },
+  {
+   "id": "live_multiple_531-151-7",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -1.8325814637483102,
+    -0.18632957819149348,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.16,
+    0.83,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 462,
+   "choice": "one-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.16,
+    0.83,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_531-151-7.json"
+  },
+  {
+   "id": "live_multiple_240-107-1",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -0.020202707317519466,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000004,
+    0.98,
+    0.010000000000000004
+   ],
+   "truncated": false,
+   "prompt_tokens": 690,
+   "choice": "one-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.98,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_240-107-1.json"
+  },
+  {
+   "id": "multiple_155",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 462,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_155.json"
+  },
+  {
+   "id": "live_multiple_71-31-0",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.01005033585350145,
+    -4.605170185988091
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.98999999999901,
+    0.009999999999990001
+   ],
+   "truncated": false,
+   "prompt_tokens": 483,
+   "choice": "one-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.99,
+    0.01
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_71-31-0.json"
+  },
+  {
+   "id": "live_multiple_578-156-4",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 605,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_578-156-4.json"
+  },
+  {
+   "id": "simple_31",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 443,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_31.json"
+  },
+  {
+   "id": "multiple_189",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 437,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/multiple_189.json"
+  },
+  {
+   "id": "live_multiple_432-141-21",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.2484613592984996,
+    -1.5141277326297755
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990005e-13,
+    0.7799999999992201,
+    0.21999999999978
+   ],
+   "truncated": false,
+   "prompt_tokens": 546,
+   "choice": "one-call",
+   "confidence_field": 0.67,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.78,
+    0.22
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_432-141-21.json"
+  },
+  {
+   "id": "live_multiple_87-38-4",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -1.5141277326297755,
+    -0.2484613592984996,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.21999999999978,
+    0.7799999999992201,
+    9.999999999990005e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 552,
+   "choice": "one-call",
+   "confidence_field": 0.67,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.22,
+    0.78,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_multiple_87-38-4.json"
+  },
+  {
+   "id": "simple_369",
+   "split": "exam",
+   "label": "one-call",
+   "logits_mean": [
+    -27.631021115928547,
+    0.0,
+    -27.631021115928547
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    0.999999999998,
+    9.99999999998001e-13
+   ],
+   "truncated": false,
+   "prompt_tokens": 414,
+   "choice": "one-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    1.0,
+    0.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/simple_369.json"
+  },
+  {
+   "id": "parallel_multiple_46",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.2188758248682006,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.03999999999996001,
+    0.95999999999904
+   ],
+   "truncated": false,
+   "prompt_tokens": 467,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.04,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_46.json"
+  },
+  {
+   "id": "parallel_167",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 488,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_167.json"
+  },
+  {
+   "id": "parallel_16",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 450,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_16.json"
+  },
+  {
+   "id": "parallel_multiple_138",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.8134107167600364,
+    -0.06187540371808753
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990005e-13,
+    0.05999999999994,
+    0.93999999999906
+   ],
+   "truncated": false,
+   "prompt_tokens": 598,
+   "choice": "multi-call",
+   "confidence_field": 0.91,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.06,
+    0.94
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_138.json"
+  },
+  {
+   "id": "parallel_multiple_28",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 448,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_28.json"
+  },
+  {
+   "id": "parallel_multiple_52",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.616186139423817,
+    -0.7765287894989963
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.53999999999946,
+    0.45999999999954
+   ],
+   "truncated": false,
+   "prompt_tokens": 448,
+   "choice": "one-call",
+   "confidence_field": 0.31,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.54,
+    0.46
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_52.json"
+  },
+  {
+   "id": "parallel_95",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 551,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_95.json"
+  },
+  {
+   "id": "parallel_multiple_124",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.2729656758128873,
+    -0.3285040669720361
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.27999999999972003,
+    0.71999999999928
+   ],
+   "truncated": false,
+   "prompt_tokens": 576,
+   "choice": "multi-call",
+   "confidence_field": 0.58,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.28,
+    0.72
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_124.json"
+  },
+  {
+   "id": "parallel_multiple_148",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.659260036932778,
+    -0.07257069283483537
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989993e-13,
+    0.06999999999993001,
+    0.92999999999907
+   ],
+   "truncated": false,
+   "prompt_tokens": 533,
+   "choice": "multi-call",
+   "confidence_field": 0.89,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.07,
+    0.93
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_148.json"
+  },
+  {
+   "id": "live_parallel_12-8-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -3.506557897319982,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.03,
+    0.96
+   ],
+   "truncated": false,
+   "prompt_tokens": 451,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.03,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_12-8-0.json"
+  },
+  {
+   "id": "parallel_169",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.7147984280919266,
+    -0.19845093872383832
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990003e-13,
+    0.17999999999982,
+    0.81999999999918
+   ],
+   "truncated": false,
+   "prompt_tokens": 548,
+   "choice": "multi-call",
+   "confidence_field": 0.73,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.18,
+    0.82
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_169.json"
+  },
+  {
+   "id": "parallel_multiple_69",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 655,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_69.json"
+  },
+  {
+   "id": "parallel_198",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.995732273553991,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.04999999999995001,
+    0.9499999999990499
+   ],
+   "truncated": false,
+   "prompt_tokens": 445,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.05,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_198.json"
+  },
+  {
+   "id": "parallel_multiple_179",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.995732273553991,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.04999999999995001,
+    0.9499999999990499
+   ],
+   "truncated": false,
+   "prompt_tokens": 631,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.05,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_179.json"
+  },
+  {
+   "id": "parallel_multiple_163",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 552,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_163.json"
+  },
+  {
+   "id": "parallel_multiple_95",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.4271163556401458,
+    -0.2744368457017603
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.23999999999976,
+    0.7599999999992401
+   ],
+   "truncated": false,
+   "prompt_tokens": 632,
+   "choice": "multi-call",
+   "confidence_field": 0.64,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.24,
+    0.76
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_95.json"
+  },
+  {
+   "id": "parallel_80",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -2.659260036932778,
+    -0.08338160893905101
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000009,
+    0.07,
+    0.92
+   ],
+   "truncated": false,
+   "prompt_tokens": 461,
+   "choice": "multi-call",
+   "confidence_field": 0.88,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.07,
+    0.92
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_80.json"
+  },
+  {
+   "id": "live_parallel_multiple_8-7-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.09431067947124129,
+    -2.4079456086518722
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990017e-13,
+    0.9099999999990901,
+    0.08999999999990997
+   ],
+   "truncated": false,
+   "prompt_tokens": 653,
+   "choice": "one-call",
+   "confidence_field": 0.86,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.91,
+    0.09
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_8-7-0.json"
+  },
+  {
+   "id": "parallel_multiple_77",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 548,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_77.json"
+  },
+  {
+   "id": "parallel_multiple_176",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -3.2188758248682006,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000002,
+    0.040000000000000015,
+    0.9500000000000001
+   ],
+   "truncated": false,
+   "prompt_tokens": 670,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.04,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_176.json"
+  },
+  {
+   "id": "live_parallel_0-0-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 422,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_0-0-0.json"
+  },
+  {
+   "id": "live_parallel_multiple_11-10-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 695,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_11-10-0.json"
+  },
+  {
+   "id": "parallel_41",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 424,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_41.json"
+  },
+  {
+   "id": "parallel_multiple_18",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 446,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_18.json"
+  },
+  {
+   "id": "live_parallel_13-9-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 420,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_13-9-0.json"
+  },
+  {
+   "id": "live_parallel_multiple_2-2-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 652,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_2-2-0.json"
+  },
+  {
+   "id": "live_parallel_multiple_19-16-1",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.2876820724517809,
+    -1.3862943611198906
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999e-13,
+    0.74999999999925,
+    0.24999999999975003
+   ],
+   "truncated": false,
+   "prompt_tokens": 682,
+   "choice": "one-call",
+   "confidence_field": 0.62,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.75,
+    0.25
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_19-16-1.json"
+  },
+  {
+   "id": "parallel_173",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 492,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_173.json"
+  },
+  {
+   "id": "parallel_multiple_14",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 490,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_14.json"
+  },
+  {
+   "id": "parallel_125",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.2188758248682006,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.03999999999996001,
+    0.95999999999904
+   ],
+   "truncated": false,
+   "prompt_tokens": 520,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.04,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_125.json"
+  },
+  {
+   "id": "parallel_109",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 435,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_109.json"
+  },
+  {
+   "id": "parallel_multiple_189",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.5621189181535411,
+    -0.843970070294529
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990005e-13,
+    0.5699999999994301,
+    0.42999999999956995
+   ],
+   "truncated": false,
+   "prompt_tokens": 621,
+   "choice": "one-call",
+   "confidence_field": 0.36,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.5700000000000001,
+    0.43
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_189.json"
+  },
+  {
+   "id": "parallel_multiple_162",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.5141277326297755,
+    -0.2484613592984996
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990005e-13,
+    0.21999999999978,
+    0.7799999999992201
+   ],
+   "truncated": false,
+   "prompt_tokens": 669,
+   "choice": "multi-call",
+   "confidence_field": 0.67,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.22,
+    0.78
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_162.json"
+  },
+  {
+   "id": "parallel_186",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -1.9661128563728327,
+    -0.1743533871447778
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.020000000000000007,
+    0.14,
+    0.84
+   ],
+   "truncated": false,
+   "prompt_tokens": 436,
+   "choice": "multi-call",
+   "confidence_field": 0.76,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.14,
+    0.84
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_186.json"
+  },
+  {
+   "id": "parallel_multiple_80",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 485,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_80.json"
+  },
+  {
+   "id": "parallel_98",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 486,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_98.json"
+  },
+  {
+   "id": "parallel_multiple_87",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.120263536200091,
+    -0.12783337150988489
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989993e-13,
+    0.11999999999988002,
+    0.87999999999912
+   ],
+   "truncated": false,
+   "prompt_tokens": 541,
+   "choice": "multi-call",
+   "confidence_field": 0.82,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.12,
+    0.88
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_87.json"
+  },
+  {
+   "id": "parallel_multiple_121",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 614,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_121.json"
+  },
+  {
+   "id": "parallel_multiple_180",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 539,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_180.json"
+  },
+  {
+   "id": "parallel_183",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -3.506557897319982,
+    -2.995732273553991,
+    -0.08338160893905101
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.029999999999999995,
+    0.05,
+    0.92
+   ],
+   "truncated": false,
+   "prompt_tokens": 515,
+   "choice": "multi-call",
+   "confidence_field": 0.88,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.03,
+    0.05,
+    0.92
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_183.json"
+  },
+  {
+   "id": "parallel_multiple_192",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 558,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_192.json"
+  },
+  {
+   "id": "parallel_6",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 447,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_6.json"
+  },
+  {
+   "id": "parallel_multiple_99",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 487,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_99.json"
+  },
+  {
+   "id": "live_parallel_multiple_5-4-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 452,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_5-4-0.json"
+  },
+  {
+   "id": "parallel_multiple_6",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 452,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_6.json"
+  },
+  {
+   "id": "parallel_37",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 413,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_37.json"
+  },
+  {
+   "id": "parallel_104",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -1.5606477482646683,
+    -0.5108256237659907,
+    -1.6607312068216509
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.21000000000000002,
+    0.6,
+    0.19
+   ],
+   "truncated": false,
+   "prompt_tokens": 497,
+   "choice": "one-call",
+   "confidence_field": 0.4,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.21,
+    0.6,
+    0.19
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_104.json"
+  },
+  {
+   "id": "parallel_31",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -2.659260036932778,
+    -0.09431067947124129
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.019999999999999997,
+    0.06999999999999999,
+    0.9099999999999999
+   ],
+   "truncated": false,
+   "prompt_tokens": 410,
+   "choice": "multi-call",
+   "confidence_field": 0.86,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.07,
+    0.91
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_31.json"
+  },
+  {
+   "id": "parallel_189",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.6607312068216509,
+    -0.21072103131565253
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999002e-13,
+    0.18999999999981,
+    0.80999999999919
+   ],
+   "truncated": false,
+   "prompt_tokens": 449,
+   "choice": "multi-call",
+   "confidence_field": 0.72,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.19,
+    0.81
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_189.json"
+  },
+  {
+   "id": "parallel_144",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -2.8134107167600364,
+    -0.08338160893905101
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.02,
+    0.05999999999999999,
+    0.92
+   ],
+   "truncated": false,
+   "prompt_tokens": 422,
+   "choice": "multi-call",
+   "confidence_field": 0.88,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.06,
+    0.92
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_144.json"
+  },
+  {
+   "id": "parallel_72",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.2072749131897207,
+    -0.11653381625595151
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.10999999999989003,
+    0.88999999999911
+   ],
+   "truncated": false,
+   "prompt_tokens": 490,
+   "choice": "multi-call",
+   "confidence_field": 0.83,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.11,
+    0.89
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_72.json"
+  },
+  {
+   "id": "parallel_76",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -3.506557897319982,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.03,
+    0.96
+   ],
+   "truncated": false,
+   "prompt_tokens": 424,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.03,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_76.json"
+  },
+  {
+   "id": "parallel_multiple_134",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 497,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_134.json"
+  },
+  {
+   "id": "parallel_73",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 480,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_73.json"
+  },
+  {
+   "id": "parallel_45",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 424,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_45.json"
+  },
+  {
+   "id": "parallel_91",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.7719568419318752,
+    -0.18632957819149348
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999001e-13,
+    0.16999999999983004,
+    0.82999999999917
+   ],
+   "truncated": false,
+   "prompt_tokens": 440,
+   "choice": "multi-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.17,
+    0.83
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_91.json"
+  },
+  {
+   "id": "parallel_22",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.659260036932778,
+    -0.07257069283483537
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989993e-13,
+    0.06999999999993001,
+    0.92999999999907
+   ],
+   "truncated": false,
+   "prompt_tokens": 435,
+   "choice": "multi-call",
+   "confidence_field": 0.89,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.07,
+    0.93
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_22.json"
+  },
+  {
+   "id": "parallel_114",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -1.5606477482646683,
+    -0.2484613592984996
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.01,
+    0.21000000000000002,
+    0.7799999999999999
+   ],
+   "truncated": false,
+   "prompt_tokens": 464,
+   "choice": "multi-call",
+   "confidence_field": 0.67,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.21,
+    0.78
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_114.json"
+  },
+  {
+   "id": "parallel_multiple_112",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.2039728043259361,
+    -0.35667494393873245
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990001e-13,
+    0.2999999999997,
+    0.6999999999993001
+   ],
+   "truncated": false,
+   "prompt_tokens": 553,
+   "choice": "multi-call",
+   "confidence_field": 0.55,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.3,
+    0.7
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_112.json"
+  },
+  {
+   "id": "parallel_multiple_93",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 467,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_93.json"
+  },
+  {
+   "id": "parallel_multiple_150",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.2188758248682006,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.03999999999996001,
+    0.95999999999904
+   ],
+   "truncated": false,
+   "prompt_tokens": 608,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.04,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_150.json"
+  },
+  {
+   "id": "live_parallel_multiple_7-6-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -3.912023005428146,
+    -2.659260036932778,
+    -0.09431067947124129
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.019999999999999997,
+    0.06999999999999999,
+    0.9099999999999999
+   ],
+   "truncated": false,
+   "prompt_tokens": 455,
+   "choice": "multi-call",
+   "confidence_field": 0.86,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.02,
+    0.07,
+    0.91
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_7-6-0.json"
+  },
+  {
+   "id": "parallel_177",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 412,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_177.json"
+  },
+  {
+   "id": "parallel_69",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 475,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_69.json"
+  },
+  {
+   "id": "parallel_40",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 454,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_40.json"
+  },
+  {
+   "id": "parallel_62",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 519,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_62.json"
+  },
+  {
+   "id": "parallel_172",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 529,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_172.json"
+  },
+  {
+   "id": "parallel_multiple_94",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.4155154439616658,
+    -1.0788096613719298
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990017e-13,
+    0.65999999999934,
+    0.3399999999996601
+   ],
+   "truncated": false,
+   "prompt_tokens": 571,
+   "choice": "one-call",
+   "confidence_field": 0.49,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.66,
+    0.34
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_94.json"
+  },
+  {
+   "id": "parallel_multiple_115",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 482,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_115.json"
+  },
+  {
+   "id": "parallel_multiple_41",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -0.941608539858445,
+    -0.4942963218147801
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990003e-13,
+    0.38999999999961,
+    0.60999999999939
+   ],
+   "truncated": false,
+   "prompt_tokens": 460,
+   "choice": "multi-call",
+   "confidence_field": 0.41,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.39,
+    0.61
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_41.json"
+  },
+  {
+   "id": "parallel_20",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 465,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_20.json"
+  },
+  {
+   "id": "parallel_111",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 452,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_111.json"
+  },
+  {
+   "id": "parallel_multiple_23",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 497,
+   "choice": "multi-call",
+   "confidence_field": 0.99,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_23.json"
+  },
+  {
+   "id": "parallel_multiple_183",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.3093333199837622,
+    -0.31471074483970024
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990015e-13,
+    0.26999999999972996,
+    0.72999999999927
+   ],
+   "truncated": false,
+   "prompt_tokens": 568,
+   "choice": "multi-call",
+   "confidence_field": 0.59,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.27,
+    0.73
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_183.json"
+  },
+  {
+   "id": "parallel_multiple_116",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -2.8134107167600364,
+    -0.07257069283483537
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000005,
+    0.060000000000000005,
+    0.93
+   ],
+   "truncated": false,
+   "prompt_tokens": 446,
+   "choice": "multi-call",
+   "confidence_field": 0.89,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.06,
+    0.9299999999999999
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_116.json"
+  },
+  {
+   "id": "live_parallel_multiple_4-3-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 462,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_4-3-0.json"
+  },
+  {
+   "id": "parallel_194",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.2039728043259361,
+    -0.35667494393873245
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990001e-13,
+    0.2999999999997,
+    0.6999999999993001
+   ],
+   "truncated": false,
+   "prompt_tokens": 457,
+   "choice": "multi-call",
+   "confidence_field": 0.55,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.3,
+    0.7
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_194.json"
+  },
+  {
+   "id": "parallel_multiple_174",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.3862943611198906,
+    -0.2876820724517809
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999e-13,
+    0.24999999999975003,
+    0.74999999999925
+   ],
+   "truncated": false,
+   "prompt_tokens": 557,
+   "choice": "multi-call",
+   "confidence_field": 0.62,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.25,
+    0.75
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_174.json"
+  },
+  {
+   "id": "parallel_118",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -4.605170185988091,
+    -3.2188758248682006,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    0.010000000000000002,
+    0.040000000000000015,
+    0.9500000000000001
+   ],
+   "truncated": false,
+   "prompt_tokens": 425,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.01,
+    0.04,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_118.json"
+  },
+  {
+   "id": "parallel_100",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 433,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_100.json"
+  },
+  {
+   "id": "parallel_49",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.8134107167600364,
+    -0.06187540371808753
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990005e-13,
+    0.05999999999994,
+    0.93999999999906
+   ],
+   "truncated": false,
+   "prompt_tokens": 440,
+   "choice": "multi-call",
+   "confidence_field": 0.91,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.06,
+    0.94
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_49.json"
+  },
+  {
+   "id": "parallel_137",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 499,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_137.json"
+  },
+  {
+   "id": "parallel_multiple_153",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 662,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_153.json"
+  },
+  {
+   "id": "parallel_multiple_167",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.3470736479666092,
+    -0.3011050927839216
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990001e-13,
+    0.25999999999974,
+    0.73999999999926
+   ],
+   "truncated": false,
+   "prompt_tokens": 626,
+   "choice": "multi-call",
+   "confidence_field": 0.61,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.26,
+    0.74
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_167.json"
+  },
+  {
+   "id": "parallel_multiple_136",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 648,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_136.json"
+  },
+  {
+   "id": "parallel_74",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.995732273553991,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.04999999999995001,
+    0.9499999999990499
+   ],
+   "truncated": false,
+   "prompt_tokens": 426,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.05,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_74.json"
+  },
+  {
+   "id": "parallel_110",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 459,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_110.json"
+  },
+  {
+   "id": "parallel_multiple_79",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.659260036932778,
+    -0.07257069283483537
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989993e-13,
+    0.06999999999993001,
+    0.92999999999907
+   ],
+   "truncated": false,
+   "prompt_tokens": 558,
+   "choice": "multi-call",
+   "confidence_field": 0.89,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.07,
+    0.93
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_79.json"
+  },
+  {
+   "id": "parallel_multiple_61",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 591,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_61.json"
+  },
+  {
+   "id": "parallel_multiple_50",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 486,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_50.json"
+  },
+  {
+   "id": "live_parallel_multiple_3-2-1",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 672,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_multiple_3-2-1.json"
+  },
+  {
+   "id": "parallel_multiple_24",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -27.631021115928547,
+    0.0
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999998001e-13,
+    9.99999999998001e-13,
+    0.999999999998
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "multi-call",
+   "confidence_field": 1,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.0,
+    1.0
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_24.json"
+  },
+  {
+   "id": "parallel_175",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -4.605170185988091,
+    -0.01005033585350145
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.009999999999990001,
+    0.98999999999901
+   ],
+   "truncated": false,
+   "prompt_tokens": 527,
+   "choice": "multi-call",
+   "confidence_field": 0.98,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.01,
+    0.99
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_175.json"
+  },
+  {
+   "id": "parallel_multiple_152",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 571,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_152.json"
+  },
+  {
+   "id": "live_parallel_10-6-0",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -1.7719568419318752,
+    -0.18632957819149348
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.99999999999001e-13,
+    0.16999999999983004,
+    0.82999999999917
+   ],
+   "truncated": false,
+   "prompt_tokens": 523,
+   "choice": "multi-call",
+   "confidence_field": 0.74,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.17,
+    0.83
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/live_parallel_10-6-0.json"
+  },
+  {
+   "id": "parallel_25",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.2188758248682006,
+    -0.040821994520255166
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.03999999999996001,
+    0.95999999999904
+   ],
+   "truncated": false,
+   "prompt_tokens": 429,
+   "choice": "multi-call",
+   "confidence_field": 0.94,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.04,
+    0.96
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_25.json"
+  },
+  {
+   "id": "parallel_92",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -2.995732273553991,
+    -0.05129329438755058
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990024e-13,
+    0.04999999999995001,
+    0.9499999999990499
+   ],
+   "truncated": false,
+   "prompt_tokens": 432,
+   "choice": "multi-call",
+   "confidence_field": 0.92,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.05,
+    0.95
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_92.json"
+  },
+  {
+   "id": "parallel_134",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 498,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_134.json"
+  },
+  {
+   "id": "parallel_multiple_76",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.506557897319982,
+    -0.030459207484708574
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999989997e-13,
+    0.02999999999997,
+    0.9699999999990301
+   ],
+   "truncated": false,
+   "prompt_tokens": 568,
+   "choice": "multi-call",
+   "confidence_field": 0.95,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.03,
+    0.97
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_multiple_76.json"
+  },
+  {
+   "id": "parallel_160",
+   "split": "exam",
+   "label": "multi-call",
+   "logits_mean": [
+    -27.631021115928547,
+    -3.912023005428146,
+    -0.020202707317519466
+   ],
+   "logits_by_rotation": [],
+   "probs_raw": [
+    9.999999999990011e-13,
+    0.019999999999980003,
+    0.9799999999990201
+   ],
+   "truncated": false,
+   "prompt_tokens": 503,
+   "choice": "multi-call",
+   "confidence_field": 0.97,
+   "mapping": "probabilities",
+   "raw_probabilities": [
+    0.0,
+    0.02,
+    0.98
+   ],
+   "raw_sum": 1.0,
+   "missing_keys": [],
+   "raw_file": "results/jev-raw/parallel_160.json"
+  }
+ ],
+ "exam": {
+  "n_exam": 300,
+  "n_boot": 1000,
+  "ci_level": 95,
+  "seed": 20261007,
+  "ece_bins": 15,
+  "exam_sha256": "cb0fa1f71cd363703122ba9c50ba326700ee6f7394fc5085297855aa6ae7758e",
+  "scored_at": "2026-10-07T10:58:28Z",
+  "prereg_commit": "2026-10-07T06:42:07-04:00",
+  "prereg_section": "## Amendment 1 (Gate 4)",
+  "prereg_section_commit": "2026-10-07T06:42:07-04:00",
+  "T": 1.0,
+  "taus": null,
+  "tau_global": null,
+  "fit_fingerprint": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+  "n_failed": 0,
+  "metrics": {
+   "accuracy": {
+    "value": 0.86,
+    "ci": [
+     0.8167,
+     0.9
+    ],
+    "n_boot_used": 1000
+   },
+   "macro_f1": {
+    "value": 0.8588,
+    "ci": [
+     0.8175,
+     0.8979
+    ],
+    "n_boot_used": 1000
+   },
+   "nll_raw": {
+    "value": 0.5089,
+    "ci": [
+     0.2929,
+     0.8145
+    ],
+    "n_boot_used": 1000
+   },
+   "nll_cal": {
+    "value": 0.5089,
+    "ci": [
+     0.2929,
+     0.8145
+    ],
+    "n_boot_used": 1000
+   },
+   "ece_raw": {
+    "value": 0.0719,
+    "ci": [
+     0.0474,
+     0.108
+    ],
+    "n_boot_used": 1000
+   },
+   "ece_cal": {
+    "value": 0.0719,
+    "ci": [
+     0.0474,
+     0.108
+    ],
+    "n_boot_used": 1000
+   },
+   "ask_rate": {
+    "value": null,
+    "ci": null,
+    "n_boot_used": 0,
+    "na": "n/a (no fit-split outputs)"
+   },
+   "selective_accuracy": {
+    "value": null,
+    "ci": null,
+    "n_boot_used": 0,
+    "na": "n/a (no fit-split outputs)",
+    "n_answered": null
+   },
+   "auroc": {
+    "value": 0.839,
+    "ci": [
+     0.7679,
+     0.899
+    ],
+    "n_boot_used": 1000
+   }
+  },
+  "curve": [
+   {
+    "tau": 0.3333333333333333,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.3469387755102041,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.3605442176870748,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.37414965986394555,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.3877551020408163,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.4013605442176871,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.41496598639455784,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.42857142857142855,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.4421768707482993,
+    "ask_rate": 0.0,
+    "selective_accuracy": 0.86,
+    "n_answered": 300
+   },
+   {
+    "tau": 0.4557823129251701,
+    "ask_rate": 0.0033333333333332993,
+    "selective_accuracy": 0.8595317725752508,
+    "n_answered": 299
+   },
+   {
+    "tau": 0.4693877551020408,
+    "ask_rate": 0.0033333333333332993,
+    "selective_accuracy": 0.8595317725752508,
+    "n_answered": 299
+   },
+   {
+    "tau": 0.48299319727891155,
+    "ask_rate": 0.010000000000000009,
+    "selective_accuracy": 0.8585858585858586,
+    "n_answered": 297
+   },
+   {
+    "tau": 0.4965986394557823,
+    "ask_rate": 0.020000000000000018,
+    "selective_accuracy": 0.8639455782312925,
+    "n_answered": 294
+   },
+   {
+    "tau": 0.5102040816326531,
+    "ask_rate": 0.020000000000000018,
+    "selective_accuracy": 0.8639455782312925,
+    "n_answered": 294
+   },
+   {
+    "tau": 0.5238095238095238,
+    "ask_rate": 0.026666666666666616,
+    "selective_accuracy": 0.8698630136986302,
+    "n_answered": 292
+   },
+   {
+    "tau": 0.5374149659863945,
+    "ask_rate": 0.036666666666666625,
+    "selective_accuracy": 0.8788927335640139,
+    "n_answered": 289
+   },
+   {
+    "tau": 0.5510204081632653,
+    "ask_rate": 0.050000000000000044,
+    "selective_accuracy": 0.887719298245614,
+    "n_answered": 285
+   },
+   {
+    "tau": 0.564625850340136,
+    "ask_rate": 0.053333333333333344,
+    "selective_accuracy": 0.8873239436619719,
+    "n_answered": 284
+   },
+   {
+    "tau": 0.5782312925170068,
+    "ask_rate": 0.06666666666666665,
+    "selective_accuracy": 0.8928571428571429,
+    "n_answered": 280
+   },
+   {
+    "tau": 0.5918367346938775,
+    "ask_rate": 0.07333333333333336,
+    "selective_accuracy": 0.89568345323741,
+    "n_answered": 278
+   },
+   {
+    "tau": 0.6054421768707483,
+    "ask_rate": 0.07999999999999996,
+    "selective_accuracy": 0.8985507246376812,
+    "n_answered": 276
+   },
+   {
+    "tau": 0.6190476190476191,
+    "ask_rate": 0.08666666666666667,
+    "selective_accuracy": 0.9014598540145985,
+    "n_answered": 274
+   },
+   {
+    "tau": 0.6326530612244898,
+    "ask_rate": 0.09333333333333338,
+    "selective_accuracy": 0.9080882352941176,
+    "n_answered": 272
+   },
+   {
+    "tau": 0.6462585034013606,
+    "ask_rate": 0.09333333333333338,
+    "selective_accuracy": 0.9080882352941176,
+    "n_answered": 272
+   },
+   {
+    "tau": 0.6598639455782314,
+    "ask_rate": 0.09999999999999998,
+    "selective_accuracy": 0.9148148148148149,
+    "n_answered": 270
+   },
+   {
+    "tau": 0.6734693877551021,
+    "ask_rate": 0.10999999999999999,
+    "selective_accuracy": 0.9213483146067416,
+    "n_answered": 267
+   },
+   {
+    "tau": 0.6870748299319729,
+    "ask_rate": 0.11333333333333329,
+    "selective_accuracy": 0.9210526315789473,
+    "n_answered": 266
+   },
+   {
+    "tau": 0.7006802721088435,
+    "ask_rate": 0.13,
+    "selective_accuracy": 0.9233716475095786,
+    "n_answered": 261
+   },
+   {
+    "tau": 0.7142857142857143,
+    "ask_rate": 0.13,
+    "selective_accuracy": 0.9233716475095786,
+    "n_answered": 261
+   },
+   {
+    "tau": 0.7278911564625851,
+    "ask_rate": 0.14,
+    "selective_accuracy": 0.9224806201550387,
+    "n_answered": 258
+   },
+   {
+    "tau": 0.7414965986394557,
+    "ask_rate": 0.1466666666666666,
+    "selective_accuracy": 0.921875,
+    "n_answered": 256
+   },
+   {
+    "tau": 0.7551020408163265,
+    "ask_rate": 0.15666666666666662,
+    "selective_accuracy": 0.924901185770751,
+    "n_answered": 253
+   },
+   {
+    "tau": 0.7687074829931972,
+    "ask_rate": 0.16333333333333333,
+    "selective_accuracy": 0.9243027888446215,
+    "n_answered": 251
+   },
+   {
+    "tau": 0.782312925170068,
+    "ask_rate": 0.18666666666666665,
+    "selective_accuracy": 0.9221311475409836,
+    "n_answered": 244
+   },
+   {
+    "tau": 0.7959183673469388,
+    "ask_rate": 0.18666666666666665,
+    "selective_accuracy": 0.9221311475409836,
+    "n_answered": 244
+   },
+   {
+    "tau": 0.8095238095238095,
+    "ask_rate": 0.18666666666666665,
+    "selective_accuracy": 0.9221311475409836,
+    "n_answered": 244
+   },
+   {
+    "tau": 0.8231292517006803,
+    "ask_rate": 0.19666666666666666,
+    "selective_accuracy": 0.9253112033195021,
+    "n_answered": 241
+   },
+   {
+    "tau": 0.8367346938775511,
+    "ask_rate": 0.21999999999999997,
+    "selective_accuracy": 0.9316239316239316,
+    "n_answered": 234
+   },
+   {
+    "tau": 0.8503401360544218,
+    "ask_rate": 0.24,
+    "selective_accuracy": 0.9385964912280702,
+    "n_answered": 228
+   },
+   {
+    "tau": 0.8639455782312926,
+    "ask_rate": 0.2433333333333333,
+    "selective_accuracy": 0.9427312775330396,
+    "n_answered": 227
+   },
+   {
+    "tau": 0.8775510204081634,
+    "ask_rate": 0.2433333333333333,
+    "selective_accuracy": 0.9427312775330396,
+    "n_answered": 227
+   },
+   {
+    "tau": 0.8911564625850341,
+    "ask_rate": 0.29000000000000004,
+    "selective_accuracy": 0.9436619718309859,
+    "n_answered": 213
+   },
+   {
+    "tau": 0.9047619047619049,
+    "ask_rate": 0.30000000000000004,
+    "selective_accuracy": 0.9523809523809523,
+    "n_answered": 210
+   },
+   {
+    "tau": 0.9183673469387756,
+    "ask_rate": 0.31666666666666665,
+    "selective_accuracy": 0.9609756097560975,
+    "n_answered": 205
+   },
+   {
+    "tau": 0.9319727891156462,
+    "ask_rate": 0.3466666666666667,
+    "selective_accuracy": 0.9642857142857143,
+    "n_answered": 196
+   },
+   {
+    "tau": 0.945578231292517,
+    "ask_rate": 0.36,
+    "selective_accuracy": 0.9635416666666666,
+    "n_answered": 192
+   },
+   {
+    "tau": 0.9591836734693877,
+    "ask_rate": 0.3933333333333333,
+    "selective_accuracy": 0.967032967032967,
+    "n_answered": 182
+   },
+   {
+    "tau": 0.9727891156462585,
+    "ask_rate": 0.49,
+    "selective_accuracy": 0.9738562091503268,
+    "n_answered": 153
+   },
+   {
+    "tau": 0.9863945578231292,
+    "ask_rate": 0.5700000000000001,
+    "selective_accuracy": 0.9767441860465116,
+    "n_answered": 129
+   },
+   {
+    "tau": 1.0,
+    "ask_rate": 1.0,
+    "selective_accuracy": null,
+    "n_answered": 0
+   }
+  ],
+  "confusion": [
+   [
+    66,
+    33,
+    1
+   ],
+   [
+    0,
+    98,
+    2
+   ],
+   [
+    0,
+    6,
+    94
+   ]
+  ],
+  "display": {
+   "accuracy": "86.0 [81.7, 90.0]",
+   "macro_f1": "85.9 [81.8, 89.8]",
+   "nll": "0.509 → 0.509",
+   "ece": "0.072 → 0.072",
+   "ask_rate": "n/a (no fit-split outputs)",
+   "selective_accuracy": "n/a (no fit-split outputs)",
+   "auroc": "0.839 [0.768, 0.899]"
+  },
+  "unfitted_gate": {
+   "tau": 0.95,
+   "ask_rate": {
+    "value": 0.38,
+    "ci": [
+     0.3267,
+     0.4367
+    ],
+    "n_boot_used": 1000
+   },
+   "selective_accuracy": {
+    "value": 0.9677,
+    "ci": [
+     0.9409,
+     0.9895
+    ],
+    "n_boot_used": 1000,
+    "n_answered": 186
+   },
+   "display": {
+    "ask_rate": "38.0 [32.7, 43.7]",
+    "selective_accuracy": "96.8 [94.1, 99.0]"
+   }
+  }
+ }
+}

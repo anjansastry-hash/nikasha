@@ -294,7 +294,14 @@ def call_one(client, item: dict, key: str, budget: dict) -> tuple[str, str | Non
     return "failed", f"still failing after {MAX_RETRIES} retries (last: {err or reason or f'HTTP {status}'})"
 
 
-def mode_run() -> int:
+CONSECUTIVE_FAIL_ABORT = 5  # budget guard: a systemic fault stops the run instead of burning the cap
+
+
+def mode_run(limit: int | None = None) -> int:
+    """Calls for the subsample items not yet stored (at most `limit` new items when given). Budget guards on
+    top of the pre-registered retry policy (they only ever stop early): an item failing before any item has
+    succeeded, or CONSECUTIVE_FAIL_ABORT failures in a row, stops the run for inspection; stored responses
+    are reused on the next run and every call stays counted in the ledger."""
     import httpx
 
     key = os.environ.get(KEY_ENV)
@@ -315,12 +322,17 @@ def mode_run() -> int:
     say(f"calls already made: {budget['calls']} (cap {SPEND_CAP}); items {len(sub['ids'])}; model {MODEL}")
     failed: dict[str, str] = {}
     n_ok_new = n_skip = 0
+    any_ok = any((RAW_DIR / f"{iid}.json").exists() for iid in sub["ids"])
+    streak = 0
     t0 = time.perf_counter()
     with httpx.Client() as client:
         for i, iid in enumerate(sub["ids"], 1):
             if (RAW_DIR / f"{iid}.json").exists():
                 n_skip += 1
                 continue
+            if limit is not None and n_ok_new + len(failed) >= limit:
+                say(f"--limit {limit} reached; stopping before item {i}")
+                break
             outcome, reason = call_one(client, exam[iid], key, budget)
             if outcome == "abort":
                 say(f"ABORT at item {i}/{len(sub['ids'])} ({iid}): {reason}; calls {budget['calls']}")
@@ -328,9 +340,16 @@ def mode_run() -> int:
                 break
             if outcome == "failed":
                 failed[iid] = reason
+                streak += 1
                 say(f"item {iid}: failed ({reason})")
+                if not any_ok or streak >= CONSECUTIVE_FAIL_ABORT:
+                    say(f"STOPPING for inspection: {'first item failed' if not any_ok else f'{streak} failures in a row'}; "
+                        f"calls {budget['calls']}")
+                    break
             else:
                 n_ok_new += 1
+                any_ok = True
+                streak = 0
             if i % 25 == 0:
                 say(f"progress {i}/{len(sub['ids'])}: ok_new {n_ok_new}, reused {n_skip}, failed {len(failed)}, "
                     f"calls {budget['calls']}, elapsed {time.perf_counter() - t0:.1f} s")
@@ -476,7 +495,8 @@ def main(argv=None) -> int:
     s = sub.add_parser("subsample")
     s.add_argument("--force", action="store_true")
     sub.add_parser("prompt-sha")
-    sub.add_parser("run")
+    r = sub.add_parser("run")
+    r.add_argument("--limit", type=int, default=None, help="call at most N new items (inspection runs)")
     sub.add_parser("build")
     args = ap.parse_args(argv)
     if args.mode == "subsample":
@@ -484,7 +504,7 @@ def main(argv=None) -> int:
     if args.mode == "prompt-sha":
         return mode_prompt_sha()
     if args.mode == "run":
-        return mode_run()
+        return mode_run(args.limit)
     return mode_build()
 
 

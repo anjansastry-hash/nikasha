@@ -334,8 +334,9 @@ def draw_curve(out_path: Path = CURVE_PNG) -> bool:
         ex = data.get("exam")
         if isinstance(ex, dict) and isinstance(ex.get("curve"), list) and ex["curve"]:
             mm = ex.get("metrics", {})
+            label = data["gauge"] if data.get("external") is not True else f"{data['gauge']} (n={ex.get('n_exam')})"
             series.append((
-                data["gauge"], ex["curve"],
+                label, ex["curve"],
                 mm.get("ask_rate", {}).get("value"), mm.get("selective_accuracy", {}).get("value"),
             ))
     if not series:
@@ -382,7 +383,8 @@ def draw_curve(out_path: Path = CURVE_PNG) -> bool:
     handles.append(Line2D([], [], color=INK_MUTED, linestyle="none", marker="o", markersize=7,
                           markeredgecolor="white", markeredgewidth=1.5))
     labels.append("operating point at the fitted per-class thresholds")
-    ax.legend(handles, labels, loc="lower left", frameon=False, fontsize=8)
+    # lower right: the constant baselines sit at ask rate 0 / selective accuracy 1/3, under a lower-left legend
+    ax.legend(handles, labels, loc="lower right", frameon=False, fontsize=8)
     fig.tight_layout()
     out_path.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(out_path, dpi=150)
@@ -406,6 +408,8 @@ def _select(args) -> list[tuple[Path, dict]]:
         data = read_json(path)
         if not _is_gauge_result(data):
             _fail(f"{path.name} is not a gauge result (needs a 'gauge' string and an 'items' list)")
+        if data.get("external") is True:
+            _fail(f"{name} is an external gauge with no fit split; it is scored by --like-for-like")
         if not _calib_path(path).exists():
             _fail(f"{_calib_path(path).name} not found — run calibrate.py first")
         if "exam" in data and not args.fit_dry_run and not args.rescore:
@@ -416,6 +420,9 @@ def _select(args) -> list[tuple[Path, dict]]:
     targets = []
     for path, data in _gauge_results():
         if not _calib_path(path).exists():
+            continue
+        if data.get("external") is True:
+            print(f"score.py: note — {path.name} is external (no fit split); scored by --like-for-like", file=sys.stderr)
             continue
         if "exam" in data and not (args.rescore or args.fit_dry_run):
             continue
@@ -667,6 +674,161 @@ def draw_labels_needed(doc: dict, out_path: Path = LABELS_NEEDED_PNG) -> None:
     print(f"labels-needed.png -> {out_path}")
 
 
+# ----------------------------------------------------------------------------- like-for-like + Jev (Task D)
+
+LIKE_PATH = RESULTS_DIR / "like-for-like.json"
+JEV_PATH = RESULTS_DIR / "jev.json"
+GAUGE3_PATH = RESULTS_DIR / "gauge3-probe.json"
+SUBSAMPLE_PATH = ROOT / "data" / "seta" / "jev-subsample.json"
+GATE_TAU = SA_TARGET  # the unfitted gate: answer iff max p >= 0.95 (PREREG Amendment 1, like-for-like group only)
+NA_NO_FIT = "n/a (no fit-split outputs)"
+NA_NO_CONF = "n/a (no confidence returned)"
+
+
+def compute_no_thresholds(gauge: str, L: np.ndarray, y: np.ndarray, T: float, na_text: str,
+                          confidence: bool) -> tuple[dict, list[dict], list[list[int]]]:
+    """compute() for a gauge with no fitted thresholds (external, exam-only): the same bootstrap and metric code,
+    ask rate / selective accuracy null. Without returned confidence, ECE, NLL and AUROC are null too (a one-hot
+    vector is a recorded choice, not a confidence)."""
+    n = int(len(y))
+    P_raw = metrics.softmax(L)
+    P_cal = metrics.softmax(L, T)
+    _validate_probs(gauge, P_raw, "raw")
+    _validate_probs(gauge, P_cal, "calibrated")
+    fns = {
+        "accuracy": lambda idx: metrics.accuracy(P_cal[idx], y[idx]),
+        "macro_f1": lambda idx: metrics.macro_f1(P_cal[idx], y[idx]),
+    }
+    if confidence:
+        fns.update({
+            "nll_raw": lambda idx: metrics.nll(P_raw[idx], y[idx]),
+            "nll_cal": lambda idx: metrics.nll(P_cal[idx], y[idx]),
+            "ece_raw": lambda idx: metrics.ece(P_raw[idx], y[idx], ECE_BINS),
+            "ece_cal": lambda idx: metrics.ece(P_cal[idx], y[idx], ECE_BINS),
+            "auroc": lambda idx: metrics.auroc(P_cal[idx], y[idx]),
+        })
+    boot = metrics.bootstrap(fns, n, n_boot=N_BOOT, seed=SEED)
+    result = {}
+    for name in METRIC_ORDER:
+        if name in boot:
+            result[name] = dict(boot[name])
+        else:
+            result[name] = {"value": None, "ci": None, "n_boot_used": 0,
+                            "na": na_text if name in ("ask_rate", "selective_accuracy") else NA_NO_CONF}
+    result["selective_accuracy"]["n_answered"] = None
+    curve = metrics.curve(P_cal, y, CURVE_POINTS) if confidence else []
+    return result, curve, metrics.confusion(P_cal, y)
+
+
+def gate_block(P: np.ndarray, y: np.ndarray) -> dict:
+    """The unfitted gate 'answer iff max p >= 0.95' with the same paired resamples as every other bootstrap."""
+    taus = [GATE_TAU] * len(LABELS)
+    boot = metrics.bootstrap({"ask_rate": lambda idx: metrics.ask_rate(P[idx], taus),
+                              "selective_accuracy": lambda idx: metrics.selective_accuracy(P[idx], y[idx], taus)},
+                             len(y), n_boot=N_BOOT, seed=SEED)
+    _, answered = metrics.abstain(P, taus)
+    boot["selective_accuracy"]["n_answered"] = int(np.count_nonzero(answered))
+    return {"tau": GATE_TAU, "ask_rate": boot["ask_rate"], "selective_accuracy": boot["selective_accuracy"],
+            "display": {"ask_rate": _with_ci(boot["ask_rate"], 100, 1),
+                        "selective_accuracy": _with_ci(boot["selective_accuracy"], 100, 1)}}
+
+
+def score_like_for_like(rescore: bool) -> int:
+    """PREREG Amendment 1: Jev's exam block, and gauges ①, ③ and Jev on the same items (subsample ids where Jev
+    succeeded, exam.jsonl order) with paired resamples; plus the unfitted gate for all three."""
+    for p in (JEV_PATH, GAUGE1_PATH, GAUGE3_PATH, SUBSAMPLE_PATH):
+        if not p.exists():
+            _fail(f"{p.name} not found")
+    jev, g1, g3 = read_json(JEV_PATH), read_json(GAUGE1_PATH), read_json(GAUGE3_PATH)
+    sub = read_json(SUBSAMPLE_PATH)
+    if not rescore and ("exam" in jev or LIKE_PATH.exists()):
+        _fail("the Jev column / like-for-like group is already scored; it is read once (rule 8)")
+    if jev.get("subsample", {}).get("sha256") != sha256_file(SUBSAMPLE_PATH):
+        _fail("jev.json was built from a different jev-subsample.json")
+
+    # phase 1 — no exam data: calibrations, fingerprints, the common item list, arrays
+    gauges = {"gauge1-logit": g1, "gauge3-probe": g3, "jev": jev}
+    calibs = {}
+    for name, data in gauges.items():
+        cp = RESULTS_DIR / f"{name}.calib.json"
+        if not cp.exists():
+            _fail(f"{cp.name} not found — run calibrate.py first")
+        _check_fingerprint(name, data, cp)
+        calibs[name] = read_json(cp)
+    jev_ok = {it["id"] for it in jev["items"]}
+    common = [i for i in sub["ids"] if i in jev_ok]
+    failed = [f["id"] for f in jev.get("failed", [])]
+    if len(common) + len(failed) != len(sub["ids"]):
+        _fail(f"Jev successes ({len(common)}) + failures ({len(failed)}) != subsample ({len(sub['ids'])})")
+    rows = {}
+    for name, data in gauges.items():
+        by_id = {it["id"]: it for it in data["items"] if it.get("split") == "exam"}
+        missing = [i for i in common if i not in by_id]
+        if missing:
+            _fail(f"{name}: {len(missing)} like-for-like ids have no exam item, e.g. {missing[:3]}")
+        rows[name] = [by_id[i] for i in common]
+        L, y = _arrays(name, rows[name])
+        _validate_probs(name, metrics.softmax(L, float(calibs[name]["T"])), "calibrated")
+
+    # phase 2 — the exam is opened here
+    prereg_commit, exam_sha, section_info, truth = _open_exam_for(jev.get("prereg_section"))
+    for name in gauges:
+        _check_split(name, rows[name], "exam", truth, subset_ok=True)
+    ex_order = [i for i in truth if i in set(common)]
+    if ex_order != common:
+        _fail("the like-for-like ids are not in exam.jsonl order")
+
+    # phase 3 — compute (same n, seed and order for every row -> paired resamples)
+    confidence = jev.get("confidence") == "probabilities"
+    na_jev = NA_NO_FIT if jev.get("confidence") in ("probabilities", "mixed") else NA_NO_CONF
+    out_rows = {}
+    for name in gauges:
+        L, y = _arrays(name, rows[name])
+        c = calibs[name]
+        T = float(c["T"])
+        if name == "jev":
+            m, curve, conf = compute_no_thresholds(name, L, y, T, na_jev, confidence)
+            d = display_strings(m)
+            d["ask_rate"] = d["selective_accuracy"] = na_jev
+            if not confidence:
+                d["ece"] = d["nll"] = d["auroc"] = NA_NO_CONF
+        else:
+            taus = [float(t) for t in c["taus"]]
+            m, curve, conf = compute(name, L, y, T, taus)
+            d = display_strings(m)
+        gate = gate_block(metrics.softmax(L, T), y) if (name != "jev" or confidence) else None
+        out_rows[name] = {"T": T, "taus": c.get("taus"), "metrics": m, "display": d, "confusion": conf,
+                          "unfitted_gate": gate, "curve": curve}
+        print(f"{name:>12} [like-for-like n={len(y)}] acc {d['accuracy']}  ece {d['ece']}  ask {d['ask_rate']}  "
+              f"sa {d['selective_accuracy']}  auroc {d['auroc']}"
+              + (f"  | gate max p>={GATE_TAU}: ask {gate['display']['ask_rate']} sa {gate['display']['selective_accuracy']}"
+                 if gate else ""))
+    scored_at = _utc_now()
+    exam_common = {"n_exam": len(common), "n_boot": N_BOOT, "ci_level": 95, "seed": SEED, "ece_bins": ECE_BINS,
+                   "exam_sha256": exam_sha, "scored_at": scored_at, "prereg_commit": prereg_commit, **(section_info or {})}
+    jr = out_rows["jev"]
+    jev["exam"] = {**exam_common, "T": jr["T"], "taus": None, "tau_global": None,
+                   "fit_fingerprint": calibs["jev"]["fit_fingerprint"]["sha256"], "n_failed": len(failed),
+                   "metrics": jr["metrics"], "curve": jr["curve"], "confusion": jr["confusion"],
+                   "display": jr["display"], "unfitted_gate": jr["unfitted_gate"]}
+    write_json(JEV_PATH, jev)
+    like = {
+        "what": "like-for-like group: gauges ①, ③ and Jev on the same exam items (the Jev subsample minus Jev "
+                "failures, exam.jsonl order); one bootstrap seed and order for every row, so resamples are paired",
+        "prereg_section": jev.get("prereg_section"),
+        "ids_file": "data/seta/jev-subsample.json", "subsample_sha256": jev["subsample"]["sha256"],
+        "n": len(common), "n_jev_failed": len(failed), "jev_failed_ids": failed,
+        "gate_rule": f"unfitted gate: answer iff max p >= {GATE_TAU} (each gauge's own final probabilities; "
+                     f"no threshold fitted)",
+        "rows": {name: {k: v for k, v in r.items() if k != "curve"} for name, r in out_rows.items()},
+        "exam": exam_common,
+    }
+    write_json(LIKE_PATH, like)
+    draw_curve(CURVE_PNG)
+    print(f"wrote {JEV_PATH.name} exam block and {LIKE_PATH.name} (n={len(common)}, Jev failed {len(failed)})")
+    return 0
+
+
 # ----------------------------------------------------------------------------- main
 
 def main(argv=None) -> int:
@@ -686,11 +848,17 @@ def main(argv=None) -> int:
                          "and never opens exam.jsonl")
     ap.add_argument("--labels-needed", action="store_true",
                     help="score the labels-needed head variants (results/labels-needed.json) once; draw labels-needed.png")
+    ap.add_argument("--like-for-like", action="store_true",
+                    help="score the Jev column and the like-for-like group (①, ③, Jev on the same items) once")
     args = ap.parse_args(argv)
     if args.labels_needed:
-        if args.gauge or args.fit_dry_run or args.curve_only:
+        if args.gauge or args.fit_dry_run or args.curve_only or args.like_for_like:
             ap.error("--labels-needed takes only --rescore")
         return score_labels_needed(args.rescore)
+    if args.like_for_like:
+        if args.gauge or args.fit_dry_run or args.curve_only:
+            ap.error("--like-for-like takes only --rescore")
+        return score_like_for_like(args.rescore)
     if args.fit_dry_run and args.rescore:
         ap.error("--fit-dry-run writes nothing; --rescore is meaningless with it")
     if args.curve_only:
