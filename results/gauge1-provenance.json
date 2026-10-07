@@ -1,0 +1,88 @@
+{
+ "gauge": "gauge1-logit",
+ "result_file": "gauge1-logit.json",
+ "engine": "gemma-4-12b-8bit-text",
+ "engine_path": "~/mlx-models/gemma-4-12b-8bit-text",
+ "prompt_version": "v1",
+ "prompt_sha256": "f45f503ecce61805817028a7abca55e14bc4c50da0e4f3fb2b08ccfef78641d4",
+ "rotations": 3,
+ "letters": [
+  "A",
+  "B",
+  "C"
+ ],
+ "letter_ids": {
+  "A": 236776,
+  "B": 236799,
+  "C": 236780
+ },
+ "letter_forms": [
+  "A",
+  "B",
+  "C"
+ ],
+ "rotation_maps": [
+  {
+   "A": "no-call",
+   "B": "one-call",
+   "C": "multi-call"
+  },
+  {
+   "A": "one-call",
+   "B": "multi-call",
+   "C": "no-call"
+  },
+  {
+   "A": "multi-call",
+   "B": "no-call",
+   "C": "one-call"
+  }
+ ],
+ "think_forms_checked": [
+  [
+   "<think>",
+   "</think>"
+  ],
+  [
+   "<|channel>thought",
+   "<channel|>"
+  ]
+ ],
+ "template_fallback_no_enable_thinking": false,
+ "n_bos_fixed_forwards": 0,
+ "tools_cap_tokens": 1500,
+ "n_truncated": 0,
+ "mean_prompt_tokens": 220.1,
+ "max_prompt_tokens": 2486,
+ "n_fit": 300,
+ "n_exam": 700,
+ "fit_by_label": {
+  "no-call": 100,
+  "one-call": 100,
+  "multi-call": 100
+ },
+ "exam_by_label": {
+  "no-call": 234,
+  "one-call": 233,
+  "multi-call": 233
+ },
+ "exam_reduced": false,
+ "exam_cap": null,
+ "letter_bias_fit_r0_minus_mean": [
+  0.3625,
+  0.7866,
+  -1.6254
+ ],
+ "timing": {
+  "s_per_item": 0.8666,
+  "wall_s": 870.511,
+  "peak_gb": 14.638,
+  "n_items": 1000,
+  "forwards_per_item": 3,
+  "load_s": 1.689,
+  "warmup_s": 0.174,
+  "process_s": 866.59
+ },
+ "mlx_version": "0.32.3",
+ "run_at": "2026-10-07T09:12:02Z"
+}
