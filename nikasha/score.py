@@ -82,6 +82,30 @@ def _prereg_commit_or_fail() -> str:
     return log.stdout.strip()
 
 
+def _prereg_section_or_fail(section: str) -> str:
+    """Rule 12 (brief 10): a gauge that declares `prereg_section` is scored only when that heading is a line
+    of the COMMITTED PREREG.md (HEAD), the working copy is clean (checked by _prereg_commit_or_fail), and the
+    commit that introduced the heading is on origin/main, i.e. pushed. Returns that commit's ISO date."""
+    import subprocess
+    try:
+        head = subprocess.run(["git", "show", "HEAD:PREREG.md"], cwd=ROOT, capture_output=True, text=True, timeout=30)
+        intro = subprocess.run(["git", "log", "--format=%H %cI", "-S", section, "--", "PREREG.md"], cwd=ROOT,
+                               capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError) as e:  # noqa: BLE001
+        _fail(f"could not query git for {section!r} ({type(e).__name__})")
+    if head.returncode != 0 or section not in head.stdout.splitlines():
+        _fail(f"the committed PREREG.md has no line {section!r} — amend, commit and push it before this exam read")
+    lines = [ln.split() for ln in intro.stdout.splitlines() if ln.strip()]
+    if intro.returncode != 0 or not lines:
+        _fail(f"cannot find the commit that introduced {section!r} in PREREG.md")
+    sha, date = lines[-1][0], lines[-1][1]  # oldest commit whose diff adds the heading
+    anc = subprocess.run(["git", "merge-base", "--is-ancestor", sha, "origin/main"], cwd=ROOT,
+                         capture_output=True, text=True, timeout=30)
+    if anc.returncode != 0:
+        _fail(f"{section!r} (commit {sha[:7]}) is not on origin/main — push it before this exam read (rule 12)")
+    return date
+
+
 def _utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -476,6 +500,11 @@ def main(argv=None) -> int:
     if not PREREG_PATH.exists():
         _fail("PREREG.md is missing — pre-register before the first exam read (rule 9)")
     prereg_commit = _prereg_commit_or_fail()
+    section_commit = {}
+    for _path, data, *_ in prepared:
+        section = data.get("prereg_section")
+        if isinstance(section, str) and section and section not in section_commit:
+            section_commit[section] = _prereg_section_or_fail(section)
     if not MANIFEST_PATH.exists():
         _fail(f"{MANIFEST_PATH} not found — build set A first")
     manifest = read_json(MANIFEST_PATH)
@@ -524,6 +553,9 @@ def main(argv=None) -> int:
                 "fit_fingerprint": fingerprint,
                 "scored_at": _utc_now(),
                 "prereg_commit": prereg_commit,
+                **({"prereg_section": data["prereg_section"],
+                    "prereg_section_commit": section_commit[data["prereg_section"]]}
+                   if data.get("prereg_section") in section_commit else {}),
                 "metrics": m,
                 "curve": curve,
                 "confusion": conf,

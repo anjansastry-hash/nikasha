@@ -1,0 +1,36 @@
+{
+ "gauge": "gauge3-probe",
+ "n_fit": 300,
+ "sa_target": 0.95,
+ "T": 0.9204683057076837,
+ "T_method": "grid+refine",
+ "tau_global": 0.76,
+ "taus": [
+  0.76,
+  0.74,
+  0.55
+ ],
+ "target_reachable_on_fit": true,
+ "fit": {
+  "nll_raw": 0.2148,
+  "nll_cal": 0.2134,
+  "ece_raw": 0.0267,
+  "ece_cal": 0.0348,
+  "accuracy": 0.9233,
+  "ask_rate": 0.0733,
+  "selective_accuracy": 0.9532
+ },
+ "grid": {
+  "T_min": 0.05,
+  "T_max": 10,
+  "T_points": 200,
+  "tau_min": 0.34,
+  "tau_max": 0.99,
+  "tau_step": 0.01
+ },
+ "fit_fingerprint": {
+  "sha256": "e9446587179d2710c772c90161754d11c7c8efe56d917a465ea9b960ce9cfe68",
+  "n_fit": 300,
+  "recipe": "sha256 of the UTF-8 text json.dumps([[id, logits_mean], ...], separators=(',', ':'), ensure_ascii=False) over the items with split == 'fit', sorted by id, logits as floats"
+ }
+}
