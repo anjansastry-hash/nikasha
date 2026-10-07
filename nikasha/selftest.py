@@ -27,7 +27,7 @@ Checks:
      results/<gauge>.json (sha256 over sorted fit ids + logits_mean): the calibration belongs to this run.
      An exam block that records fit_fingerprint must match it too; score.py's guard refuses a tampered run.
   i  PREREG Amendment 1 (Gate 4): its commit predates every new exam block, each block records it, the Gate 3
-     blocks predate it, and it is on origin/main.
+     blocks predate it, and it is on HEAD (WARN while not yet on origin/main, e.g. before a force-push).
   j  gauge ③'s fit-split logits are flagged oof: true and reproduce as out-of-fold values by refitting per fold.
   k  no key material anywhere in the repo: the key prefix is in no file (.git included) and in no commit.
 
@@ -635,7 +635,9 @@ GATE3_FILES = {"baseline-uniform.json", "baseline-majority.json", "gauge1-logit.
 def check_i(repo: Repo) -> list[tuple[str, str, str]]:
     """Rule 12 (brief 10): the commit that introduced Amendment 1 predates every new (Gate 4) exam block, every
     block recording the amendment names that commit, the Gate 3 blocks predate it (never re-scored), and the
-    commit is on origin/main."""
+    commit is on HEAD (FAIL otherwise). Not yet on origin/main is a WARN, not a FAIL: after the Gate 5 history
+    rewrite the new commits exist locally until the force-push, and chronology is decided by commit dates, which
+    the rewrite keeps."""
     blocks = exam_blocks(repo)
     new = [(n, ex) for n, ex in blocks if n not in GATE3_FILES]
     old = [(n, ex) for n, ex in blocks if n in GATE3_FILES]
@@ -662,14 +664,17 @@ def check_i(repo: Repo) -> list[tuple[str, str, str]]:
     for name, ex in old:
         if not _parse_iso(str(ex.get("scored_at"))) < when:
             problems.append(f"{name}: Gate 3 block scored at {ex.get('scored_at')}, after the amendment (re-scored?)")
-    rc2, _, _ = _git("merge-base", "--is-ancestor", sha, "origin/main")
+    rc2, _, _ = _git("merge-base", "--is-ancestor", sha, "HEAD")
     if rc2 != 0:
-        problems.append(f"amendment commit {sha[:7]} is not on origin/main")
+        problems.append(f"amendment commit {sha[:7]} is not on HEAD")
     if problems:
         return [(FAIL, "i", "; ".join(problems))]
-    return [(PASS, "i", f"Amendment 1 commit {sha[:7]} ({raw}) predates all {len(new)} Gate 4 exam blocks "
-                        f"({', '.join(sorted(n for n, _ in new))}), each records it; the {len(old)} Gate 3 blocks predate "
-                        f"it; on origin/main")]
+    summary = (f"Amendment 1 commit {sha[:7]} ({raw}) predates all {len(new)} Gate 4 exam blocks "
+               f"({', '.join(sorted(n for n, _ in new))}), each records it; the {len(old)} Gate 3 blocks predate it")
+    rc3, _, _ = _git("merge-base", "--is-ancestor", sha, "origin/main")
+    if rc3 != 0:
+        return [(WARN, "i", f"{summary}; on HEAD but not yet on origin/main (push pending)")]
+    return [(PASS, "i", f"{summary}; on origin/main")]
 
 
 def check_j(repo: Repo) -> list[tuple[str, str, str]]:

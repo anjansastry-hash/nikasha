@@ -2,3 +2,5 @@ __pycache__/
 *.pyc
 results/*.partial.json
 ops/*.pid
+ops/
+results/otel31b-ran/
