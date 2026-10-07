@@ -33,6 +33,10 @@ DISPLAY_NAME = {
 }
 # Columns whose cell carries a CI (display key == metrics key); eligible for the "within noise" dagger.
 CI_COLUMNS = ["accuracy", "ask_rate", "selective_accuracy", "auroc"]
+# Columns whose cell shows two metrics as "raw → cal" (score.py's display string). Each half is
+# bootstrapped with its own CI, so each half gets its own dagger: display key -> (raw key, cal key).
+ARROW_COLUMNS = {"ece": ("ece_raw", "ece_cal")}
+ARROW = " → "  # the separator score.py writes between the raw and cal halves
 # Bootstrap/calibration parameters that must agree across every scored gauge. `ci_level` is optional:
 # when no JSON carries it the level is printed in words (CI_LEVEL_WORDS), never as a hand-written digit.
 SHARED_KEYS = ["n_boot", "seed", "ece_bins", "sa_target", "ci_level"]
@@ -274,6 +278,16 @@ def cell(display: dict, key: str, dagger: bool) -> str:
     return s
 
 
+def arrow_cell(display: dict, key: str, daggers: tuple[bool, bool]) -> str:
+    """A "raw → cal" cell: the display string is split on its arrow (no number is touched) and the
+    dagger is appended to each half whose metric is within noise. A string of any other shape is
+    marked as a whole when either half is."""
+    parts = fmt(display.get(key)).split(ARROW)
+    if len(parts) != 2:
+        return cell(display, key, any(daggers))
+    return ARROW.join(p + DAGGER if d and p != DASH else p for p, d in zip(parts, daggers))
+
+
 def results_table(rows: list[dict]) -> list[str]:
     """The results table, its within-noise footnote and the bootstrap line (needs at least one row)."""
     out: list[str] = []
@@ -283,6 +297,7 @@ def results_table(rows: list[dict]) -> list[str]:
               f"ask rate @ SA {fmt(shared['sa_target'])} [CI]",
               "selective accuracy achieved [CI]", "AUROC [CI]"]
     noise = {m: within_noise(rows, m) for m in CI_COLUMNS}
+    noise.update({m: within_noise(rows, m) for pair in ARROW_COLUMNS.values() for m in pair})
     out.append("| " + " | ".join(header) + " |")
     out.append("|" + "---|" * len(header))
     for i, r in enumerate(rows):
@@ -294,7 +309,7 @@ def results_table(rows: list[dict]) -> list[str]:
             DISPLAY_NAME.get(r["id"], r["gauge"]),
             fmt(r["exam"].get("n_exam")),
             cell(display, "accuracy", noise["accuracy"][i]),
-            cell(display, "ece", False),
+            arrow_cell(display, "ece", tuple(noise[m][i] for m in ARROW_COLUMNS["ece"])),
             cell(display, "ask_rate", noise["ask_rate"][i]),
             cell(display, "selective_accuracy", noise["selective_accuracy"][i]),
             cell(display, "auroc", noise["auroc"][i]),

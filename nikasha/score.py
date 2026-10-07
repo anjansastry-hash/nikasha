@@ -62,6 +62,24 @@ def _fail(msg: str):
     sys.exit(2)
 
 
+def _prereg_commit_or_fail() -> str:
+    """Rule 9: PREREG.md must be committed and clean (no uncommitted edits) before the exam is opened.
+    Returns the ISO date of its last commit, which is recorded in the exam block."""
+    import subprocess
+    try:
+        log = subprocess.run(["git", "log", "-1", "--format=%cI", "--", "PREREG.md"], cwd=ROOT,
+                             capture_output=True, text=True, timeout=30)
+        st = subprocess.run(["git", "status", "--porcelain", "--", "PREREG.md"], cwd=ROOT,
+                            capture_output=True, text=True, timeout=30)
+    except (OSError, subprocess.SubprocessError) as e:  # noqa: BLE001
+        _fail(f"could not query git for PREREG.md ({type(e).__name__}) — rule 9 cannot be verified")
+    if log.returncode != 0 or not log.stdout.strip():
+        _fail("PREREG.md has no commit — commit and push it before the first exam read (rule 9)")
+    if st.returncode != 0 or st.stdout.strip():
+        _fail("PREREG.md has uncommitted changes — commit and push it before the first exam read (rule 9)")
+    return log.stdout.strip()
+
+
 def _utc_now() -> str:
     return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
@@ -439,6 +457,7 @@ def main(argv=None) -> int:
     # ---- phase 2: the exam is opened here and nowhere else ------------------------------------
     if not PREREG_PATH.exists():
         _fail("PREREG.md is missing — pre-register before the first exam read (rule 9)")
+    prereg_commit = _prereg_commit_or_fail()
     if not MANIFEST_PATH.exists():
         _fail(f"{MANIFEST_PATH} not found — build set A first")
     manifest = read_json(MANIFEST_PATH)
@@ -485,6 +504,7 @@ def main(argv=None) -> int:
                 "tau_global": tau_global,
                 "exam_sha256": actual,
                 "scored_at": _utc_now(),
+                "prereg_commit": prereg_commit,
                 "metrics": m,
                 "curve": curve,
                 "confusion": conf,

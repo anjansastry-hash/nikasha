@@ -1,0 +1,31 @@
+{
+ "gauge": "baseline-majority",
+ "n_fit": 300,
+ "sa_target": 0.95,
+ "T": 1.0,
+ "T_method": "fixed",
+ "tau_global": null,
+ "taus": [
+  1.01,
+  1.01,
+  1.01
+ ],
+ "target_reachable_on_fit": false,
+ "fit": {
+  "nll_raw": 18.4207,
+  "nll_cal": 18.4207,
+  "ece_raw": 0.6667,
+  "ece_cal": 0.6667,
+  "accuracy": 0.3333,
+  "ask_rate": 1.0,
+  "selective_accuracy": null
+ },
+ "grid": {
+  "T_min": 0.05,
+  "T_max": 10,
+  "T_points": 200,
+  "tau_min": 0.34,
+  "tau_max": 0.99,
+  "tau_step": 0.01
+ }
+}

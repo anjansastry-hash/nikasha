@@ -189,6 +189,18 @@ def main(argv=None) -> int:
 
     uniform_path = RESULTS_DIR / f"{UNIFORM_GAUGE}.json"
     majority_path = RESULTS_DIR / f"{MAJORITY_GAUGE}.json"
+    # Rule 8 guard: never silently discard a scored exam block (a rewrite would force a second exam
+    # read of the same gauge version). --force is the explicit, logged override.
+    if not getattr(args, "force", False):
+        for path in (uniform_path, majority_path):
+            if path.exists():
+                try:
+                    existing = read_json(path)
+                except (OSError, ValueError):
+                    existing = {}
+                if isinstance(existing, dict) and "exam" in existing:
+                    raise SystemExit(f"STOP: {path.relative_to(ROOT)} already carries an 'exam' block; "
+                                     f"refusing to overwrite a scored gauge file (use --force to override)")
     write_json(uniform_path, uniform)
     write_json(majority_path, majority)
 

@@ -1,0 +1,31 @@
+{
+ "gauge": "gauge1-logit",
+ "n_fit": 300,
+ "sa_target": 0.95,
+ "T": 3.7937827067436003,
+ "T_method": "grid+refine",
+ "tau_global": 0.84,
+ "taus": [
+  0.34,
+  0.84,
+  0.84
+ ],
+ "target_reachable_on_fit": true,
+ "fit": {
+  "nll_raw": 0.8951,
+  "nll_cal": 0.3489,
+  "ece_raw": 0.1059,
+  "ece_cal": 0.063,
+  "accuracy": 0.8833,
+  "ask_rate": 0.1033,
+  "selective_accuracy": 0.9554
+ },
+ "grid": {
+  "T_min": 0.05,
+  "T_max": 10,
+  "T_points": 200,
+  "tau_min": 0.34,
+  "tau_max": 0.99,
+  "tau_step": 0.01
+ }
+}
