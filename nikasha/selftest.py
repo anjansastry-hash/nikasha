@@ -28,7 +28,8 @@ Checks:
      An exam block that records fit_fingerprint must match it too; score.py's guard refuses a tampered run.
   i  PREREG Amendment 1 (Gate 4): its commit predates every new exam block, each block records it, the Gate 3
      blocks predate it, and it is on HEAD (WARN while not yet on origin/main, e.g. before a force-push).
-  j  gauge ③'s fit-split logits are flagged oof: true and reproduce as out-of-fold values by refitting per fold.
+  j  gauge ③'s fit-split logits are flagged oof: true, its calib fingerprint matches, and they reproduce as
+     out-of-fold values by refitting per fold (PASS max |diff| <= 0.05, WARN <= 0.5, FAIL above).
   k  no key material anywhere in the repo: the key prefix is in no file (.git included) and in no commit.
 
 Run from the repo root:  ~/venvs/nikasha/bin/python -m nikasha.selftest
@@ -58,6 +59,7 @@ from nikasha import (
 )
 
 PASS, FAIL, WARN, SKIP = "PASS", "FAIL", "WARN", "SKIP"
+J_TOL_PASS, J_TOL_WARN = 0.05, 0.5  # check j: refit vs stored oof logits, max |diff| (see check_j)
 
 README_PATH = ROOT / "README.md"
 PREREG_PATH = ROOT / "PREREG.md"
@@ -679,7 +681,13 @@ def check_i(repo: Repo) -> list[tuple[str, str, str]]:
 
 def check_j(repo: Repo) -> list[tuple[str, str, str]]:
     """gauge ③: fit-split logits flagged oof: true — and genuinely out-of-fold: refitting the head per stored fold
-    (chosen C, features from results/gauge3-features.npy) reproduces them, and they differ from in-sample values."""
+    (chosen C, features from results/gauge3-features.npy) reproduces them, and they differ from in-sample values.
+
+    Tolerance (Gate 5, brief 16 R1): the refit is compared, not matched bit for bit. A different BLAS gives
+    slightly different solver results with the same scikit-learn (1.9.1 on the MacBook: exact match RED, Studio
+    max |diff| 0.0). PASS if max |oof diff| <= J_TOL_PASS (0.05), WARN (printed, not failing) if <= J_TOL_WARN
+    (0.5), FAIL above, and FAIL whenever in-sample logits are not further away than the refit. The oof flags and
+    the calib fit fingerprint are always asserted exactly; they don't depend on the machine."""
     path = RESULTS_DIR / "gauge3-probe.json"
     obj, err = repo.results.get(path, (None, "absent"))
     if err or not isinstance(obj, dict):
@@ -694,6 +702,13 @@ def check_j(repo: Repo) -> list[tuple[str, str, str]]:
                             "(top-level oof, per-item oof/fold, exam items oof: false)")]
     out = [(PASS, "j", f"gauge3-probe.json: top-level oof true; {len(fit)} fit items oof: true with folds "
                        f"{sorted({it['fold'] for it in fit})}; {len(exam)} exam items oof: false")]
+    calib, cerr = repo.results.get(path.with_name("gauge3-probe.calib.json"), (None, "absent"))
+    stored_fp = ((calib or {}).get("fit_fingerprint") or {}).get("sha256") if isinstance(calib, dict) else None
+    actual_fp = fit_fingerprint(obj["items"])["sha256"]
+    if cerr or stored_fp != actual_fp:
+        return out + [(FAIL, "j", f"gauge3-probe.calib.json fit_fingerprint {str(stored_fp)[:12]}... does not match "
+                                  f"gauge3-probe.json {actual_fp[:12]}... ({cerr or 'mismatch'})")]
+    out.append((PASS, "j", f"gauge3-probe.calib.json fit_fingerprint {actual_fp[:12]}... matches the oof fit logits"))
     try:
         import numpy as np
 
@@ -713,9 +728,13 @@ def check_j(repo: Repo) -> list[tuple[str, str, str]]:
         insample = fit_head(Xf, y, float(obj["C"]))[0].decision_function(Xf)
         d_oof = float(np.abs(oof - stored).max())
         d_in = float(np.abs(insample - stored).max())
-        if d_oof <= 1e-6 < d_in:
-            out.append((PASS, "j", f"refit per stored fold reproduces the fit logits (max |diff| {d_oof:.1e}); "
-                                   f"in-sample logits differ by up to {d_in:.2f}: they are out-of-fold"))
+        if d_oof <= J_TOL_PASS and d_oof < d_in:
+            out.append((PASS, "j", f"refit per stored fold reproduces the fit logits (max |diff| {d_oof:.1e} <= "
+                                   f"{J_TOL_PASS}); in-sample logits differ by up to {d_in:.2f}: they are out-of-fold"))
+        elif d_oof <= J_TOL_WARN and d_oof < d_in:
+            out.append((WARN, "j", f"refit per stored fold is close but not within {J_TOL_PASS} (max |diff| "
+                                   f"{d_oof:.3g} <= {J_TOL_WARN}; a different BLAS?); in-sample differ by up to "
+                                   f"{d_in:.2f}"))
         else:
             out.append((FAIL, "j", f"fit logits not reproduced as out-of-fold values (max |oof diff| {d_oof:.3g}, "
                                    f"max |in-sample diff| {d_in:.3g})"))
