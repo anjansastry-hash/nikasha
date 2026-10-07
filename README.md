@@ -16,7 +16,8 @@ set A: built from `gorilla-llm/Berkeley-Function-Calling-Leaderboard` (license A
 | fit | 300 | 100 | 100 | 100 |
 | exam | 700 | 234 | 233 | 233 |
 
-Dropped: 0 items (ground-truth call count contradicts the file's category).
+Dropped for a category contradiction: 0 items — ground-truth call count contradicts the file's category.  
+Dropped for missing ground truth: 1 item (BFCL_v3_live_multiple.json: 1) — no possible_answer row for the item's id (or ground_truth not a list/dict).  
 Sampling draws at least 10 items from every non-empty source file, so live and non-live items both appear. Seed 20261007 for sampling and split.
 
 Canary (KU3): verbatim completions 0/20, twins 0/20 — not flagged; gauge ① is reported as a zero-shot read.
@@ -31,7 +32,11 @@ Canary (KU3): verbatim completions 0/20, twins 0/20 — not flagged; gauge ① i
 
 † within noise: 95% CIs overlap with another row.
 
+A constant uniform predictor is calibrated by construction (confidence 1/3, accuracy ≈ 1/3), so its ECE overlaps any well-calibrated gauge.
+
 95% percentile bootstrap CIs, 1000 resamples, seed 20261007; ECE with 15 equal-width bins; selective-accuracy target 0.95; thresholds fitted on the fit split only.
+
+Letter bias of gauge ① logit read (fit split, rotation r0 minus the mean over rotations, logits per label in label order): [+0.36, +0.79, −1.63]; averaging over three letter orders removes this bias.
 
 ![selective accuracy vs ask rate](results/curve.png)
 

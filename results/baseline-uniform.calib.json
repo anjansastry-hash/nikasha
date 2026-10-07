@@ -27,5 +27,10 @@
   "tau_min": 0.34,
   "tau_max": 0.99,
   "tau_step": 0.01
+ },
+ "fit_fingerprint": {
+  "sha256": "939ba0c0f59cdb360b4834fb2ad89cdfe92b0f2c920ee755c6b39eebd22493e8",
+  "n_fit": 300,
+  "recipe": "sha256 of the UTF-8 text json.dumps([[id, logits_mean], ...], separators=(',', ':'), ensure_ascii=False) over the items with split == 'fit', sorted by id, logits as floats"
  }
 }

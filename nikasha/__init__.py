@@ -69,3 +69,22 @@ def write_json(path, obj) -> None:
     with open(path, "w", encoding="utf-8") as f:
         json.dump(obj, f, indent=1, ensure_ascii=False)
         f.write("\n")
+
+
+FINGERPRINT_RECIPE = (
+    "sha256 of the UTF-8 text json.dumps([[id, logits_mean], ...], separators=(',', ':'), ensure_ascii=False) "
+    "over the items with split == 'fit', sorted by id, logits as floats"
+)
+
+
+def fit_fingerprint(items) -> dict:
+    """Binds a .calib.json to the gauge run it was fitted on: sha256 over the sorted fit ids and their
+    logits_mean (the only inputs calibrate.py reads). A re-run gauge changes it, so score.py can refuse
+    stale T / thresholds."""
+    rows = sorted(
+        ([str(it["id"]), [float(x) for x in it["logits_mean"]]]
+         for it in items if isinstance(it, dict) and it.get("split") == "fit"),
+        key=lambda r: r[0],
+    )
+    text = json.dumps(rows, separators=(",", ":"), ensure_ascii=False)
+    return {"sha256": sha256_text(text), "n_fit": len(rows), "recipe": FINGERPRINT_RECIPE}

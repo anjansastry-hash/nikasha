@@ -15,11 +15,17 @@ Checks:
   d  one license line per distinct non-"constant" engine named in results gauge files:
      cards/<engine>.md exists and has a line starting with "license:".
   e  sha256(exam.jsonl) and sha256(fit.jsonl) equal the manifest's.
-  f  PREREG.md's last commit date (git log) is earlier than every exam.scored_at (rule 9);
-     SKIP while no exam block exists.
+  f  every exam.scored_at is preceded by a commit of PREREG.md (rule 9): the version in force at scoring
+     time is the latest PREREG.md commit before it, and an exam block that records `prereg_commit` must
+     name exactly that commit's date. PREREG.md is amended, never rewritten: every later committed version
+     (and the working tree) starts with the full text in force at the first exam block. SKIP while no
+     exam block exists.
   g  README.md exists, carries the readme.py marker, and is at least as new as the JSON it depends on
      (WARN, not FAIL, when older). results/*.partial.json and results/timing-*.json are not README
      inputs and are left out of that comparison.
+  h  every results/<gauge>.calib.json carries fit_fingerprint and it equals nikasha.fit_fingerprint of
+     results/<gauge>.json (sha256 over sorted fit ids + logits_mean): the calibration belongs to this run.
+     An exam block that records fit_fingerprint must match it too.
 
 Run from the repo root:  ~/venvs/nikasha/bin/python -m nikasha.selftest
 This module never imports an engine and never prints the text of any set-A item.
@@ -42,6 +48,7 @@ from nikasha import (
     MANIFEST_PATH,
     RESULTS_DIR,
     ROOT,
+    fit_fingerprint,
     read_json,
     sha256_file,
 )
@@ -400,48 +407,114 @@ def _git(*args: str) -> tuple[int, str, str]:
     return r.returncode, r.stdout.strip(), r.stderr.strip()
 
 
-def check_f(repo: Repo) -> list[tuple[str, str, str]]:
-    """PREREG.md's last commit precedes every exam.scored_at; SKIP when nothing is scored yet."""
-    scored: list[tuple[str, object]] = []
+def prereg_history() -> tuple[list[tuple[str, datetime, str]], str | None]:
+    """Commits that touched PREREG.md, oldest first: (sha, commit datetime, raw ISO date). (list, error)."""
+    rc, out_txt, err_txt = _git("log", "--format=%H %cI", "--", "PREREG.md")
+    if rc != 0:
+        return [], f"git log for PREREG.md failed (rc={rc}): {err_txt or out_txt}"
+    hist: list[tuple[str, datetime, str]] = []
+    for line in out_txt.splitlines():
+        parts = line.split()
+        if len(parts) != 2:
+            continue
+        try:
+            hist.append((parts[0], _parse_iso(parts[1]), parts[1]))
+        except ValueError:
+            return [], f"cannot parse PREREG.md commit date {parts[1]!r}"
+    hist.sort(key=lambda t: t[1])
+    return hist, None
+
+
+def prereg_text_at(sha: str) -> str | None:
+    rc, out_txt, _ = _git("show", f"{sha}:PREREG.md")
+    return out_txt if rc == 0 else None
+
+
+def in_force(hist: list[tuple[str, datetime, str]], when: datetime):
+    """The PREREG.md commit in force at `when`: the latest one strictly before it (None if none)."""
+    before = [h for h in hist if h[1] < when]
+    return before[-1] if before else None
+
+
+def exam_blocks(repo: Repo) -> list[tuple[str, dict]]:
+    """(file name, exam block) for every results file carrying a top-level `exam` dict."""
+    out = []
     for p, (obj, err) in repo.results.items():
         if err or not isinstance(obj, dict):
             continue
         exam = obj.get("exam")
         if isinstance(exam, dict):
-            scored.append((p.name, exam.get("scored_at")))
+            out.append((p.name, exam))
+    return out
+
+
+def check_f(repo: Repo) -> list[tuple[str, str, str]]:
+    """Every exam.scored_at is preceded by a PREREG.md commit (the one in force, which a recorded
+    prereg_commit must name); PREREG.md only grows by appending after the first exam block."""
+    scored = [(name, exam.get("scored_at"), exam.get("prereg_commit")) for name, exam in exam_blocks(repo)]
     if not scored:
         return [(SKIP, "f", "no exam block in any results file yet; PREREG date check deferred")]
     if not PREREG_PATH.is_file():
         return [(FAIL, "f", "PREREG.md missing")]
-    rc, out_txt, err_txt = _git("log", "-1", "--format=%cI", "--", "PREREG.md")
-    if rc != 0:
-        return [(FAIL, "f", f"git log for PREREG.md failed (rc={rc}): {err_txt or out_txt}")]
-    if not out_txt:
+    hist, err = prereg_history()
+    if err:
+        return [(FAIL, "f", err)]
+    if not hist:
         return [(FAIL, "f", "PREREG.md has no commit in git history (rule 9: commit and push before the first exam read)")]
-    prereg_raw = out_txt.splitlines()[0].strip()
-    try:
-        prereg_dt = _parse_iso(prereg_raw)
-    except ValueError:
-        return [(FAIL, "f", f"cannot parse PREREG.md commit date {prereg_raw!r}")]
     bad: list[str] = []
-    parsed: list[tuple[str, datetime, str]] = []
-    for name, raw in scored:
+    parsed: list[tuple[str, datetime, str, tuple]] = []
+    for name, raw, recorded in scored:
         if not isinstance(raw, str) or not raw.strip():
             bad.append(f"{name}: exam.scored_at missing")
             continue
         try:
-            parsed.append((name, _parse_iso(raw), raw))
+            dt = _parse_iso(raw)
         except ValueError:
             bad.append(f"{name}: unparsable exam.scored_at {raw!r}")
-    late = [f"{name}: scored_at {raw} is not after the PREREG commit" for name, dt, raw in parsed if not prereg_dt < dt]
+            continue
+        force = in_force(hist, dt)
+        if force is None:
+            bad.append(f"{name}: scored_at {raw} precedes every PREREG.md commit")
+            continue
+        if isinstance(recorded, str) and recorded.strip():
+            try:
+                if _parse_iso(recorded) != force[1]:
+                    bad.append(f"{name}: records prereg_commit {recorded} but the PREREG.md commit in force at "
+                               f"{raw} is {force[2]} ({force[0][:7]})")
+            except ValueError:
+                bad.append(f"{name}: unparsable prereg_commit {recorded!r}")
+        parsed.append((name, dt, raw, force))
     results: list[tuple[str, str, str]] = []
-    if bad or late:
-        results.append((FAIL, "f", f"PREREG.md last commit {prereg_raw} must precede every exam.scored_at: "
-                        + "; ".join(bad + late)))
+    if bad:
+        results.append((FAIL, "f", "every exam block must be preceded by the PREREG.md commit it records: "
+                        + "; ".join(bad)))
+        return results
+    earliest = min(parsed, key=lambda t: t[1])
+    versions = sorted({t[3][0][:7] + " " + t[3][2] for t in parsed})
+    results.append((PASS, "f", f"all {len(parsed)} exam.scored_at are preceded by the PREREG.md commit in force "
+                    f"(versions in force: {', '.join(versions)}; earliest block {earliest[2]} in {earliest[0]})"))
+
+    # amend, never rewrite: every PREREG.md version after the first exam block extends the text in force then
+    base_sha, base_dt, base_raw = earliest[3]
+    base_text = prereg_text_at(base_sha)
+    if base_text is None:
+        results.append((FAIL, "f", f"cannot read PREREG.md at {base_sha[:7]}"))
+        return results
+    later = [h for h in hist if h[1] > base_dt]
+    rewritten = []
+    for sha, _dt, raw in later:
+        text = prereg_text_at(sha)
+        if text is None or not text.startswith(base_text):
+            rewritten.append(f"{sha[:7]} ({raw})")
+    work = PREREG_PATH.read_text(encoding="utf-8")
+    if not work.rstrip("\n").startswith(base_text.rstrip("\n")):
+        rewritten.append("working tree")
+    if rewritten:
+        results.append((FAIL, "f", f"PREREG.md text in force at the first exam block ({base_sha[:7]}) was changed, "
+                        f"not appended to, in: {', '.join(rewritten)}"))
     else:
-        earliest = min(parsed, key=lambda t: t[1])
-        results.append((PASS, "f", f"PREREG.md last commit {prereg_raw} precedes all {len(parsed)} exam.scored_at "
-                        f"(earliest {earliest[2]} in {earliest[0]})"))
+        results.append((PASS, "f", f"PREREG.md is append-only since {base_sha[:7]} ({len(later)} later commit(s) "
+                        f"and the working tree extend it)"))
     rc2, dirty, _ = _git("status", "--porcelain", "--", "PREREG.md")
     if rc2 == 0 and dirty:
         results.append((WARN, "f", "PREREG.md has uncommitted changes in the working tree; "
@@ -475,6 +548,74 @@ def check_g(repo: Repo) -> list[tuple[str, str, str]]:
     return out
 
 
+def check_h(repo: Repo) -> list[tuple[str, str, str]]:
+    """Each .calib.json is bound to its gauge run by fit_fingerprint (and so is any exam block recording one)."""
+    out: list[tuple[str, str, str]] = []
+    for p, obj in repo.gauge_files():
+        calib_path = p.with_name(p.stem + ".calib.json")
+        if not calib_path.is_file():
+            if isinstance(obj.get("exam"), dict):
+                out.append((FAIL, "h", f"{p.name}: scored but has no {calib_path.name}"))
+            continue
+        calib, err = repo.results.get(calib_path, (None, "not loaded"))
+        if err or not isinstance(calib, dict):
+            out.append((FAIL, "h", f"{calib_path.name}: unreadable ({err})"))
+            continue
+        stored = (calib.get("fit_fingerprint") or {}).get("sha256")
+        actual = fit_fingerprint(obj["items"])
+        if not isinstance(stored, str) or not stored:
+            out.append((FAIL, "h", f"{calib_path.name}: no fit_fingerprint (run calibrate.py --stamp)"))
+            continue
+        problems = []
+        if stored != actual["sha256"]:
+            problems.append(f"calib {stored[:12]}... != gauge file {actual['sha256'][:12]}...")
+        exam_fp = (obj.get("exam") or {}).get("fit_fingerprint") if isinstance(obj.get("exam"), dict) else None
+        if exam_fp is not None and exam_fp != actual["sha256"]:
+            problems.append(f"exam block records {str(exam_fp)[:12]}...")
+        if problems:
+            out.append((FAIL, "h", f"{p.name}: fit fingerprint mismatch -- " + "; ".join(problems)))
+        else:
+            out.append((PASS, "h", f"{calib_path.name} fit_fingerprint {stored[:12]}... matches {p.name} "
+                        f"(n_fit={actual['n_fit']})"))
+    if not out:
+        out.append((SKIP, "h", "no gauge file with a .calib.json yet"))
+        return out
+    out.append(_refusal_probe(repo))
+    return out
+
+
+def _refusal_probe(repo: Repo) -> tuple[str, str, str]:
+    """Behavioural half of check h: score.py's fingerprint guard must refuse a gauge whose fit logits
+    changed after calibration. One fit logit of a calibrated gauge is nudged IN MEMORY and handed to
+    score._check_fingerprint (the guard phase 1 runs before the exam is opened); nothing is written and
+    exam.jsonl is never touched."""
+    import contextlib
+    import copy
+    import io
+
+    from nikasha import score
+
+    for p, obj in repo.gauge_files():
+        calib_path = p.with_name(p.stem + ".calib.json")
+        fit_idx = next((i for i, it in enumerate(obj["items"])
+                        if isinstance(it, dict) and it.get("split") == "fit"), None)
+        if not calib_path.is_file() or fit_idx is None:
+            continue
+        tampered = copy.deepcopy(obj)
+        tampered["items"][fit_idx]["logits_mean"][0] = float(tampered["items"][fit_idx]["logits_mean"][0]) + 1e-3
+        sink = io.StringIO()
+        try:
+            with contextlib.redirect_stderr(sink):
+                score._check_fingerprint(obj["gauge"], tampered, calib_path)
+        except SystemExit as exc:
+            if exc.code != 0 and "fingerprint" in sink.getvalue():
+                return (PASS, "h", f"score.py refuses a tampered {p.name} (one fit logit +1e-3, in memory): "
+                                   f"exit {exc.code}")
+            return (FAIL, "h", f"score.py exited {exc.code} on a tampered {p.name} without a fingerprint message")
+        return (FAIL, "h", f"score.py accepted a tampered {p.name} (one fit logit +1e-3): stale calib not refused")
+    return (SKIP, "h", "no calibrated gauge with fit items to probe the refusal")
+
+
 CHECKS = (
     ("a", check_a),
     ("b", check_b),
@@ -483,6 +624,7 @@ CHECKS = (
     ("e", check_e),
     ("f", check_f),
     ("g", check_g),
+    ("h", check_h),
 )
 
 
@@ -492,7 +634,7 @@ CHECKS = (
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="nikasha.selftest",
-        description="Repo consistency checks (a-g); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
+        description="Repo consistency checks (a-h); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
     )
     ap.add_argument("--strict", action="store_true", help="treat WARN lines as FAIL")
     args = ap.parse_args(argv)

@@ -2,7 +2,8 @@
 
 The exam split is read ONCE per gauge version (brief rule 8). This module is the only code that opens
 data/seta/exam.jsonl (rule 4); it keeps only ids and labels from it and never prints item text. It reads
-results JSON and never imports an engine.
+results JSON and never imports an engine. It refuses to score a gauge whose .calib.json fit_fingerprint
+(sha256 over sorted fit ids + logits_mean) differs from the gauge file's, i.e. stale T / thresholds.
 
 Usage (from the repo root, inside the venv):
   $PY -m nikasha.score                  # every results/*.json with "items" + a .calib.json and no "exam" block
@@ -32,6 +33,7 @@ from nikasha import (
     ROOT,
     SA_TARGET,
     SEED,
+    fit_fingerprint,
     read_json,
     read_jsonl,
     sha256_file,
@@ -196,6 +198,20 @@ def _read_calib(gauge: str, path: Path) -> tuple[float, list[float], float | Non
         _fail(f"{gauge}: taus must be {len(LABELS)} finite numbers, got {taus}")
     tg = c.get("tau_global")
     return T, taus, (None if tg is None else float(tg))
+
+
+def _check_fingerprint(gauge: str, data: dict, calib_path: Path) -> str:
+    """The .calib.json must have been fitted on THIS gauge run: its fit_fingerprint (sha256 over the
+    sorted fit ids + their logits_mean) must equal the gauge file's. Refuses when absent or different."""
+    stored = (read_json(calib_path).get("fit_fingerprint") or {}).get("sha256")
+    if not isinstance(stored, str) or not stored:
+        _fail(f"{gauge}: {calib_path.name} carries no fit_fingerprint — cannot prove it belongs to this gauge "
+              f"run; run calibrate.py (or calibrate.py --stamp for a calib fitted before fingerprints existed)")
+    actual = fit_fingerprint(data["items"])["sha256"]
+    if actual != stored:
+        _fail(f"{gauge}: fit fingerprint {actual[:16]}… of results/{gauge}.json differs from {calib_path.name}'s "
+              f"{stored[:16]}… — the gauge was re-run after calibration; re-calibrate before scoring")
+    return actual
 
 
 # ----------------------------------------------------------------------------- the metric code
@@ -433,6 +449,7 @@ def main(argv=None) -> int:
             _check_split(gauge, rows, "fit", truth, subset_ok=False)
             L, y = _arrays(gauge, rows)
             T, taus, _ = _read_calib(gauge, _calib_path(path))
+            _check_fingerprint(gauge, data, _calib_path(path))
             m, _, conf = compute(gauge, L, y, T, taus)
             d = display_strings(m)
             print(summary_line(gauge, "fit-dry-run", len(rows), T, taus, m, d))
@@ -446,13 +463,14 @@ def main(argv=None) -> int:
     for path, data in targets:
         gauge = data["gauge"]
         T, taus, tau_global = _read_calib(gauge, _calib_path(path))
+        fingerprint = _check_fingerprint(gauge, data, _calib_path(path))
         rows = _rows_of(gauge, data["items"], "exam")
         if isinstance(data.get("n_exam"), int) and data["n_exam"] != len(rows):
             _fail(f"{gauge}: n_exam={data['n_exam']} but {len(rows)} items carry split == 'exam'")
         L, y = _arrays(gauge, rows)
         _validate_probs(gauge, metrics.softmax(L), "raw")
         _validate_probs(gauge, metrics.softmax(L, T), "calibrated")
-        prepared.append((path, data, rows, L, y, T, taus, tau_global))
+        prepared.append((path, data, rows, L, y, T, taus, tau_global, fingerprint))
 
     # ---- phase 2: the exam is opened here and nowhere else ------------------------------------
     if not PREREG_PATH.exists():
@@ -485,7 +503,7 @@ def main(argv=None) -> int:
     # gauge stops the run (--curve-only redraws it at any time without opening the exam)
     scored = 0
     try:
-        for path, data, rows, L, y, T, taus, tau_global in prepared:
+        for path, data, rows, L, y, T, taus, tau_global, fingerprint in prepared:
             gauge = data["gauge"]
             if "exam" in data:
                 print(f"!!! WARNING: --rescore is OVERWRITING the exam block of {gauge} "
@@ -503,6 +521,7 @@ def main(argv=None) -> int:
                 "taus": taus,
                 "tau_global": tau_global,
                 "exam_sha256": actual,
+                "fit_fingerprint": fingerprint,
                 "scored_at": _utc_now(),
                 "prereg_commit": prereg_commit,
                 "metrics": m,

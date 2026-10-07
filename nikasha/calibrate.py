@@ -15,11 +15,19 @@ For each gauge result file ``results/<gauge>.json`` this module
 It never opens ``data/seta/*.jsonl``, never touches exam items and never prints item text — only ids,
 counts, numbers. Every metric comes from ``nikasha/metrics.py``; nothing is reimplemented here.
 
+Every .calib.json carries ``fit_fingerprint`` (``nikasha.fit_fingerprint``: sha256 over the sorted fit ids
+and their logits_mean), which binds it to the gauge run it was fitted on; score.py refuses to score when
+the gauge file's fingerprint differs. A gauge with two or more rotations also gets ``letter_bias_fit``:
+mean over fit items of (r0 logit − mean-over-rotations logit), per label.
+
 Usage (from the repo root)::
 
     $PY -m nikasha.calibrate                 # every gauge result that has no .calib.json yet
     $PY -m nikasha.calibrate --gauge NAME    # that one gauge (recomputed even if a .calib.json exists)
     $PY -m nikasha.calibrate --all           # recompute every gauge result
+    $PY -m nikasha.calibrate --stamp         # existing .calib.json files: re-derive T and thresholds in
+                                             # memory, refuse on any difference, then ADD fit_fingerprint
+                                             # (and letter_bias_fit) without changing any stored number
 """
 from __future__ import annotations
 
@@ -29,7 +37,7 @@ from pathlib import Path
 
 import numpy as np
 
-from nikasha import LABELS, RESULTS_DIR, SA_TARGET, metrics, read_json, write_json
+from nikasha import LABELS, RESULTS_DIR, SA_TARGET, fit_fingerprint, metrics, read_json, write_json
 
 # The search grids metrics.py uses (documented in the calib.json "grid" block). These mirror the
 # brief and the interface spec; metrics.fit_temperature / metrics.fit_thresholds own the actual search.
@@ -187,6 +195,29 @@ def _check_probs_raw(fit_items: list[dict], probs_raw: np.ndarray, stem: str) ->
               file=sys.stderr)
 
 
+def _signed(v: float) -> str:
+    """+0.36 / −1.63: two decimals, explicit sign, typographic minus."""
+    return f"{v:+.2f}".replace("-", "−")
+
+
+def letter_bias(fit_items: list[dict]) -> dict | None:
+    """Mean over fit items of (r0 logit − mean-over-rotations logit), per label, in label order. None
+    unless every fit item carries at least two rotations (a one-rotation gauge has no bias line)."""
+    if not fit_items or not all(isinstance(it.get("logits_by_rotation"), list)
+                                and len(it["logits_by_rotation"]) >= 2 for it in fit_items):
+        return None
+    k_labels = len(LABELS)
+    raw = [sum(float(it["logits_by_rotation"][0][k]) - float(it["logits_mean"][k]) for it in fit_items)
+           / len(fit_items) for k in range(k_labels)]
+    return {
+        "split": "fit",
+        "n": len(fit_items),
+        "definition": "mean over fit items of (rotation r0 restricted logit − mean over rotations), per label, label order",
+        "value": [round(v, 4) for v in raw],
+        "display": "[" + ", ".join(_signed(v) for v in raw) + "]",
+    }
+
+
 def calibrate_gauge(obj: dict, stem: str) -> dict:
     """Fit T and thresholds on the fit split of one gauge result; return the calib.json object."""
     gauge = obj.get("gauge") if isinstance(obj.get("gauge"), str) else stem
@@ -228,7 +259,7 @@ def calibrate_gauge(obj: dict, stem: str) -> dict:
         "selective_accuracy": _r4(metrics.selective_accuracy(probs_cal, y, taus_arr)),
     }
 
-    return {
+    calib = {
         "gauge": gauge,
         "n_fit": n_fit,
         "sa_target": SA_TARGET,
@@ -242,7 +273,56 @@ def calibrate_gauge(obj: dict, stem: str) -> dict:
             "T_min": T_MIN, "T_max": T_MAX, "T_points": T_POINTS,
             "tau_min": TAU_MIN, "tau_max": TAU_MAX, "tau_step": TAU_STEP,
         },
+        "fit_fingerprint": fit_fingerprint(obj["items"]),
     }
+    bias = letter_bias(fit_items)
+    if bias is not None:
+        calib["letter_bias_fit"] = bias
+    return calib
+
+
+# Keys whose stored values --stamp must reproduce exactly before it may add the fingerprint.
+STAMP_VERIFY_KEYS = ("gauge", "n_fit", "sa_target", "T", "T_method", "tau_global", "taus",
+                     "target_reachable_on_fit", "fit", "grid")
+STAMP_ADD_KEYS = ("fit_fingerprint", "letter_bias_fit")
+
+
+def stamp_existing(results_dir: Path) -> int:
+    """Bind every existing .calib.json to its gauge run without changing a stored number: re-derive the
+    calibration in memory from the gauge file's fit split, refuse when any stored key differs (the calib
+    then does not belong to this run), and only ADD the missing STAMP_ADD_KEYS."""
+    n_fail = n_done = 0
+    for calib_path in sorted(results_dir.glob(f"*{CALIB_SUFFIX}")):
+        stem = calib_path.name[: -len(CALIB_SUFFIX)]
+        gauge_path = results_dir / f"{stem}.json"
+        if not gauge_path.is_file():
+            n_fail += 1
+            print(f"calibrate --stamp: {stem}: no gauge file results/{gauge_path.name}", file=sys.stderr)
+            continue
+        stored = read_json(calib_path)
+        try:
+            fresh = calibrate_gauge(read_json(gauge_path), stem)
+        except CalibrationError as e:
+            n_fail += 1
+            print(f"calibrate --stamp: {stem}: cannot re-derive: {e}", file=sys.stderr)
+            continue
+        diffs = [k for k in STAMP_VERIFY_KEYS if stored.get(k) != fresh.get(k)]
+        diffs += [k for k in STAMP_ADD_KEYS if k in stored and stored[k] != fresh.get(k)]
+        if diffs:
+            n_fail += 1
+            print(f"calibrate --stamp: {stem}: REFUSED — stored {diffs} differ from a re-derivation on the "
+                  f"current gauge file; this calib was not fitted on this run", file=sys.stderr)
+            continue
+        added = [k for k in STAMP_ADD_KEYS if k not in stored and k in fresh]
+        for k in added:
+            stored[k] = fresh[k]
+        if added:
+            write_json(calib_path, stored)
+        n_done += 1
+        print(f"{stem}: re-derivation identical on {len(STAMP_VERIFY_KEYS)} keys; added {added or 'nothing'}; "
+              f"fit_fingerprint {stored['fit_fingerprint']['sha256'][:16]}… (n_fit {stored['fit_fingerprint']['n_fit']})")
+    print(f"calibrate --stamp: {n_done} calib file(s) bound, {n_fail} refused")
+    return 1 if n_fail else 0
 
 
 def summary_line(stem: str, calib: dict, out_path: Path) -> str:
@@ -274,6 +354,9 @@ def build_parser() -> argparse.ArgumentParser:
                       help="calibrate only results/NAME.json (recomputed even if NAME.calib.json exists)")
     mode.add_argument("--all", action="store_true",
                       help="recompute every gauge result, including those that already have a .calib.json")
+    mode.add_argument("--stamp", action="store_true",
+                      help="add fit_fingerprint (and letter_bias_fit) to existing .calib.json files after "
+                           "verifying that a re-derivation reproduces every stored number")
     return ap
 
 
@@ -281,6 +364,8 @@ def main(argv=None) -> int:
     args = build_parser().parse_args(argv)
 
     results_dir = Path(RESULTS_DIR)
+    if args.stamp:
+        return stamp_existing(results_dir)
     if args.gauge:
         try:
             targets = [resolve_one(results_dir, args.gauge)]
