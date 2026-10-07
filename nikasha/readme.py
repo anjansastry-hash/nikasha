@@ -232,6 +232,18 @@ def intro_section() -> list[str]:
     return ["# nikasha", "", INTRO.format(labels=labels)]
 
 
+def install_section() -> list[str]:
+    return ["## Install", "",
+            "```",
+            "git clone https://github.com/anjansastry-hash/nikasha.git && cd nikasha",
+            "python -m venv .venv && source .venv/bin/activate",
+            "pip install -r requirements.txt",
+            "```", "",
+            "Use a full clone, not a shallow clone or a ZIP: selftest checks f and i read the git history. "
+            "`make selftest` needs no model download; `make gauge1` needs the 12B weights at `$NIKASHA_ENGINE` "
+            "or `~/mlx-models/gemma-4-12b-8bit-text`."]
+
+
 def _items(n) -> str:
     return f"{fmt(n)} item" + ("" if n == 1 else "s")
 
@@ -585,6 +597,7 @@ def promised_section() -> list[str]:
 def build(manifest: dict, rows: list[dict]) -> str:
     lines: list[str] = []
     lines += intro_section()
+    lines += [""] + install_section()
     lines += [""] + seta_section(manifest)
     lines += [""] + results_section(rows)
     for section in (like_for_like_section(), labels_needed_section(), share_of_gap_section()):

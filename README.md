@@ -2,6 +2,16 @@
 
 One sealed exam, many decision gauges. A gauge is any program that, for one item, returns a probability vector over the fixed label list (`no-call`, `one-call`, `multi-call`): one entry per label, every entry between zero and one inclusive, and the entries summing to one within a tolerance of one part in a million. Each gauge is its own process and writes `results/<gauge>.json`; the harness (`calibrate.py`, `score.py`, `readme.py`) reads that JSON and never imports an engine.
 
+## Install
+
+```
+git clone https://github.com/anjansastry-hash/nikasha.git && cd nikasha
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+Use a full clone, not a shallow clone or a ZIP: selftest checks f and i read the git history. `make selftest` needs no model download; `make gauge1` needs the 12B weights at `$NIKASHA_ENGINE` or `~/mlx-models/gemma-4-12b-8bit-text`.
+
 ## Set A
 
 set A: built from `gorilla-llm/Berkeley-Function-Calling-Leaderboard` (license Apache-2.0). Three labels, in fixed order:
