@@ -29,7 +29,9 @@ from nikasha import (
     FIT_PATH,
     LABELS,
     RESULTS_DIR,
+    ROOT,
     SEED,
+    read_json,
     read_jsonl,
     write_json,
 )
@@ -155,7 +157,9 @@ def main(argv=None) -> int:
                      "results/baseline-uniform.json and results/baseline-majority.json. "
                      "Reads ids and labels only; prints counts and the majority label only."),
     )
-    ap.parse_args(argv)
+    ap.add_argument("--force", action="store_true",
+                    help="overwrite the baseline files even if they already carry a scored 'exam' block")
+    args = ap.parse_args(argv)
 
     fit = load_ids_labels(FIT_PATH)
     exam = load_ids_labels(EXAM_PATH)
