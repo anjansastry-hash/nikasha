@@ -1,0 +1,30 @@
+{
+ "row": "gaugeJ",
+ "what": "per-class thresholds on gauge J's self-reported confidence (class = emitted decision), fitted on the fit split only",
+ "prereg_section": "## Amendment 2 — gauge J (JSON emission)",
+ "n_fit": 300,
+ "sa_target": 0.95,
+ "procedure": "metrics.fit_thresholds (gauge ①'s): global τ grid 0.34–0.99 step 0.01, then per-class coordinate descent; a parse failure is an ask",
+ "target_reachable_on_fit": false,
+ "mode": "target not reachable: global τ with the best fit selective accuracy",
+ "tau_global": 0.91,
+ "taus": [
+  0.91,
+  0.91,
+  0.91
+ ],
+ "fit": {
+  "n": 300,
+  "trust_accuracy": 0.89,
+  "parse_failure_rate": 0.0,
+  "ask_rate": 0.0333,
+  "selective_accuracy": 0.9172
+ },
+ "fit_fingerprint": {
+  "sha256": "7c60c12663a42d267c7735e3cb1e5a453bc8b687233d5bbc7becc8439251cadb",
+  "n_fit": 300,
+  "recipe": "sha256 of the UTF-8 text json.dumps([[id, decision, confidence, parse_ok], ...], separators=(',', ':'), ensure_ascii=False) over the fit item lines, sorted by id"
+ },
+ "fit_file_sha256": "d56ce40916f4653ae9e4fa4fe42eeeee5833deeb670377d1d3e55bbae81bac38",
+ "fitted_at": "2026-10-09T13:25:25Z"
+}

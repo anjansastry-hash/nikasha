@@ -575,7 +575,10 @@ def gauge_j_section() -> list[str]:
            "",
            f"Paired with gauge ① on the same resamples: ask rate J-gated − gauge ① (per-class τ, "
            f"{fmt(d.get('gauge1_ask_rate_value'))}) = **{fmt(d.get('ask_diff_points'))}** points — "
-           f"{fmt(d.get('paired_verdict'))}.",
+           f"{fmt(d.get('paired_verdict'))}."
+           + ("" if th.get("target_reachable_on_fit") else
+              f" Read it with the selective-accuracy column: J-gated does not reach the {fmt(ex.get('sa_target'))} target, "
+              "so a lower ask rate than gauge ① is not a gain at equal selective accuracy."),
            "",
            f"Latency per decision on the same {fmt(lat.get('n_items'))} {fmt(lat.get('split'))} items, one session: "
            f"gauge J {fmt(d.get('latency_gaugeJ'))}; gauge ① (three-rotation read) {fmt(d.get('latency_gauge1'))}.",
