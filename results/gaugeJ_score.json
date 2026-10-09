@@ -1,0 +1,148 @@
+{
+ "row": "gaugeJ",
+ "what": "gauge J — the engine of gauge ① asked to emit {decision, confidence} as JSON (Amendment 2): J-trust takes the field and never asks; J-gated asks below a per-class threshold on the emitted confidence",
+ "prereg_section": "## Amendment 2 — gauge J (JSON emission)",
+ "prompt_version": "j-v1",
+ "prompt_sha256": "6b4f94775d4b9dc354b627ebd656b0dfbc059d185387ec9c29a49b3a3e0e96da",
+ "max_new_tokens": 48,
+ "temperature": 0.0,
+ "thresholds": {
+  "target_reachable_on_fit": false,
+  "mode": "target not reachable: global τ with the best fit selective accuracy",
+  "tau_global": 0.91,
+  "taus": [
+   0.91,
+   0.91,
+   0.91
+  ],
+  "n_fit": 300
+ },
+ "fit": {
+  "n": 300,
+  "trust_accuracy": 0.89,
+  "parse_failure_rate": 0.0,
+  "ask_rate": 0.0333,
+  "selective_accuracy": 0.9172
+ },
+ "metrics": {
+  "trust_accuracy": {
+   "value": 0.8771,
+   "ci": [
+    0.8514,
+    0.9014
+   ],
+   "n_boot_used": 2000
+  },
+  "gated_ask_rate": {
+   "value": 0.0271,
+   "ci": [
+    0.0157,
+    0.0386
+   ],
+   "n_boot_used": 2000
+  },
+  "gated_selective_accuracy": {
+   "value": 0.8987,
+   "ci": [
+    0.8759,
+    0.9209
+   ],
+   "n_boot_used": 2000,
+   "n_answered": 681
+  },
+  "parse_failure_rate": {
+   "value": 0.0,
+   "ci": [
+    0.0,
+    0.0
+   ],
+   "n_boot_used": 2000
+  },
+  "gauge1_ask_rate": {
+   "value": 0.1343,
+   "ci": [
+    0.1086,
+    0.16
+   ],
+   "n_boot_used": 2000
+  },
+  "ask_diff_j_minus_gauge1": {
+   "value": -0.1071,
+   "ci": [
+    -0.1314,
+    -0.0829
+   ],
+   "n_boot_used": 2000
+  }
+ },
+ "within_noise": false,
+ "counts": {
+  "n": 700,
+  "n_parse_ok": 700,
+  "n_parse_failure": 0,
+  "n_answered_gated": 681,
+  "n_finish_length": 0,
+  "by_decision": {
+   "none": 163,
+   "one": 288,
+   "several": 249
+  },
+  "n_confidence_1": 681
+ },
+ "latency": {
+  "n_items": 50,
+  "split": "fit",
+  "gaugeJ": {
+   "median_s": 0.684,
+   "p90_s": 0.845,
+   "mean_s": 0.719,
+   "max_new_tokens": 48
+  },
+  "gauge1": {
+   "median_s": 0.628,
+   "p90_s": 1.148,
+   "mean_s": 0.757,
+   "forwards_per_decision": 3
+  },
+  "file_sha256": "1f34935157e7b2e1376c171844740f9f2e68cb91bf83a375eab5203adc424172",
+  "display": {
+   "gaugeJ": "median 0.684 s, p90 0.845 s",
+   "gauge1": "median 0.628 s, p90 1.148 s"
+  }
+ },
+ "display": {
+  "trust_accuracy": "87.7 [85.1, 90.1]",
+  "gated_ask_rate": "2.7 [1.6, 3.9] (target not reachable)",
+  "gated_selective_accuracy": "89.9 [87.6, 92.1]",
+  "parse_failure_rate": "0.0 [0.0, 0.0]",
+  "gauge1_ask_rate_value": "13.4",
+  "ask_diff_points": "-10.7 [-13.1, -8.3]",
+  "paired_verdict": "J-gated asks less than gauge ①, outside noise",
+  "taus": "[0.91, 0.91, 0.91]",
+  "fit_ask_rate": "3.3",
+  "fit_selective_accuracy": "91.7",
+  "latency_gaugeJ": "median 0.684 s, p90 0.845 s",
+  "latency_gauge1": "median 0.628 s, p90 1.148 s"
+ },
+ "exam": {
+  "n_exam": 700,
+  "n_boot": 2000,
+  "ci_level": 95,
+  "seed": 20261007,
+  "sa_target": 0.95,
+  "exam_sha256": "cb0fa1f71cd363703122ba9c50ba326700ee6f7394fc5085297855aa6ae7758e",
+  "exam_file": "gaugeJ_exam.jsonl",
+  "exam_file_sha256": "ebf348328914667989b8ed3fad715e3ea36280b1546e806c279be52fa3e7e3d6",
+  "exam_read_started_at": "2026-10-09T13:27:15Z",
+  "scored_at": "2026-10-09T13:36:12Z",
+  "prereg_commit": "2026-10-09T09:18:01-04:00",
+  "prereg_section": "## Amendment 2 — gauge J (JSON emission)",
+  "prereg_section_commit": "2026-10-09T09:18:01-04:00",
+  "prereg_section_sha": "3f9b698501c00a2e651a19dd7ce65aee2552bb18",
+  "gauge1_check": {
+   "ask_rate_recomputed": 0.1343,
+   "gate3_exam_block": 0.1343,
+   "equal": true
+  }
+ }
+}

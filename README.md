@@ -41,12 +41,15 @@ Canary (KU3): verbatim completions 0/20, twins 0/20 — not flagged; gauge ① i
 | gauge ① logit read | 700 | 88.4 [85.9, 90.7] † | 0.106 † → 0.041 † | 13.4 [11.0, 16.0] | 95.2 [93.4, 96.9] † | 0.836 [0.789, 0.881] † |
 | gauge ③ probe | 700 | 93.0 [91.1, 94.9] | 0.039 † → 0.030 † | 7.3 [5.4, 9.2] | 95.8 [94.3, 97.2] † | 0.904 [0.866, 0.936] † |
 | Jev (external, hosted, same 300 items) | 300 | 86.0 [81.7, 90.0] † | 0.072 † → 0.072 † | n/a (no fit-split outputs) | n/a (no fit-split outputs) | 0.839 [0.768, 0.899] † |
+| gauge J JSON emission ‡ | 700 | 87.7 [85.1, 90.1] | — | 2.7 [1.6, 3.9] (target not reachable) | 89.9 [87.6, 92.1] | — |
 
 † within noise: 95% CIs overlap with another row.
 
 A constant uniform predictor is calibrated by construction (confidence 1/3, accuracy ≈ 1/3), so its ECE overlaps any well-calibrated gauge.
 
 95% percentile bootstrap CIs, 1000 resamples, seed 20261007; ECE with 15 equal-width bins; selective-accuracy target 0.95; thresholds fitted on the fit split only.
+
+‡ Gauge J (pre-registered in PREREG.md, `## Amendment 2 — gauge J (JSON emission)`): accuracy is J-trust (the emitted decision taken as given, a parse failure counted as wrong); ask rate and selective accuracy are J-gated (per-class thresholds on the emitted confidence, a parse failure counted as an ask). Its CIs use 2000 resamples paired with gauge ①, so it is left out of the † marks; parse failures, the paired difference and latency are in the Gauge J section.
 
 Letter bias of gauge ① logit read (fit split, rotation r0 minus the mean over rotations, logits per label in label order): [+0.36, +0.79, −1.63]; averaging over three letter orders removes this bias.
 
@@ -87,6 +90,23 @@ Smallest n whose mean ask rate is within noise of gauge ①'s or better (pre-reg
 ## Share of the gap
 
 The analogue of the per-category threshold rung, on the 700-item exam with the ask rate at the selective-accuracy target as the metric: gauge ① at its fit-chosen global τ 0.84 asks 19.7 [17.0, 22.6], at its fit-chosen per-class τ 13.4 [11.0, 16.0]; gauge ③ at its per-class τ asks 7.3 [5.4, 9.2]. Per-class thresholds on the zero-shot read close a share **0.506 [0.386, 0.632]** of the gap between gauge ① at its global τ and gauge ③ (numerator 6.3 [4.6, 8.3], denominator 12.4 [9.7, 15.3] points; 95% paired bootstrap CIs, 1000 resamples).
+
+## Gauge J — JSON emission
+
+The common practice: ask the model to emit a JSON field and trust it. Gauge J asks the engine of gauge ① — the same tool list and request, without the lettered options — to reply with only `{"decision": "none" | "one" | "several", "confidence": …}`; greedy decoding, at most 48 new tokens, one generation per item, no retries, parsed from the first JSON object. Pre-registered in PREREG.md (`## Amendment 2 — gauge J (JSON emission)`) before gauge J read any set-A item; the exam was read once.
+
+| gauge J row | n | accuracy [CI] | ask rate @ SA 0.95 [CI] | selective accuracy achieved [CI] | parse failures [CI] |
+|---|---|---|---|---|---|
+| J-trust: take the field, never ask | 700 | 87.7 [85.1, 90.1] | never asks | — | 0.0 [0.0, 0.0] |
+| J-gated: per-class τ on the emitted confidence | 700 | — | 2.7 [1.6, 3.9] (target not reachable) | 89.9 [87.6, 92.1] | 0.0 [0.0, 0.0] |
+
+Thresholds τ (none, one, several) = [0.91, 0.91, 0.91], fitted on the 300 fit items with gauge ①'s procedure (target not reachable on the fit split: the τ with the best fit selective accuracy, all classes); on the fit split J-gated asks 3.3 at selective accuracy 91.7. Parse failures on the exam: 0 of 700 (0 cut off at the token cap). Of the parsed replies, 681 report confidence exactly one.
+
+Paired with gauge ① on the same resamples: ask rate J-gated − gauge ① (per-class τ, 13.4) = **-10.7 [-13.1, -8.3]** points — J-gated asks less than gauge ①, outside noise. Read it with the selective-accuracy column: J-gated does not reach the 0.95 target, so a lower ask rate than gauge ① is not a gain at equal selective accuracy.
+
+Latency per decision on the same 50 fit items, one session: gauge J median 0.684 s, p90 0.845 s; gauge ① (three-rotation read) median 0.628 s, p90 1.148 s.
+
+95% percentile bootstrap CIs, 2000 resamples, seed 20261007, over the 700 exam items in file order; thresholds fitted on the fit split only.
 
 ## Engines and licenses
 
