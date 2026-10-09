@@ -357,6 +357,9 @@ def results_table(rows: list[dict]) -> list[str]:
             cell(display, "auroc", noise["auroc"][i]),
         ]
         out.append("| " + " | ".join(cells) + " |")
+    gj = load_gauge_j()
+    if gj is not None:
+        out.append(gauge_j_table_row(gj))
     out.append("")
     if any(any(flags) for flags in noise.values()):
         out.append(FOOTNOTE_TPL.format(level=level))
@@ -369,6 +372,9 @@ def results_table(rows: list[dict]) -> list[str]:
         f"ECE with {fmt(shared['ece_bins'])} equal-width bins; "
         f"selective-accuracy target {fmt(shared['sa_target'])}; thresholds fitted on the fit split only."
     )
+    if gj is not None:
+        out.append("")
+        out.append(gauge_j_footnote(gj))
     for r in rows:
         bias = r["calib"].get("letter_bias_fit")
         if isinstance(bias, dict) and bias.get("display"):
@@ -506,6 +512,79 @@ def share_of_gap_section() -> list[str]:
     return head + [line]
 
 
+GAUGEJ_SCORE = "gaugeJ_score.json"
+GAUGEJ_NAME = "gauge J JSON emission ‡"
+
+
+def load_gauge_j() -> dict | None:
+    """results/gaugeJ_score.json once it carries an exam block (PREREG Amendment 2), else None."""
+    path = RESULTS_DIR / GAUGEJ_SCORE
+    doc = load_json_dict(path) if path.is_file() else None
+    return doc if isinstance(doc, dict) and isinstance(doc.get("exam"), dict) else None
+
+
+def gauge_j_table_row(doc: dict) -> str:
+    """Gauge J's row in the results table, appended after the Gate 3 / 4 rows and outside their † marks:
+    accuracy = J-trust, ask rate and selective accuracy = J-gated; ECE and AUROC are not registered for J."""
+    d = doc.get("display") or {}
+    cells = [GAUGEJ_NAME, fmt(dig(doc, "exam", "n_exam")), fmt(d.get("trust_accuracy")), DASH,
+             fmt(d.get("gated_ask_rate")), fmt(d.get("gated_selective_accuracy")), DASH]
+    return "| " + " | ".join(cells) + " |"
+
+
+def gauge_j_footnote(doc: dict) -> str:
+    ex = doc["exam"]
+    return (f"‡ Gauge J (pre-registered in PREREG.md, {code(fmt(doc.get('prereg_section')))}): accuracy is J-trust (the "
+            "emitted decision taken as given, a parse failure counted as wrong); ask rate and selective accuracy are "
+            "J-gated (per-class thresholds on the emitted confidence, a parse failure counted as an ask). Its CIs use "
+            f"{fmt(ex.get('n_boot'))} resamples paired with gauge ①, so it is left out of the † marks; parse failures, "
+            "the paired difference and latency are in the Gauge J section.")
+
+
+def gauge_j_section() -> list[str]:
+    """Amendment 2: J-trust, J-gated, parse failures, the paired ask-rate difference against gauge ① and the latency
+    line — every number a display string or value of results/gaugeJ_score.json."""
+    doc = load_gauge_j()
+    if doc is None:
+        return []
+    d, ex, c, th = doc.get("display") or {}, doc["exam"], doc.get("counts") or {}, doc.get("thresholds") or {}
+    lat = doc.get("latency") or {}
+    level = f"{fmt(ex.get('ci_level'))}%" if ex.get("ci_level") is not None else CI_LEVEL_WORDS
+    reach = ("reaches the target on the fit split" if th.get("target_reachable_on_fit")
+             else "target not reachable on the fit split: the τ with the best fit selective accuracy, all classes")
+    out = ["## Gauge J — JSON emission", "",
+           "The common practice: ask the model to emit a JSON field and trust it. Gauge J asks the engine of gauge ① — "
+           "the same tool list and request, without the lettered options — to reply with only "
+           '`{"decision": "none" | "one" | "several", "confidence": …}`; greedy decoding, at most '
+           f"{fmt(doc.get('max_new_tokens'))} new tokens, one generation per item, no retries, parsed from the first "
+           f"JSON object. Pre-registered in PREREG.md ({code(fmt(doc.get('prereg_section')))}) before gauge J read any "
+           "set-A item; the exam was read once.", "",
+           f"| gauge J row | n | accuracy [CI] | ask rate @ SA {fmt(ex.get('sa_target'))} [CI] | "
+           "selective accuracy achieved [CI] | parse failures [CI] |",
+           "|---|---|---|---|---|---|",
+           f"| J-trust: take the field, never ask | {fmt(ex.get('n_exam'))} | {fmt(d.get('trust_accuracy'))} | never asks | "
+           f"{DASH} | {fmt(d.get('parse_failure_rate'))} |",
+           f"| J-gated: per-class τ on the emitted confidence | {fmt(ex.get('n_exam'))} | {DASH} | "
+           f"{fmt(d.get('gated_ask_rate'))} | {fmt(d.get('gated_selective_accuracy'))} | {fmt(d.get('parse_failure_rate'))} |",
+           "",
+           f"Thresholds τ (none, one, several) = {fmt(d.get('taus'))}, fitted on the {fmt(th.get('n_fit'))} fit items "
+           f"with gauge ①'s procedure ({reach}); on the fit split J-gated asks {fmt(d.get('fit_ask_rate'))} at selective "
+           f"accuracy {fmt(d.get('fit_selective_accuracy'))}. Parse failures on the exam: {fmt(c.get('n_parse_failure'))} "
+           f"of {fmt(c.get('n'))} ({fmt(c.get('n_finish_length'))} cut off at the token cap). Of the parsed replies, "
+           f"{fmt(c.get('n_confidence_1'))} report confidence exactly one.",
+           "",
+           f"Paired with gauge ① on the same resamples: ask rate J-gated − gauge ① (per-class τ, "
+           f"{fmt(d.get('gauge1_ask_rate_value'))}) = **{fmt(d.get('ask_diff_points'))}** points — "
+           f"{fmt(d.get('paired_verdict'))}.",
+           "",
+           f"Latency per decision on the same {fmt(lat.get('n_items'))} {fmt(lat.get('split'))} items, one session: "
+           f"gauge J {fmt(d.get('latency_gaugeJ'))}; gauge ① (three-rotation read) {fmt(d.get('latency_gauge1'))}.",
+           "",
+           f"{level} percentile bootstrap CIs, {fmt(ex.get('n_boot'))} resamples, seed {fmt(ex.get('seed'))}, over the "
+           f"{fmt(ex.get('n_exam'))} exam items in file order; thresholds fitted on the fit split only."]
+    return out
+
+
 LABELS_NEEDED_REL = "results/labels-needed.png"
 
 
@@ -601,7 +680,7 @@ def build(manifest: dict, rows: list[dict]) -> str:
     lines += [""] + install_section()
     lines += [""] + seta_section(manifest)
     lines += [""] + results_section(rows)
-    for section in (like_for_like_section(), labels_needed_section(), share_of_gap_section()):
+    for section in (like_for_like_section(), labels_needed_section(), share_of_gap_section(), gauge_j_section()):
         if section:
             lines += [""] + section
     lines += [""] + engines_section()

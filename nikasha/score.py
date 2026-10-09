@@ -11,6 +11,7 @@ Usage (from the repo root, inside the venv):
   $PY -m nikasha.score --rescore        # also overwrite existing exam blocks (scoring-code bug fixes only; log it)
   $PY -m nikasha.score --fit-dry-run    # the identical metric code on the FIT split; prints numbers, writes nothing
   $PY -m nikasha.score --curve-only     # only redraw results/curve.png from the exam blocks on disk; exam not opened
+  $PY -m nikasha.score --gauge-j        # gauge J (Amendment 2) once; --fit-dry-run runs it on the fit split
 """
 from __future__ import annotations
 
@@ -39,7 +40,7 @@ from nikasha import (
     sha256_file,
     write_json,
 )
-from nikasha import metrics
+from nikasha import gauge_json, metrics
 
 CURVE_POINTS = 50
 CURVE_PNG = RESULTS_DIR / "curve.png"
@@ -918,6 +919,211 @@ def score_share_of_gap(rescore: bool) -> int:
     return 0
 
 
+# ----------------------------------------------------------------------------- gauge J (Amendment 2)
+
+GAUGEJ_SCORE_PATH = RESULTS_DIR / "gaugeJ_score.json"
+GAUGE1_CALIB_PATH = RESULTS_DIR / "gauge1-logit.calib.json"
+
+
+def _pts(m: dict) -> str:
+    """A difference of two rates, in points with an explicit sign: "+3.1 [0.4, 5.9]"."""
+    v, ci = m.get("value"), m.get("ci")
+    if v is None:
+        return DASH
+    head = f"{float(v) * 100:+.1f}"
+    if not ci or ci[0] is None or ci[1] is None:
+        return f"{head} [{DASH}, {DASH}]"
+    return f"{head} [{float(ci[0]) * 100:.1f}, {float(ci[1]) * 100:.1f}]"
+
+
+def compute_gauge_j(rows_j: list[dict], P1: np.ndarray, taus1: list[float], y: np.ndarray, calib_j: dict,
+                    n_boot: int = gauge_json.J_BOOT, seed: int = SEED) -> dict:
+    """Every gauge J number (Amendment 2) on one item set, paired with gauge ① at its per-class τ: one bootstrap
+    call, so every metric — gauge ①'s ask rate and the difference included — uses the same resamples. The exam
+    run, --fit-dry-run and selftest check J2 all call this."""
+    yj, dec, conf, ok = gauge_json.arrays(rows_j)
+    if not np.array_equal(yj, y):
+        _fail("gauge J labels differ from gauge ①'s on the same items")
+    taus_j = [float(t) for t in calib_j["taus"]]
+    S = gauge_json.score_matrix(dec, conf)
+    fns = {
+        "trust_accuracy": lambda idx: gauge_json.trust_accuracy(y[idx], dec[idx]),
+        "gated_ask_rate": lambda idx: metrics.ask_rate(S[idx], taus_j),
+        "gated_selective_accuracy": lambda idx: metrics.selective_accuracy(S[idx], y[idx], taus_j),
+        "parse_failure_rate": lambda idx: float((~ok[idx]).mean()),
+        "gauge1_ask_rate": lambda idx: metrics.ask_rate(P1[idx], taus1),
+        "ask_diff_j_minus_gauge1": lambda idx: metrics.ask_rate(S[idx], taus_j) - metrics.ask_rate(P1[idx], taus1),
+    }
+    boot = metrics.bootstrap(fns, len(y), n_boot=n_boot, seed=seed)
+    _, answered = metrics.abstain(S, taus_j)
+    boot["gated_selective_accuracy"]["n_answered"] = int(np.count_nonzero(answered))
+    dci = boot["ask_diff_j_minus_gauge1"]["ci"]
+    within = bool(dci is not None and dci[0] <= 0 <= dci[1])
+    verdict = ("within noise" if within else
+               "J-gated asks more than gauge ①, outside noise" if dci and dci[0] > 0 else
+               "J-gated asks less than gauge ①, outside noise")
+    reachable = bool(calib_j["target_reachable_on_fit"])
+    counts = {
+        "n": int(len(y)), "n_parse_ok": int(ok.sum()), "n_parse_failure": int((~ok).sum()),
+        "n_answered_gated": int(np.count_nonzero(answered)),
+        "n_finish_length": int(sum(1 for r in rows_j if r.get("finish_reason") == "length")),
+        "by_decision": {d: int(sum(1 for r in rows_j if r["parse_ok"] and r["decision_raw"] == d))
+                        for d in gauge_json.DECISION_ORDER},
+        "n_confidence_1": int(sum(1 for r in rows_j if r["parse_ok"] and r["confidence"] == 1.0)),
+    }
+    display = {
+        "trust_accuracy": _with_ci(boot["trust_accuracy"], 100, 1),
+        "gated_ask_rate": _with_ci(boot["gated_ask_rate"], 100, 1)
+                          + ("" if reachable else f" ({gauge_json.UNREACHABLE})"),
+        "gated_selective_accuracy": _with_ci(boot["gated_selective_accuracy"], 100, 1),
+        "parse_failure_rate": _with_ci(boot["parse_failure_rate"], 100, 1),
+        "gauge1_ask_rate_value": _num(boot["gauge1_ask_rate"]["value"], 100, 1),
+        "ask_diff_points": _pts(boot["ask_diff_j_minus_gauge1"]),
+        "paired_verdict": verdict,
+    }
+    return {"metrics": boot, "within_noise": within, "counts": counts, "display": display}
+
+
+def _gauge1_exam(order: list[str] | None = None) -> tuple[list[dict], np.ndarray, np.ndarray, list[float]]:
+    """gauge ①'s exam (or, with order = fit ids, fit) rows, labels, calibrated probabilities and per-class τ, from
+    its Gate 3 files (T and τ unchanged; fingerprint checked)."""
+    g1 = read_json(GAUGE1_PATH)
+    _check_fingerprint("gauge1-logit", g1, GAUGE1_CALIB_PATH)
+    T, taus, _ = _read_calib("gauge1-logit", GAUGE1_CALIB_PATH)
+    split = "exam" if order is None else "fit"
+    rows = _rows_of("gauge1-logit", g1["items"], split)
+    if order is not None:
+        by_id = {r["id"]: r for r in rows}
+        rows = [by_id[i] for i in order]
+    L, y = _arrays("gauge1-logit", rows)
+    return rows, y, metrics.softmax(L, T), taus
+
+
+def _latency_block() -> dict | None:
+    if not gauge_json.LATENCY_OUT.exists():
+        return None
+    lat = read_json(gauge_json.LATENCY_OUT)
+    g1, gj = lat["gauge1"], lat["gaugeJ"]
+    return {"n_items": lat["n_items"], "split": lat["split"], "gaugeJ": gj, "gauge1": g1,
+            "file_sha256": sha256_file(gauge_json.LATENCY_OUT),
+            "display": {"gaugeJ": f"median {gj['median_s']} s, p90 {gj['p90_s']} s",
+                        "gauge1": f"median {g1['median_s']} s, p90 {g1['p90_s']} s"}}
+
+
+def _gauge_j_inputs(split: str) -> tuple[dict, list[dict], dict]:
+    """(header, items, calib) of gauge J on one split, with every check that needs no exam label."""
+    path = gauge_json.EXAM_OUT if split == "exam" else gauge_json.FIT_OUT
+    head, rows, foot = gauge_json.read_run(path)
+    if foot is None or foot["n_items"] != len(rows) or head["n_items"] != len(rows) or head["split"] != split:
+        _fail(f"{path.name} is incomplete (header {head.get('n_items')}, footer "
+              f"{None if foot is None else foot['n_items']}, items {len(rows)})")
+    if any(r.get("split") != split for r in rows) or len({r["id"] for r in rows}) != len(rows):
+        _fail(f"{path.name}: items of another split or duplicate ids")
+    if head.get("prompt_sha256") != gauge_json.prompt_sha256():
+        _fail(f"{path.name} was produced by prompt {str(head.get('prompt_sha256'))[:12]}…, not the registered j-v1")
+    calib = read_json(gauge_json.CALIB_OUT)
+    _h, fit_rows, _f = gauge_json.read_run(gauge_json.FIT_OUT)
+    if calib["fit_fingerprint"]["sha256"] != gauge_json.fit_fingerprint_j(fit_rows)["sha256"]:
+        _fail("gaugeJ_calib.json was not fitted on gaugeJ_fit.jsonl (fingerprint differs)")
+    if abs(float(calib["sa_target"]) - SA_TARGET) > 1e-12:
+        _fail(f"gaugeJ_calib.json sa_target {calib['sa_target']} != {SA_TARGET}")
+    if split == "exam":
+        found = gauge_json.amendment2_commit()
+        if found is None or head.get("prereg_commit") != found[0]:
+            _fail(f"gaugeJ_exam.jsonl records prereg_commit {head.get('prereg_commit')}, not the Amendment 2 commit {found}")
+        if head.get("calib_sha256") != sha256_file(gauge_json.CALIB_OUT):
+            _fail("gaugeJ_calib.json changed after the exam read")
+    return head, rows, calib
+
+
+def score_gauge_j(rescore: bool, fit_dry_run: bool) -> int:
+    """PREREG Amendment 2: J-trust, J-gated, parse failures, the paired ask-rate difference against gauge ① and the
+    latency line, once, on the 700-item exam. --fit-dry-run runs the identical code on the fit split (in-sample
+    thresholds; plumbing only) and writes nothing."""
+    if fit_dry_run:
+        if not gauge_json.FIT_OUT.exists() or not gauge_json.CALIB_OUT.exists():
+            _fail("gauge J fit outputs / thresholds missing")
+        _h, rows, calib = _gauge_j_inputs("fit")
+        truth = _load_truth(FIT_PATH)
+        _check_split("gaugeJ", rows, "fit", truth, subset_ok=False)
+        _r1, y, P1, taus1 = _gauge1_exam([r["id"] for r in rows])
+        res = compute_gauge_j(rows, P1, taus1, y, calib)
+        print(f"gaugeJ fit-dry-run (n={len(rows)}, in-sample thresholds; nothing written): {res['display']} "
+              f"counts {res['counts']}")
+        return 0
+    if GAUGEJ_SCORE_PATH.exists() and not rescore:
+        print(f"score.py: {GAUGEJ_SCORE_PATH.name} exists (scored_at "
+              f"{read_json(GAUGEJ_SCORE_PATH)['exam']['scored_at']}); gauge J is scored once — nothing to do")
+        return 0
+    if not gauge_json.EXAM_OUT.exists():
+        print("score.py: gauge J has not read the exam (results/gaugeJ_exam.jsonl absent); nothing to score")
+        return 0
+
+    # phase 1 — no exam labels yet
+    head, rows, calib = _gauge_j_inputs("exam")
+    rows1, y1, P1, taus1 = _gauge1_exam()
+    if [r["id"] for r in rows] != [r["id"] for r in rows1]:
+        _fail("gauge J and gauge ① exam items are not in the same order")
+    latency = _latency_block()
+    if latency is None:
+        _fail("results/gaugeJ_latency.json missing — the latency rows are pre-registered")
+    a2 = gauge_json.amendment2_commit()
+
+    # phase 2 — the exam labels are opened here
+    prereg_commit = _prereg_commit_or_fail()
+    manifest = read_json(MANIFEST_PATH)
+    exam_sha = sha256_file(EXAM_PATH)
+    if exam_sha != (manifest.get("sha256") or {}).get("exam.jsonl"):
+        _fail("exam.jsonl sha256 differs from the manifest — the sealed exam changed; stop")
+    truth = _load_truth(EXAM_PATH)
+    _check_split("gaugeJ", rows, "exam", truth, subset_ok=False)
+    _check_split("gauge1-logit", rows1, "exam", truth, subset_ok=False)
+    if [r["id"] for r in rows] != list(truth):
+        _fail("gauge J exam items are not in exam.jsonl order")
+    print(f"exam.jsonl sha256 verified ({exam_sha[:16]}…); ids={len(truth)}; n_boot={gauge_json.J_BOOT}; seed={SEED}")
+
+    # phase 3 — compute (paired with gauge ①), write
+    res = compute_gauge_j(rows, P1, taus1, y1, calib)
+    stored = read_json(GAUGE1_PATH)["exam"]["metrics"]["ask_rate"]["value"]
+    if res["metrics"]["gauge1_ask_rate"]["value"] != stored:
+        _fail(f"gauge ① ask rate recomputed {res['metrics']['gauge1_ask_rate']['value']} != Gate 3 exam block {stored}")
+    if GAUGEJ_SCORE_PATH.exists():
+        print("!!! WARNING: --rescore is OVERWRITING gaugeJ_score.json (scoring-code bug fixes only; log it) !!!")
+    fit = calib["fit"]
+    doc = {
+        "row": "gaugeJ",
+        "what": "gauge J — the engine of gauge ① asked to emit {decision, confidence} as JSON (Amendment 2): J-trust "
+                "takes the field and never asks; J-gated asks below a per-class threshold on the emitted confidence",
+        "prereg_section": gauge_json.AMENDMENT2_HEADING,
+        "prompt_version": head["prompt_version"], "prompt_sha256": head["prompt_sha256"],
+        "max_new_tokens": head["max_new_tokens"], "temperature": head["temperature"],
+        "thresholds": {k: calib[k] for k in ("target_reachable_on_fit", "mode", "tau_global", "taus", "n_fit")},
+        "fit": fit,
+        "metrics": res["metrics"], "within_noise": res["within_noise"], "counts": res["counts"],
+        "latency": latency,
+        "display": {**res["display"],
+                    "taus": "[" + ", ".join(f"{t:.2f}" for t in calib["taus"]) + "]",
+                    "fit_ask_rate": _num(fit["ask_rate"], 100, 1),
+                    "fit_selective_accuracy": _num(fit["selective_accuracy"], 100, 1),
+                    "latency_gaugeJ": latency["display"]["gaugeJ"], "latency_gauge1": latency["display"]["gauge1"]},
+        "exam": {"n_exam": len(rows), "n_boot": gauge_json.J_BOOT, "ci_level": 95, "seed": SEED,
+                 "sa_target": SA_TARGET, "exam_sha256": exam_sha,
+                 "exam_file": gauge_json.EXAM_OUT.name, "exam_file_sha256": sha256_file(gauge_json.EXAM_OUT),
+                 "exam_read_started_at": head["started_at"], "scored_at": _utc_now(), "prereg_commit": prereg_commit,
+                 "prereg_section": gauge_json.AMENDMENT2_HEADING, "prereg_section_commit": a2[1],
+                 "prereg_section_sha": a2[0],
+                 "gauge1_check": {"ask_rate_recomputed": res["metrics"]["gauge1_ask_rate"]["value"],
+                                  "gate3_exam_block": stored, "equal": True}},
+    }
+    write_json(GAUGEJ_SCORE_PATH, doc)
+    d = doc["display"]
+    print(f"gauge J [exam n={len(rows)}]: trust acc {d['trust_accuracy']} | gated ask {d['gated_ask_rate']} "
+          f"sa {d['gated_selective_accuracy']} | parse failures {d['parse_failure_rate']} | ask J-gated − ① "
+          f"{d['ask_diff_points']} ({d['paired_verdict']}) | latency J {d['latency_gaugeJ']}, ① {d['latency_gauge1']}")
+    print(f"wrote {GAUGEJ_SCORE_PATH.name}")
+    return 0
+
+
 # ----------------------------------------------------------------------------- main
 
 def main(argv=None) -> int:
@@ -941,7 +1147,13 @@ def main(argv=None) -> int:
                     help="score the Jev column and the like-for-like group (①, ③, Jev on the same items) once")
     ap.add_argument("--share-of-gap", action="store_true",
                     help="compute the share of the gap (analogue of the per-category threshold rung) once")
+    ap.add_argument("--gauge-j", action="store_true",
+                    help="score gauge J (JSON emission, Amendment 2) once; a no-op when already scored or not run")
     args = ap.parse_args(argv)
+    if args.gauge_j:
+        if args.gauge or args.curve_only or args.labels_needed or args.like_for_like or args.share_of_gap:
+            ap.error("--gauge-j takes only --rescore or --fit-dry-run")
+        return score_gauge_j(args.rescore, args.fit_dry_run)
     if args.share_of_gap:
         if args.gauge or args.fit_dry_run or args.curve_only or args.labels_needed or args.like_for_like:
             ap.error("--share-of-gap takes only --rescore")

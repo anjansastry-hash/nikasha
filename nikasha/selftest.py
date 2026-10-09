@@ -31,6 +31,14 @@ Checks:
   j  gauge ③'s fit-split logits are flagged oof: true, its calib fingerprint matches, and they reproduce as
      out-of-fold values by refitting per fold (PASS max |diff| <= 0.05, WARN <= 0.5, FAIL above).
   k  no key material anywhere in the repo: the key prefix is in no file (.git included) and in no commit.
+  i  (also) PREREG Amendment 2 (Gate 4b, gauge J): its commit predates gauge J's first read of any set-A item (the fit
+     and exam headers), the exam header records its hash, the score block records it and follows it, the commit that
+     adds the exam file descends from it, and it is on HEAD.
+  J1 gauge J read the exam once: one results/gaugeJ_exam*.jsonl, one header and one footer, one line per exam id in
+     exam.jsonl order (ids only are read from exam.jsonl), one scored block bound to that file by sha256, the
+     thresholds unchanged since the read, and at most one commit touching the file.
+  J2 the README's gauge J cells equal values recomputed from the gauge J output files, its thresholds and gauge ①'s
+     Gate 3 exam outputs (the same paired bootstrap), and gaugeJ_score.json stores those same values.
 
 Run from the repo root:  ~/venvs/nikasha/bin/python -m nikasha.selftest
 This module never imports an engine and never prints the text of any set-A item.
@@ -645,11 +653,11 @@ def check_i(repo: Repo) -> list[tuple[str, str, str]]:
     commit is on HEAD (FAIL otherwise). Not yet on origin/main is a WARN, not a FAIL: after the Gate 5 history
     rewrite the new commits exist locally until the force-push, and chronology is decided by commit dates, which
     the rewrite keeps."""
-    blocks = exam_blocks(repo)
+    blocks = [(n, ex) for n, ex in exam_blocks(repo) if ex.get("prereg_section") != AMENDMENT2_HEADING]
     new = [(n, ex) for n, ex in blocks if n not in GATE3_FILES]
     old = [(n, ex) for n, ex in blocks if n in GATE3_FILES]
     if not new:
-        return [(SKIP, "i", "no Gate 4 exam block yet")]
+        return [(SKIP, "i", "no Gate 4 exam block yet")] + check_i_amendment2(repo)
     rc, out_txt, err_txt = _git("log", "--format=%H %cI", "-S", AMENDMENT_HEADING, "--", "PREREG.md")
     lines = [ln.split() for ln in out_txt.splitlines() if ln.strip()] if rc == 0 else []
     if not lines:
@@ -675,13 +683,173 @@ def check_i(repo: Repo) -> list[tuple[str, str, str]]:
     if rc2 != 0:
         problems.append(f"amendment commit {sha[:7]} is not on HEAD")
     if problems:
-        return [(FAIL, "i", "; ".join(problems))]
+        return [(FAIL, "i", "; ".join(problems))] + check_i_amendment2(repo)
     summary = (f"Amendment 1 commit {sha[:7]} ({raw}) predates all {len(new)} Gate 4 exam blocks "
                f"({', '.join(sorted(n for n, _ in new))}), each records it; the {len(old)} Gate 3 blocks predate it")
     rc3, _, _ = _git("merge-base", "--is-ancestor", sha, "origin/main")
     if rc3 != 0:
+        return [(WARN, "i", f"{summary}; on HEAD but not yet on origin/main (push pending)")] + check_i_amendment2(repo)
+    return [(PASS, "i", f"{summary}; on origin/main")] + check_i_amendment2(repo)
+
+
+AMENDMENT2_HEADING = "## Amendment 2 — gauge J (JSON emission)"
+GAUGEJ_FIT = RESULTS_DIR / "gaugeJ_fit.jsonl"
+GAUGEJ_EXAM = RESULTS_DIR / "gaugeJ_exam.jsonl"
+GAUGEJ_CALIB = RESULTS_DIR / "gaugeJ_calib.json"
+GAUGEJ_SCORE = RESULTS_DIR / "gaugeJ_score.json"
+
+
+def _first_line(path: Path) -> dict | None:
+    try:
+        with open(path, encoding="utf-8") as f:
+            obj = json.loads(f.readline())
+        return obj if isinstance(obj, dict) else None
+    except (OSError, ValueError):
+        return None
+
+
+def check_i_amendment2(repo: Repo) -> list[tuple[str, str, str]]:
+    """Chronology of Amendment 2 (Gate 4b): the commit that introduces its heading predates gauge J's first read of
+    any set-A item (fit and exam headers' started_at), the exam header records that commit's hash, the J score block
+    follows it and records it, the commit that adds gaugeJ_exam.jsonl descends from it, and it is on HEAD."""
+    if not GAUGEJ_EXAM.is_file() and not GAUGEJ_FIT.is_file():
+        return [(SKIP, "i", "Amendment 2: gauge J has read no set-A item yet")]
+    rc, out_txt, err_txt = _git("log", "--format=%H %cI", "-S", AMENDMENT2_HEADING, "--", "PREREG.md")
+    lines = [ln.split() for ln in out_txt.splitlines() if ln.strip()] if rc == 0 else []
+    if not lines:
+        return [(FAIL, "i", f"gauge J outputs exist but no commit introduces {AMENDMENT2_HEADING!r} in PREREG.md")]
+    sha, raw = lines[-1][0], lines[-1][1]
+    when = _parse_iso(raw)
+    problems, facts = [], []
+    for path in (GAUGEJ_FIT, GAUGEJ_EXAM):
+        if not path.is_file():
+            continue
+        head = _first_line(path)
+        if not head or head.get("kind") != "header":
+            problems.append(f"{path.name}: no header line")
+            continue
+        try:
+            started = _parse_iso(str(head.get("started_at")))
+        except ValueError:
+            problems.append(f"{path.name}: unparsable started_at")
+            continue
+        if not started > when:
+            problems.append(f"{path.name}: read started {head.get('started_at')}, not after the amendment ({raw})")
+        facts.append(f"{path.name} started {head.get('started_at')}")
+        if path == GAUGEJ_EXAM and head.get("prereg_commit") != sha:
+            problems.append(f"{path.name}: header records prereg_commit {str(head.get('prereg_commit'))[:7]}, not {sha[:7]}")
+    obj, err = repo.results.get(GAUGEJ_SCORE, (None, "absent"))
+    if isinstance(obj, dict) and isinstance(obj.get("exam"), dict):
+        ex = obj["exam"]
+        try:
+            if not _parse_iso(str(ex.get("scored_at"))) > when:
+                problems.append(f"{GAUGEJ_SCORE.name}: scored_at {ex.get('scored_at')} does not follow the amendment")
+        except ValueError:
+            problems.append(f"{GAUGEJ_SCORE.name}: unparsable scored_at")
+        if ex.get("prereg_section") != AMENDMENT2_HEADING or ex.get("prereg_section_sha") != sha:
+            problems.append(f"{GAUGEJ_SCORE.name}: exam block does not record Amendment 2 ({sha[:7]})")
+        elif _parse_iso(str(ex.get("prereg_section_commit"))) != when:
+            problems.append(f"{GAUGEJ_SCORE.name}: records amendment date {ex.get('prereg_section_commit')}, not {raw}")
+    rc2, added, _ = _git("log", "--diff-filter=A", "--format=%H", "--", str(GAUGEJ_EXAM.relative_to(ROOT)))
+    if rc2 == 0 and added:
+        add_sha = added.splitlines()[-1]
+        if add_sha == sha or _git("merge-base", "--is-ancestor", sha, add_sha)[0] != 0:
+            problems.append(f"{GAUGEJ_EXAM.name} was added in {add_sha[:7]}, which does not descend from {sha[:7]}")
+        else:
+            facts.append(f"exam file added in {add_sha[:7]}, after it")
+    elif GAUGEJ_EXAM.is_file():
+        facts.append("exam file not yet committed")
+    if _git("merge-base", "--is-ancestor", sha, "HEAD")[0] != 0:
+        problems.append(f"Amendment 2 commit {sha[:7]} is not on HEAD")
+    if problems:
+        return [(FAIL, "i", "Amendment 2: " + "; ".join(problems))]
+    summary = f"Amendment 2 commit {sha[:7]} ({raw}) predates gauge J's reads ({'; '.join(facts)})"
+    if _git("merge-base", "--is-ancestor", sha, "origin/main")[0] != 0:
         return [(WARN, "i", f"{summary}; on HEAD but not yet on origin/main (push pending)")]
     return [(PASS, "i", f"{summary}; on origin/main")]
+
+
+def check_J1(repo: Repo) -> list[tuple[str, str, str]]:
+    """Gauge J read the exam once: one exam output file, one header, one footer, one line per exam id in exam.jsonl
+    order, one scored block bound to that file, thresholds unchanged since the read, at most one commit of the file."""
+    files = sorted(p.name for p in RESULTS_DIR.glob("gaugeJ_exam*"))
+    if not files:
+        return [(SKIP, "J1", "gauge J has not read the exam")]
+    from nikasha.gauge_json import read_run
+
+    problems = []
+    if files != [GAUGEJ_EXAM.name]:
+        problems.append(f"expected exactly {GAUGEJ_EXAM.name}, found {files}")
+    try:
+        head, rows, foot = read_run(GAUGEJ_EXAM)
+    except SystemExit as exc:
+        return [(FAIL, "J1", str(exc))]
+    exam_ids, _ = _read_ids(EXAM_PATH)
+    ids = [r.get("id") for r in rows]
+    if foot is None or foot.get("n_items") != len(rows) or head.get("n_items") != len(rows):
+        problems.append("header / footer / item counts disagree (incomplete or appended read)")
+    if ids != exam_ids:
+        problems.append(f"item ids are not exactly exam.jsonl's ids in order ({len(ids)} lines, {len(set(ids))} unique, "
+                        f"{len(exam_ids)} exam ids)")
+    if any(r.get("split") != "exam" for r in rows):
+        problems.append("an item line is not on the exam split")
+    if head.get("calib_sha256") != sha256_file(GAUGEJ_CALIB):
+        problems.append("gaugeJ_calib.json differs from the one in force at the read")
+    blocks = [n for n, ex in exam_blocks(repo) if ex.get("prereg_section") == AMENDMENT2_HEADING]
+    obj, _ = repo.results.get(GAUGEJ_SCORE, (None, "absent"))
+    if isinstance(obj, dict) and isinstance(obj.get("exam"), dict):
+        if blocks != [GAUGEJ_SCORE.name]:
+            problems.append(f"Amendment 2 exam blocks in {blocks}, expected only {GAUGEJ_SCORE.name}")
+        if obj["exam"].get("exam_file_sha256") != sha256_file(GAUGEJ_EXAM):
+            problems.append("the scored block is bound to a different gaugeJ_exam.jsonl")
+    rc, commits, _ = _git("log", "--format=%H", "--", str(GAUGEJ_EXAM.relative_to(ROOT)))
+    n_commits = len(commits.splitlines()) if rc == 0 and commits else 0
+    if n_commits > 1:
+        problems.append(f"{GAUGEJ_EXAM.name} is touched by {n_commits} commits (rewritten after the read?)")
+    if problems:
+        return [(FAIL, "J1", "; ".join(problems))]
+    return [(PASS, "J1", f"gauge J read the exam once: one file, one header ({head.get('started_at')}), {len(rows)} "
+                         f"item lines in exam.jsonl order, one footer, one scored block bound by sha256, thresholds "
+                         f"unchanged; {n_commits} commit(s) of the file")]
+
+
+def check_J2(repo: Repo) -> list[tuple[str, str, str]]:
+    """The README's gauge J cells equal values recomputed from the J output files (score.compute_gauge_j on the
+    exam lines, the J thresholds and gauge ①'s Gate 3 exam outputs), and gaugeJ_score.json stores the same."""
+    obj, _ = repo.results.get(GAUGEJ_SCORE, (None, "absent"))
+    if not isinstance(obj, dict) or not isinstance(obj.get("exam"), dict):
+        return [(SKIP, "J2", "gauge J not scored yet")]
+    import contextlib
+    import io
+
+    from nikasha import readme, score
+    from nikasha.gauge_json import read_run
+
+    _h, rows, _f = read_run(GAUGEJ_EXAM)
+    with contextlib.redirect_stdout(io.StringIO()):
+        _r1, y, P1, taus1 = score._gauge1_exam()
+        res = score.compute_gauge_j(rows, P1, taus1, y, read_json(GAUGEJ_CALIB))
+    stored = obj.get("display") or {}
+    diff = [k for k, v in res["display"].items() if stored.get(k) != v]
+    if obj.get("metrics") != res["metrics"]:
+        diff.append("metrics")
+    if diff:
+        return [(FAIL, "J2", f"gaugeJ_score.json differs from a recomputation on: {diff}")]
+    text = README_PATH.read_text(encoding="utf-8")
+    lines = text.splitlines()
+    want_row = readme.gauge_j_table_row(obj)
+    expect = [want_row] + readme.gauge_j_section()
+    missing = [ln for ln in expect if ln and ln not in lines]
+    d = res["display"]
+    cells = want_row.split(" | ")
+    if not (d["trust_accuracy"] in cells and d["gated_ask_rate"] in cells and d["gated_selective_accuracy"] in cells):
+        missing.append("results-table row does not carry the recomputed J cells")
+    if missing:
+        return [(FAIL, "J2", f"{len(missing)} README gauge J line(s) differ from the recomputed values, e.g. "
+                             f"{missing[0][:120]!r}")]
+    return [(PASS, "J2", f"README gauge J cells = recomputed values (trust acc {d['trust_accuracy']}; gated ask "
+                         f"{d['gated_ask_rate']}, SA {d['gated_selective_accuracy']}; parse failures "
+                         f"{d['parse_failure_rate']}; J − ① {d['ask_diff_points']} pts, {d['paired_verdict']})")]
 
 
 def check_j(repo: Repo) -> list[tuple[str, str, str]]:
@@ -785,6 +953,8 @@ CHECKS = (
     ("i", check_i),
     ("j", check_j),
     ("k", check_k),
+    ("J1", check_J1),
+    ("J2", check_J2),
 )
 
 
@@ -794,7 +964,7 @@ CHECKS = (
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(
         prog="nikasha.selftest",
-        description="Repo consistency checks (a-k); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
+        description="Repo consistency checks (a-k, J1, J2); prints SELFTEST GREEN and exits 0, or SELFTEST RED and exits 1.",
     )
     ap.add_argument("--strict", action="store_true", help="treat WARN lines as FAIL")
     args = ap.parse_args(argv)
