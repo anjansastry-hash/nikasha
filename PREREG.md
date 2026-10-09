@@ -158,3 +158,70 @@ different BLAS gives slightly different solver output with the same scikit-learn
 was RED on every machine but the Studio. From Gate 5 it is PASS if max |Δ| ≤ 0.05, WARN (printed, not failing) if
 ≤ 0.5, FAIL above. The `oof: true` flags and the calib fit fingerprint are still asserted exactly. Nothing in the
 exam, the gauges, the metrics or the published numbers changes.
+
+## Amendment 2 — gauge J (JSON emission)
+
+Filed 2026-10-09 09:18 ET (Gate 4b), before gauge J has read any set-A item (fit or exam). Everything above is
+unchanged; no Gate 3 or Gate 4 number is recomputed and no existing gauge reads the exam again. Before this
+amendment gauge J ran only on two synthetic items that are not in set A (a plumbing check of generation and
+parsing, logged in `ops/COMMAND_LOG.md`).
+
+Why: the common practice is "ask the LLM to emit a JSON field and trust it". Gauge J measures that practice with
+the same 12B engine as gauge ①, so the comparison is like for like.
+
+1. **Model and content.** The engine of gauge ① (`ENGINE_PATH`, the same weights, mlx-lm 0.31.3, never patched).
+   The item content is gauge ①'s: its TOOLS block (gauge ①'s own renderer and token cap) and the item's request,
+   rendered with the engine's chat template (`enable_thinking=False`, generation prompt, the same think-block
+   assertion and single-BOS handling). The lettered options are removed. Prompt j-v1, `nikasha/gauge_json.py`,
+   sha256 `6b4f94775d4b9dc354b627ebd656b0dfbc059d185387ec9c29a49b3a3e0e96da` (canonical JSON printed by
+   `python -m nikasha.gauge_json --prompt-sha`):
+   - system: `You are the tool-routing gate of a coding agent. Given the user's request and the tools available, decide how many tool calls the next step needs.` (gauge ①'s system sentence without `Answer with a single letter.`), a newline, then `Reply with only {"decision": "none" | "one" | "several", "confidence": <number 0–1>}, where "none" = no tool call, "one" = one tool call, "several" = more than one tool call, and confidence is your confidence that the decision is correct.`
+   - user: `TOOLS:` / the TOOLS block / `REQUEST:` / the request / `Reply with only the JSON object.`
+   - mapping: `none` → no-call, `one` → one-call, `several` → multi-call.
+2. **Instruction and decoding.** Reply with only `{"decision": "none" | "one" | "several", "confidence": <number 0–1>}`.
+   Greedy decoding (temperature 0: mlx-lm `make_sampler(temp=0.0)`), at most 48 new tokens (generation also stops
+   at the engine's end-of-turn token), one generation per item, no retries. The order of the three values is fixed
+   as written (common practice; no rotation).
+3. **Parsing.** The first JSON object in the output: `json.JSONDecoder().raw_decode` at the first `{` of the
+   generated text. `decision` must be exactly one of the three strings and `confidence` a JSON number (not a
+   boolean), finite, in [0, 1]; other keys are ignored. Anything else — no `{`, no decodable object there (for
+   example a reply cut off at 48 tokens), a missing or different value — is a **parse failure**.
+4. **Rows reported.**
+   - **J-trust:** the decision as given, never ask. Exam accuracy over the 700 items, a parse failure counted as wrong.
+   - **J-gated:** answer iff the item parsed and its self-reported confidence ≥ τ[class], class = the emitted
+     decision; otherwise ask (a parse failure is an ask). τ is fitted on the 300 fit items with gauge ①'s procedure
+     and target — `metrics.fit_thresholds` at SA 0.95: the smallest global τ on 0.34–0.99 (step 0.01) whose fit
+     selective accuracy is ≥ 0.95 with at least one item answered, then per-class coordinate descent in steps of
+     0.01 (floor 0.34) — applied to a score matrix that holds the confidence at the emitted decision and 0
+     elsewhere (all 0 on a parse failure), so `metrics.abstain` is exactly this rule. The confidence is used as
+     emitted (no temperature). Reported at the target on the exam: ask rate, selective accuracy achieved, and the
+     parse-failure rate separately.
+   - **Latency:** median and p90 (`numpy.percentile`, linear interpolation) seconds per decision for gauge J (TOOLS
+     block, render, generation, parse) and gauge ① (its full three-rotation read), measured in one process with the
+     engine loaded once, after one warm-up of each on a synthetic item, on the first 50 items of `fit.jsonl`: per
+     item, gauge ① then gauge J. Fit items only, never the exam.
+5. **Statistics.** 2,000 bootstrap resamples, 95% percentile CIs, seed 20261007 (`metrics.bootstrap`: one
+   `default_rng(seed)`, `idx = integers(0, n, n)` per resample) over the 700 exam items in `exam.jsonl` order, for
+   J-trust accuracy, J-gated ask rate, J-gated selective accuracy and the parse-failure rate. Paired: the same
+   resamples recompute gauge ①'s exam ask rate at its Gate 3 per-class τ (T and τ from
+   `results/gauge1-logit.calib.json`, unchanged; the point value must equal the Gate 3 exam block's) and the
+   difference ask(J-gated) − ask(①). "Within noise" is printed if the difference's CI contains 0. The Gate 3 / 4
+   rows keep their 1,000 resamples and their † marks; gauge J is not added to those marks.
+6. **Outcome-neutral.** Every row is reported whichever way it lands. Gauge J reads the exam once, with the
+   committed code, after this amendment is committed; the exam output file is created exclusively and never
+   overwritten. No re-runs, prompt changes or threshold changes after the exam read; any deviation is a new
+   amendment written before a new read.
+7. **Fallback (pre-stated).** If no global τ on the fit split reaches 95% selective accuracy (so no per-class
+   threshold exists under this procedure), J-gated is reported as "target not reachable", and its exam ask rate and
+   selective accuracy are given at the τ on the same grid with the best fit selective accuracy (ties → the smallest
+   τ, i.e. the lowest ask rate), applied to all three classes.
+
+Files: `results/gaugeJ_fit.jsonl`, `results/gaugeJ_calib.json` (with a fingerprint over the fit outputs),
+`results/gaugeJ_latency.json`, `results/gaugeJ_exam.jsonl` (its header records `prereg_commit` = the hash of the
+commit that introduces this amendment), and the scored `results/gaugeJ_score.json`. README: one row appended to the
+results table (marked, outside the † marks) and a section "Gauge J — JSON emission"; every existing README number
+stays byte-identical.
+
+Exam reads under this amendment: gauge J once; its score once. This amendment is committed, not pushed, before the
+read (brief 19: the push is done by hand); the exam guard requires it on HEAD with a clean tree and records whether
+it is on origin/main.
